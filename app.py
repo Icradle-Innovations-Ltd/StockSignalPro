@@ -813,10 +813,10 @@ def download_system_report():
             from weasyprint import HTML
             pdf = HTML(string=html).write_pdf()
         
-        # Create response
+        # Create response with inline display
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = 'attachment; filename=system_report.pdf'
+        response.headers['Content-Disposition'] = 'inline; filename=system_report.pdf'
         return response
     except Exception as e:
         logger.error(f"Error generating PDF: {str(e)}")
