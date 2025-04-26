@@ -70,9 +70,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show file name
             if (files.length > 0) {
-                const fileNameElement = uploadArea.querySelector('.file-name');
+                const fileNameElement = uploadArea.querySelector('#upload-filename');
                 if (fileNameElement) {
                     fileNameElement.textContent = files[0].name;
+                    
+                    // Add visual feedback
+                    uploadArea.classList.add('border-primary');
+                    uploadArea.querySelector('.upload-icon i').classList.add('text-primary');
                 }
             }
         }
@@ -84,9 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show file name when selected via dialog
         fileInput.addEventListener('change', function() {
-            const fileNameElement = uploadArea.querySelector('.file-name');
+            const fileNameElement = uploadArea.querySelector('#upload-filename');
             if (fileNameElement && this.files.length > 0) {
                 fileNameElement.textContent = this.files[0].name;
+                
+                // Add visual feedback
+                uploadArea.classList.add('border-primary');
+                uploadArea.querySelector('.upload-icon i').classList.add('text-primary');
             }
         });
     }

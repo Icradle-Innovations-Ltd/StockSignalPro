@@ -1,0 +1,153 @@
+<!-- Advanced Features Section -->
+<div class="bg-dark text-white py-4 mb-5">
+  <div class="container">
+    <h3 class="mb-4">Advanced Features</h3>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-lightbulb text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Contextual AI-powered investment tips</h5>
+            <p class="text-muted mb-0">Get personalized insights based on cycle analysis and market conditions.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-share-alt text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Social sharing of investment insights</h5>
+            <p class="text-muted mb-0">Share your analysis and discoveries with your network.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-trophy text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Gamification elements: Stock Analysis Badges</h5>
+            <p class="text-muted mb-0">Earn badges for accurate cycle detection and profitable analyses.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-file-export text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>One-click export of analysis reports to PDF</h5>
+            <p class="text-muted mb-0">Create professional reports of your cycle analysis with a single click.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-tachometer-alt text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Personalized dashboard with user performance metrics</h5>
+            <p class="text-muted mb-0">Track your analysis accuracy and improvement over time.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-filter text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Develop advanced filtering by sector, volatility, and cycle strength</h5>
+            <p class="text-muted mb-0">Find the best opportunities matching your trading style.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4 feature-item d-none">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-bell text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Enable live signal notifications when cycle signals trigger</h5>
+            <p class="text-muted mb-0">Get alerts when stocks reach critical points in their cycle.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4 feature-item d-none">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-briefcase text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Add portfolio analysis for multiple stocks</h5>
+            <p class="text-muted mb-0">Analyze cycle correlations across your entire investment portfolio.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4 feature-item d-none">
+        <div class="d-flex bg-dark-subtle p-3 rounded h-100">
+          <div class="me-3">
+            <i class="fas fa-brain text-primary" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h5>Implement machine learning forecasts using LSTM models</h5>
+            <p class="text-muted mb-0">Enhance cycle detection with advanced ML predictions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-4">
+      <button class="btn btn-outline-light" id="toggle-features">
+        <span id="toggle-text">Show more</span>
+        <i class="fas fa-chevron-down ms-2" id="toggle-icon"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggle-features');
+    const toggleText = document.getElementById('toggle-text');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const featureItems = document.querySelectorAll('.feature-item');
+    
+    toggleButton.addEventListener('click', function() {
+      const isExpanded = toggleText.textContent === 'Show less';
+      
+      featureItems.forEach(item => {
+        if (isExpanded) {
+          item.classList.add('d-none');
+        } else {
+          item.classList.remove('d-none');
+        }
+      });
+      
+      if (isExpanded) {
+        toggleText.textContent = 'Show more';
+        toggleIcon.classList.remove('fa-chevron-up');
+        toggleIcon.classList.add('fa-chevron-down');
+      } else {
+        toggleText.textContent = 'Show less';
+        toggleIcon.classList.remove('fa-chevron-down');
+        toggleIcon.classList.add('fa-chevron-up');
+      }
+    });
+  });
+</script>
