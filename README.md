@@ -2,6 +2,82 @@
 
 A web application that leverages Fast Fourier Transform (FFT) algorithms to analyze and predict stock market cycles with advanced data visualization and recommendation capabilities.
 
+## Running Locally
+
+1. Clone the repository:
+```bash
+git clone <your-repository-url>
+cd stock-market-signal-processing
+```
+
+2. Install required packages:
+```bash
+pip install -r requirements.txt
+```
+
+3. Set up PostgreSQL database:
+- Create a new database
+- Set the DATABASE_URL environment variable:
+```bash
+export DATABASE_URL=postgresql://username:password@localhost/dbname
+```
+
+4. Initialize the database:
+```bash
+python recreate_db.py
+```
+
+5. Run the application:
+```bash
+python main.py
+```
+
+The application will be available at `http://0.0.0.0:5000`
+
+## Deploying on Replit
+
+1. Create a new Repl using the Python template
+
+2. Import your code into the Repl
+
+3. Set up environment variables in the Secrets tab:
+- Add `DATABASE_URL` with your PostgreSQL connection string
+- Add any other required environment variables
+
+4. Install dependencies:
+- The system will automatically install packages from pyproject.toml
+
+5. Deploy the application:
+- Click the "Deploy" button in the toolbar
+- Choose "Autoscale" deployment
+- Configure deployment settings:
+  - Machine: 1 vCPU, 2 GiB RAM
+  - Max machines: 3 (adjust based on expected traffic)
+  - Run command: `python main.py`
+- Select a domain name
+- Click "Deploy"
+
+Your app will be live in a few minutes!
+
+## Features
+
+- **Data Import Options**:
+  - Upload CSV files with historical price data
+  - Fetch live data by entering stock ticker symbols
+  - Select time periods for analysis
+
+- **Advanced Technical Analysis**:
+  - Fast Fourier Transform (FFT) analysis
+  - Market cycle detection
+  - Trading recommendations with confidence ratings
+  - Market sentiment analysis
+
+- **Interactive Visualizations**:
+  - Time series plots
+  - Frequency domain analysis
+  - Price forecasting
+  - Sentiment gauge charts
+
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Features](#features)
@@ -20,37 +96,6 @@ This application applies signal processing techniques to stock market data to id
 
 Users can upload their own CSV data files or enter a stock ticker symbol to fetch real-time market data. The application then processes this data, identifies dominant cycles, and provides actionable insights with confidence ratings.
 
-## Features
-
-- **Data Import Options**:
-  - Upload CSV files with historical price data
-  - Fetch live data by entering stock ticker symbols
-  - Select time periods for analysis (1yr, 2yrs, 5yrs, etc.)
-
-- **Advanced Technical Analysis**:
-  - Fast Fourier Transform (FFT) analysis to detect market cycles
-  - Identification of dominant cycles with period length and strength metrics
-  - Phase analysis to determine current position within cycles
-  - Market sentiment analysis based on financial news
-
-- **Trading Recommendations**:
-  - Buy/Hold/Sell recommendations with confidence ratings
-  - Context-aware analysis based on current market conditions
-  - Reasoning behind each recommendation
-
-- **Interactive Visualizations**:
-  - Time series plots with moving averages
-  - Frequency domain (power spectrum) analysis
-  - Price forecasting based on detected cycles
-  - Market sentiment gauge charts with bullish/bearish indicators
-
-- **Export Options**:
-  - Generate PDF reports of analysis results
-  - Download CSV data of processed results
-
-- **Database Integration**:
-  - PostgreSQL database for storing analysis results
-  - Persistent storage for retrieving past analyses
 
 ## Technical Architecture
 
@@ -63,7 +108,6 @@ The application is built using a modern web stack with the following components:
   - **Pandas**: Data manipulation and processing
   - **yfinance**: Stock data API integration
   - **Plotly**: Interactive data visualization
-  
 
 - **Frontend**:
   - Bootstrap 5 for responsive UI components
@@ -339,4 +383,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
