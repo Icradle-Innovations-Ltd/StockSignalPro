@@ -788,6 +788,19 @@ def system_report():
     """Display the system report page."""
     return render_template('system_report.html', now=datetime.now)
 
+@app.route('/download-system-report')
+def download_system_report():
+    """Generate and download system report as PDF."""
+    # Create PDF using pdfkit
+    html = render_template('system_report.html', now=datetime.now)
+    pdf = pdfkit.from_string(html, False)
+    
+    # Create response
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=system_report.pdf'
+    return response
+
 @app.route('/api/market-sentiment', methods=['GET'])
 def get_market_sentiment_api():
     """API endpoint to get market sentiment data."""
