@@ -1,0 +1,75 @@
+     ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+9mzwp
+==> Running 'gunicorn app:app'
+9mzwp
+Traceback (most recent call last):
+9mzwp
+  File "/opt/render/project/src/.venv/bin/gunicorn", line 8, in <module>
+9mzwp
+    sys.exit(run())
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 67, in run
+9mzwp
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/app/base.py", line 231, in run
+9mzwp
+    super().run()
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/app/base.py", line 72, in run
+9mzwp
+    Arbiter(self).run()
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/arbiter.py", line 58, in __init__
+9mzwp
+    self.setup(app)
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/arbiter.py", line 118, in setup
+9mzwp
+    self.app.wsgi()
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+9mzwp
+    self.callable = self.load()
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+9mzwp
+    return self.load_wsgiapp()
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+9mzwp
+    return util.import_app(self.app_uri)
+9mzwp
+  File "/opt/render/project/src/.venv/lib/python3.9/site-packages/gunicorn/util.py", line 359, in import_app
+9mzwp
+    mod = importlib.import_module(module)
+9mzwp
+  File "/opt/render/project/python/Python-3.9.7/lib/python3.9/importlib/__init__.py", line 127, in import_module
+9mzwp
+    return _bootstrap._gcd_import(name[level:], package, level)
+9mzwp
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+9mzwp
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+9mzwp
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+9mzwp
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+9mzwp
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+9mzwp
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+9mzwp
+  File "/opt/render/project/src/app.py", line 59, in <module>
+9mzwp
+    from flask_talisman import Talisman
+9mzwp
+ModuleNotFoundError: No module named 'flask_talisman'
+wtrq7
+10.223.126.180 - - [26/Apr/2025:23:04:00 +0000] "GET / HTTP/1.1" 200 32022 "https://stocksignalpro.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+wtrq7
+10.223.177.236 - - [26/Apr/2025:23:04:01 +0000] "GET /static/assets/logo.svg HTTP/1.1" 304 0 "https://stocksignalpro.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+wtrq7
+10.223.154.172 - - [26/Apr/2025:23:04:01 +0000] "GET /static/css/style.css HTTP/1.1" 304 0 "https://stocksignalpro.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+wtrq7
+10.223.151.152 - - [26/Apr/2025:23:04:01 +0000] "GET /static/js/main.js HTTP/1.1" 304 0 "https://stocksignalpro.onrender.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
