@@ -1,0 +1,12 @@
+[build]
+  command = "pip install -r requirements.txt"
+  publish = "."
+
+[build.environment]
+  PYTHON_VERSION = "3.9.7"
+  FLASK_ENV = "production"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

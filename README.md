@@ -66,6 +66,12 @@ Note: All dependencies are defined in `pyproject.toml`. Poetry will automaticall
 
 Your app will be live in a few minutes!
 
+## Deployment on Render
+
+1. Environment: Python 3.9.7
+2. Build Command: `pip install -r requirements.txt`
+3. Start Command: `gunicorn app:app`
+
 ## Features
 
 - **Data Import Options**:

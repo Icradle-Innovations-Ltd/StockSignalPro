@@ -29,16 +29,25 @@ pdfkit_config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\
 
 # Create the app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev_secret_key")
+
+# Configure the app
+app.config.update(
+    SECRET_KEY=os.environ.get('SECRET_KEY', 'your-secret-key-here'),
+    SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL', 'sqlite:///stocksignalpro.db'),
+    SQLALCHEMY_TRACK_MODIFICATIONS=False,
+    DEBUG=False if os.environ.get('FLASK_ENV') == 'production' else True,
+    TESTING=False if os.environ.get('FLASK_ENV') == 'production' else True,
+    PROPAGATE_EXCEPTIONS=True if os.environ.get('FLASK_ENV') == 'production' else False
+)
+
+# Configure for production behind proxy
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-# Configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///stocksignalpro.db"  # Using SQLite for local development
+# Configure SQLAlchemy
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
 }
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Import and initialize the database
 from models import db, Analysis, MarketSentiment, Portfolio
@@ -952,4 +961,4 @@ def server_error(e):
     return render_template('index.html', error="Server error occurred"), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
