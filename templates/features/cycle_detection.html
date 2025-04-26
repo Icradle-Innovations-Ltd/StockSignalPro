@@ -1,0 +1,169 @@
+{% extends "base_content.html" %}
+
+{% block title %}Cycle Detection - CycleTrader{% endblock %}
+
+{% block page_title %}Cycle Detection{% endblock %}
+{% block page_subtitle %}Discover hidden market cycles using advanced signal processing techniques{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">What is Cycle Detection?</h2>
+            
+            <p>Cycle detection is the process of identifying recurring patterns in stock price movements. While traditional technical analysis often relies on visual pattern recognition, our approach uses mathematical algorithms to objectively identify cyclical behavior that might be invisible to the naked eye.</p>
+            
+            <p>Using Fast Fourier Transform (FFT) and other signal processing techniques, we can detect:</p>
+            
+            <ul class="mb-4">
+                <li><strong>Dominant Cycles</strong> - The most significant recurring patterns in the price data</li>
+                <li><strong>Cycle Lengths</strong> - The time period of each cycle (e.g., 20-day,.40-day cycles)</li>
+                <li><strong>Cycle Strength</strong> - How pronounced each cycle is within the overall price movement</li>
+                <li><strong>Current Position</strong> - Where in the cycle the current price is positioned</li>
+            </ul>
+            
+            <div class="text-center my-5">
+                <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74" alt="Cycles in Stock Market Data" class="img-fluid rounded shadow">
+            </div>
+            
+            <h3 class="text-primary mt-5 mb-3">How Our Cycle Detection Works</h3>
+            
+            <ol>
+                <li>
+                    <h5>Data Preprocessing</h5>
+                    <p>First, we clean and normalize the price data to remove irregularities and prepare it for analysis. We apply detrending to separate cyclical patterns from long-term trends.</p>
+                </li>
+                
+                <li>
+                    <h5>Fast Fourier Transform (FFT)</h5>
+                    <p>We apply FFT to transform the price data from the time domain to the frequency domain. This mathematical operation reveals which cycle lengths (frequencies) are most prominent in the data.</p>
+                </li>
+                
+                <li>
+                    <h5>Peak Detection</h5>
+                    <p>Our algorithm identifies peaks in the frequency spectrum that represent dominant cycles. Each peak corresponds to a cycle of a specific length.</p>
+                </li>
+                
+                <li>
+                    <h5>Cycle Ranking</h5>
+                    <p>We rank cycles by their strength (amplitude) and filter out noise to focus on the most significant patterns.</p>
+                </li>
+                
+                <li>
+                    <h5>Phase Analysis</h5>
+                    <p>For each identified cycle, we calculate its current phase, which tells us where in the cycle the price currently is (e.g., bottom, rising, top, or falling).</p>
+                </li>
+            </ol>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>Why Cycle Detection Matters</h5>
+                <p class="mb-0">Market cycles occur due to various factors including institutional behavior, market psychology, and seasonal patterns. By detecting these cycles objectively, traders can make more informed decisions about market timing and anticipate potential turning points.</p>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Benefits of Cycle Analysis</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-search" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Objective Pattern Recognition</h5>
+                            <p>Identify patterns that might be missed by visual analysis alone.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-clock" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Improved Market Timing</h5>
+                            <p>Anticipate potential turning points based on cyclical patterns.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Multi-timeframe Analysis</h5>
+                            <p>Identify both short-term and long-term cycles for comprehensive market understanding.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-brain" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Reduced Emotional Bias</h5>
+                            <p>Base decisions on mathematical analysis rather than subjective interpretations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Applications in Trading</h2>
+            
+            <p>Cycle detection can be applied to various trading strategies:</p>
+            
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Counter-Trend Trading</h5>
+                            <p class="card-text">Identify potential reversal points by looking for prices approaching cycle tops or bottoms.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Trend Confirmation</h5>
+                            <p class="card-text">Use cycle analysis to confirm trend direction and strength, especially when multiple cycles align.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Cycle Period Estimation</h5>
+                            <p class="card-text">Estimate how long current market conditions might persist based on dominant cycle lengths.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Risk Management</h5>
+                            <p class="card-text">Adjust position sizes and stop losses based on cycle volatility and expected turning points.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{{ url_for('index') }}#upload-section" class="btn btn-primary btn-lg">
+                    <i class="fas fa-chart-line me-2"></i> Try Cycle Detection Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

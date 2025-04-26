@@ -274,6 +274,39 @@ def download_csv(analysis_id):
 def page_not_found(e):
     return render_template('index.html', error="Page not found"), 404
 
+# Feature and Resource Pages
+@app.route('/features/cycle-detection')
+def cycle_detection():
+    return render_template('features/cycle_detection.html')
+
+@app.route('/features/fft-analysis')
+def fft_analysis():
+    return render_template('features/fft_analysis.html')
+
+@app.route('/features/trading-signals')
+def trading_signals():
+    return render_template('features/trading_signals.html')
+
+@app.route('/features/stock-forecasting')
+def stock_forecasting():
+    return render_template('features/stock_forecasting.html')
+
+@app.route('/resources/documentation')
+def documentation():
+    return render_template('resources/documentation.html')
+
+@app.route('/resources/api')
+def api_docs():
+    return render_template('resources/api.html')
+
+@app.route('/resources/blog')
+def blog():
+    return render_template('resources/blog.html')
+
+@app.route('/resources/support')
+def support():
+    return render_template('resources/support.html')
+
 @app.errorhandler(500)
 def server_error(e):
     return render_template('index.html', error="Server error occurred"), 500

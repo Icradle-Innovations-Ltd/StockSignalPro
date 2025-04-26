@@ -1,0 +1,169 @@
+{% extends "base_content.html" %}
+
+{% block title %}FFT Analysis - CycleTrader{% endblock %}
+
+{% block page_title %}Fast Fourier Transform (FFT) Analysis{% endblock %}
+{% block page_subtitle %}Understanding the mathematical foundation behind our cycle detection{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">What is Fast Fourier Transform?</h2>
+            
+            <p>Fast Fourier Transform (FFT) is a powerful mathematical algorithm that transforms time-domain data into the frequency domain. In simpler terms, it takes a complex signal (like stock price movements) and breaks it down into its constituent cycles or wavelengths.</p>
+            
+            <p>Named after the French mathematician Jean-Baptiste Joseph Fourier, this technique has applications in various fields including image processing, audio analysis, and - as in our application - financial market analysis.</p>
+            
+            <div class="alert alert-light border mt-4 mb-5">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        <i class="fas fa-quote-left text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <div class="col-md-10">
+                        <p class="mb-0 fst-italic">"The Fast Fourier Transform is the most important numerical algorithm of our lifetime."</p>
+                        <p class="text-end mb-0">— Gilbert Strang, Professor of Mathematics, MIT</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center my-5">
+                <img src="https://images.unsplash.com/photo-1535320903710-d993d3d77d29" alt="Frequency Domain Visualization" class="img-fluid rounded shadow">
+            </div>
+            
+            <h3 class="text-primary mt-5 mb-3">How FFT Works in Market Analysis</h3>
+            
+            <p>When applied to stock market data, FFT helps uncover hidden patterns that might not be visible in the original price chart:</p>
+            
+            <ol>
+                <li>
+                    <h5>Time to Frequency Domain Conversion</h5>
+                    <p>FFT transforms price data from a time series (prices over time) into a frequency spectrum (cycles of different periods).</p>
+                </li>
+                
+                <li>
+                    <h5>Cycle Identification</h5>
+                    <p>The resulting frequency spectrum reveals which cycle lengths are most prominent in the price data. Peaks in this spectrum represent dominant cycles.</p>
+                </li>
+                
+                <li>
+                    <h5>Amplitude and Phase Information</h5>
+                    <p>For each cycle, FFT provides both amplitude (how strong the cycle is) and phase (where in the cycle we currently are) information.</p>
+                </li>
+                
+                <li>
+                    <h5>Cycle Extraction</h5>
+                    <p>By filtering and focusing on specific frequency ranges, we can isolate and study individual cycles.</p>
+                </li>
+            </ol>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>Mathematical Foundation</h5>
+                <p>The discrete Fourier transform of a price signal is computed as:</p>
+                <div class="my-3 text-center">
+                    <span class="p-2 bg-light border rounded">X(k) = Σ[n=0 to N-1] x(n) × e^(-j2πkn/N)</span>
+                </div>
+                <p class="mb-0">Where x(n) is the price data, N is the number of data points, and k is the frequency index. The Fast Fourier Transform is an optimized algorithm to compute this transformation efficiently.</p>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Advantages of FFT Analysis in Trading</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-tachometer-alt" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Efficiency</h5>
+                            <p>FFT is computationally efficient, allowing for real-time analysis of large datasets.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-filter" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Noise Reduction</h5>
+                            <p>Helps separate meaningful cycles from random market noise.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-eye" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Hidden Pattern Detection</h5>
+                            <p>Reveals cyclical patterns that may be invisible in traditional price charts.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-calculator" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Quantitative Precision</h5>
+                            <p>Provides exact measurements of cycle lengths, strengths, and phases.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Power Spectrum Interpretation</h2>
+            
+            <p>One of the key outputs of FFT analysis is the power spectrum, which shows the strength (amplitude) of cycles at different periods:</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">X-Axis (Period)</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>The horizontal axis represents the cycle period in days (typically shown on a logarithmic scale).</p>
+                            <p class="mb-0">Shorter periods (faster cycles) appear on the left, while longer periods (slower cycles) appear on the right.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Y-Axis (Amplitude)</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>The vertical axis shows the amplitude or strength of each cycle.</p>
+                            <p class="mb-0">Taller peaks indicate stronger cycles that have more influence on price movement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-light border mt-4">
+                <h5 class="text-primary"><i class="fas fa-lightbulb me-2"></i>Interpreting Peaks</h5>
+                <p>Peaks in the power spectrum represent dominant cycles in the price data. For example, a peak at 20 days suggests a cycle that completes approximately every 20 trading days.</p>
+                <p class="mb-0">Multiple peaks indicate that price is influenced by several cycles of different lengths simultaneously.</p>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{{ url_for('index') }}#upload-section" class="btn btn-primary btn-lg">
+                    <i class="fas fa-wave-square me-2"></i> Try FFT Analysis Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

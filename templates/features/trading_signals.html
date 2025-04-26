@@ -1,0 +1,204 @@
+{% extends "base_content.html" %}
+
+{% block title %}Trading Signals - CycleTrader{% endblock %}
+
+{% block page_title %}Trading Signals{% endblock %}
+{% block page_subtitle %}Actionable trading recommendations based on cycle analysis{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Cycle-Based Trading Signals</h2>
+            
+            <p>Our trading signals are generated through a comprehensive analysis of detected market cycles and their current positions. By understanding where price is located within multiple cycles of different lengths, we can provide actionable recommendations with confidence ratings.</p>
+            
+            <div class="alert alert-warning mt-4 mb-4">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+                    </div>
+                    <div>
+                        <h5>Disclaimer</h5>
+                        <p class="mb-0">The trading signals provided are for educational and informational purposes only. They are based on mathematical analysis of historical data and should not be considered financial advice. Always perform your own research and consider consulting with a qualified financial advisor before making investment decisions.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center my-5">
+                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3" alt="Trading Signals Dashboard" class="img-fluid rounded shadow">
+            </div>
+            
+            <h3 class="text-primary mt-5 mb-3">Types of Trading Signals</h3>
+            
+            <div class="row g-4 mt-2">
+                <div class="col-md-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-header bg-success text-white text-center">
+                            <h5 class="mb-0">Buy Signal</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-arrow-up text-success" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <p>Generated when multiple cycles are at or near their bottom phases, suggesting potential upward movement.</p>
+                            <p class="mb-0"><strong>Ideal for:</strong> Entering new long positions or adding to existing ones.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-warning text-dark text-center">
+                            <h5 class="mb-0">Hold Signal</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-equals text-warning" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <p>Generated when cycles are in transitional phases or when different cycles are giving conflicting signals.</p>
+                            <p class="mb-0"><strong>Ideal for:</strong> Maintaining current positions without increasing exposure.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white text-center">
+                            <h5 class="mb-0">Sell Signal</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-arrow-down text-danger" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <p>Generated when multiple cycles are at or near their peak phases, suggesting potential downward movement.</p>
+                            <p class="mb-0"><strong>Ideal for:</strong> Exiting long positions or considering short positions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Confidence Ratings</h2>
+            
+            <p>Each trading signal comes with a confidence percentage that indicates the strength and clarity of the signal. This helps you gauge the reliability of the recommendation.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">High Confidence (80-100%)</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>Multiple strong cycles aligned in the same direction</li>
+                                <li>Clear cycle patterns with minimal noise</li>
+                                <li>Historical reliability of detected cycles</li>
+                                <li>Strong signal intensity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">Medium Confidence (60-79%)</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>Some cycle alignment with mixed signals</li>
+                                <li>Moderate cycle clarity</li>
+                                <li>Some historical consistency</li>
+                                <li>Average signal intensity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">Low Confidence (Below 60%)</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>Conflicting cycle signals</li>
+                                <li>Weak or noisy cycle patterns</li>
+                                <li>Limited historical consistency</li>
+                                <li>Low signal intensity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Trading Signal Components</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-bullseye" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Recommendation</h5>
+                            <p>Clear Buy, Hold, or Sell action with confidence percentage.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-wave-square" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Cycle Information</h5>
+                            <p>Details about detected cycles and their current positions.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-brain" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Reasoning</h5>
+                            <p>Explanation of why the specific recommendation was generated.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Visualizations</h5>
+                            <p>Interactive charts showing the cycles and price projections.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>Best Practices</h5>
+                <p class="mb-0">For best results, consider trading signals in conjunction with other forms of analysis, risk management strategies, and your overall investment goals. Pay special attention to high-confidence signals that align with your own analysis.</p>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{{ url_for('index') }}#upload-section" class="btn btn-primary btn-lg">
+                    <i class="fas fa-signal me-2"></i> Get Trading Signals Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

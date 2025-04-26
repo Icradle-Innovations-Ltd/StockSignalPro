@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CycleTrader - Stock Market Signal Processing{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container-fluid px-0">
+                    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                        <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="30" class="me-2">
+                        <span class="app-title">CycleTrader</span>
+                    </a>
+                    
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="featuresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Features
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="featuresDropdown">
+                                    <li><a class="dropdown-item" href="{{ url_for('cycle_detection') }}">Cycle Detection</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('fft_analysis') }}">FFT Analysis</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('trading_signals') }}">Trading Signals</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('stock_forecasting') }}">Stock Forecasting</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Resources
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+                                    <li><a class="dropdown-item" href="{{ url_for('documentation') }}">Documentation</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('api_docs') }}">API</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('blog') }}">Blog</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('support') }}">Support</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('index') }}#upload-section" class="btn btn-primary ms-lg-3">
+                                    <i class="fas fa-upload me-1"></i> Analyze Stock
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Page Header -->
+    <section class="bg-light py-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="text-primary">{% block page_title %}Page Title{% endblock %}</h1>
+                    <p class="lead mb-0">{% block page_subtitle %}Page subtitle or brief description{% endblock %}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container py-4">
+        {% block content %}
+        <!-- Page content goes here -->
+        {% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="40" class="mb-3">
+                    <p class="text-muted">Advanced stock market signal processing using Fast Fourier Transform to detect hidden market cycles and generate trading recommendations.</p>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-primary mb-3">Features</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('cycle_detection') }}" class="text-muted text-decoration-none">Cycle Detection</a></li>
+                        <li class="mb-2"><a href="{{ url_for('fft_analysis') }}" class="text-muted text-decoration-none">FFT Analysis</a></li>
+                        <li class="mb-2"><a href="{{ url_for('trading_signals') }}" class="text-muted text-decoration-none">Trading Signals</a></li>
+                        <li class="mb-2"><a href="{{ url_for('stock_forecasting') }}" class="text-muted text-decoration-none">Stock Forecasting</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-primary mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('documentation') }}" class="text-muted text-decoration-none">Documentation</a></li>
+                        <li class="mb-2"><a href="{{ url_for('api_docs') }}" class="text-muted text-decoration-none">API</a></li>
+                        <li class="mb-2"><a href="{{ url_for('blog') }}" class="text-muted text-decoration-none">Blog</a></li>
+                        <li class="mb-2"><a href="{{ url_for('support') }}" class="text-muted text-decoration-none">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 col-md-4">
+                    <h5 class="text-primary mb-3">About</h5>
+                    <p class="text-muted">CycleTrader is an educational tool designed to help traders and investors understand market cycles through signal processing techniques.</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="text-muted text-decoration-none"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary mt-4 pt-4 text-center text-muted">
+                <p>&copy; 2023 CycleTrader. All rights reserved.</p>
+                <p class="small">Disclaimer: This application is for educational purposes only. It does not constitute financial advice.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
