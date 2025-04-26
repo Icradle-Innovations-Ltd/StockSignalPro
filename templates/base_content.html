@@ -150,6 +150,40 @@
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
+    <!-- Force menu refresh -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Force update the nav menus to include Market Sentiment
+            var featuresDropdown = document.querySelector('.dropdown-menu[aria-labelledby="featuresDropdown"]');
+            if (featuresDropdown) {
+                var marketSentimentItem = document.createElement('li');
+                var marketSentimentLink = document.createElement('a');
+                marketSentimentLink.href = "{{ url_for('market_sentiment_page') }}";
+                marketSentimentLink.className = 'dropdown-item';
+                marketSentimentLink.textContent = 'Market Sentiment';
+                
+                // Check if it's already there
+                var exists = false;
+                var items = featuresDropdown.querySelectorAll('a.dropdown-item');
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].textContent.includes('Market Sentiment')) {
+                        exists = true;
+                        break;
+                    }
+                }
+                
+                // Add it if not present
+                if (!exists) {
+                    marketSentimentItem.appendChild(marketSentimentLink);
+                    featuresDropdown.appendChild(marketSentimentItem);
+                    console.log('Added Market Sentiment to menu');
+                }
+            } else {
+                console.log('Features dropdown not found');
+            }
+        });
+    </script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>
