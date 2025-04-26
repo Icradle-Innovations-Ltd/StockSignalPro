@@ -64,14 +64,38 @@ def fetch_portfolio_data(stocks, period="2y"):
     Returns:
         dict: Dictionary mapping tickers to DataFrames
     """
+    import logging
+    logger = logging.getLogger(__name__)
+    
     stock_data = {}
+    
+    if not stocks:
+        logger.error("No stocks provided to fetch_portfolio_data")
+        return stock_data
+    
+    logger.info(f"Fetching portfolio data for tickers: {stocks}")
+    
+    valid_data_count = 0
+    error_count = 0
     
     for ticker in stocks:
         try:
+            logger.info(f"Fetching data for ticker: {ticker}")
             df = fetch_stock_data(ticker, period=period)
-            stock_data[ticker] = df
+            
+            if df is not None and not df.empty:
+                stock_data[ticker] = df
+                valid_data_count += 1
+                logger.info(f"Successfully fetched data for {ticker}, shape: {df.shape if hasattr(df, 'shape') else 'N/A'}")
+            else:
+                logger.error(f"No data returned for ticker: {ticker}")
+                error_count += 1
+                
         except Exception as e:
-            print(f"Error fetching data for {ticker}: {str(e)}")
+            logger.error(f"Error fetching data for {ticker}: {str(e)}")
+            error_count += 1
+    
+    logger.info(f"Portfolio data fetch complete. Success: {valid_data_count}, Errors: {error_count}")
     
     return stock_data
 

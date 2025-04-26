@@ -323,10 +323,10 @@ def create_portfolio():
         # Get form data
         name = request.form.get('name')
         description = request.form.get('description')
-        tickers = request.form.get('tickers', '').strip().upper().split(',')
+        tickers_input = request.form.get('tickers', '').strip().upper()
         
         # Filter empty strings and strip whitespace
-        tickers = [ticker.strip() for ticker in tickers if ticker.strip()]
+        tickers = [ticker.strip() for ticker in tickers_input.split(',') if ticker.strip()]
         
         # Handle allocations if provided
         allocations = {}
@@ -349,48 +349,65 @@ def create_portfolio():
             return render_template('portfolios/new.html')
         
         try:
-            # Fetch data for the tickers
-            stock_data = fetch_portfolio_data(tickers)
+            # Log information for debugging
+            logger.info(f"Creating portfolio with name: {name}, tickers: {tickers}")
             
-            # Check if we got data for at least one ticker
-            if not stock_data:
-                flash('Could not fetch data for any of the provided tickers', 'danger')
-                return render_template('portfolios/new.html')
-            
-            # If some tickers failed, update the list
-            valid_tickers = list(stock_data.keys())
-            
-            # Calculate correlation matrix
-            correlation_matrix = calculate_correlation_matrix(stock_data)
-            correlation_heatmap = create_correlation_heatmap(correlation_matrix)
-            
-            # Analyze cycles
-            cycle_analysis = analyze_portfolio_cycles(stock_data)
-            cycle_chart = create_portfolio_cycle_chart(cycle_analysis, stock_data)
-            
-            # Create portfolio performance chart
-            if allocations:
+            # Create default equal allocations if not provided
+            if not allocations:
+                allocation_pct = 100.0 / len(tickers)
+                allocations = {ticker: allocation_pct for ticker in tickers}
+            else:
                 # Normalize allocations to 100%
                 total = sum(allocations.values())
                 if total > 0:
                     allocations = {ticker: (alloc / total * 100) for ticker, alloc in allocations.items()}
             
-            portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
-            
-            # Create portfolio
+            # Create portfolio with minimal data first - we'll fetch the details later
+            # This approach ensures we can at least create the portfolio structure
             portfolio = Portfolio(
                 name=name,
                 description=description,
-                stocks=valid_tickers,
-                allocations=allocations,
-                correlation_matrix=correlation_matrix.to_dict() if not correlation_matrix.empty else None,
-                portfolio_plot=portfolio_chart,
-                cycle_analysis=cycle_analysis
+                stocks=tickers,
+                allocations=allocations
             )
             
             # Save to database
             db.session.add(portfolio)
             db.session.commit()
+            
+            # Now, try to fetch the data asynchronously (or at least log the attempt)
+            logger.info(f"Portfolio created with ID: {portfolio.id} - Now fetching stock data")
+            
+            try:
+                # Fetch data for the tickers (this will run, but we won't block portfolio creation on it)
+                stock_data = fetch_portfolio_data(tickers)
+                
+                if stock_data:
+                    # If we got data, update the portfolio with analysis results
+                    valid_tickers = list(stock_data.keys())
+                    
+                    # Calculate correlation matrix
+                    correlation_matrix = calculate_correlation_matrix(stock_data)
+                    
+                    # Analyze cycles
+                    cycle_analysis = analyze_portfolio_cycles(stock_data)
+                    
+                    # Create portfolio performance chart
+                    portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
+                    
+                    # Update portfolio
+                    portfolio.stocks = valid_tickers
+                    portfolio.correlation_matrix = correlation_matrix.to_dict() if not correlation_matrix.empty else None
+                    portfolio.cycle_analysis = cycle_analysis
+                    portfolio.portfolio_plot = portfolio_chart
+                    
+                    db.session.commit()
+                    logger.info(f"Portfolio {portfolio.id} updated with analysis data")
+                else:
+                    logger.warning(f"Could not fetch stock data for portfolio {portfolio.id}")
+            except Exception as data_error:
+                # Don't fail the whole operation if just the data fetch fails
+                logger.error(f"Error fetching data for portfolio {portfolio.id}: {str(data_error)}")
             
             flash('Portfolio created successfully', 'success')
             return redirect(url_for('view_portfolio', portfolio_id=portfolio.id))
@@ -413,6 +430,40 @@ def view_portfolio(portfolio_id):
     
     # Get all analyses associated with this portfolio
     analyses = Analysis.query.filter_by(portfolio_id=portfolio_id).all()
+    
+    # If portfolio has no analysis data yet, try to generate it now
+    if portfolio.stocks and (portfolio.correlation_matrix is None or portfolio.cycle_analysis is None or portfolio.portfolio_plot is None):
+        try:
+            logger.info(f"Generating missing analysis data for portfolio {portfolio_id}")
+            
+            # Fetch data for the tickers
+            stock_data = fetch_portfolio_data(portfolio.stocks)
+            
+            if stock_data:
+                # Calculate correlation matrix
+                correlation_matrix = calculate_correlation_matrix(stock_data)
+                
+                # Analyze cycles
+                cycle_analysis = analyze_portfolio_cycles(stock_data)
+                
+                # Create portfolio performance chart  
+                portfolio_chart = create_portfolio_performance_chart(stock_data, portfolio.allocations)
+                
+                # Update portfolio
+                if portfolio.correlation_matrix is None and not correlation_matrix.empty:
+                    portfolio.correlation_matrix = correlation_matrix.to_dict()
+                
+                if portfolio.cycle_analysis is None:
+                    portfolio.cycle_analysis = cycle_analysis
+                    
+                if portfolio.portfolio_plot is None:
+                    portfolio.portfolio_plot = portfolio_chart
+                
+                db.session.commit()
+                logger.info(f"Portfolio {portfolio.id} updated with missing analysis data")
+        except Exception as e:
+            logger.error(f"Error generating analysis data for portfolio {portfolio_id}: {str(e)}")
+            # Don't show this error to the user, just log it
     
     return render_template('portfolios/view.html', 
                           portfolio=portfolio.to_dict(), 
