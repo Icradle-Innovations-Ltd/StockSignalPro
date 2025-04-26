@@ -82,7 +82,67 @@
         <h2 class="border-bottom pb-2">Implementation Details</h2>
         <div class="card">
             <div class="card-body">
-                <h5>Data Processing Pipeline</h5>
+                <h5>Core Algorithms</h5>
+                
+                <h6 class="mt-4">1. Fast Fourier Transform (FFT)</h6>
+                <p>Our implementation uses the Fast Fourier Transform algorithm to decompose price data into its frequency components:</p>
+                <ul>
+                    <li><strong>Purpose:</strong> Convert time-domain price data into frequency-domain representation</li>
+                    <li><strong>Implementation:</strong> Using SciPy's FFT module with Hann window function to reduce spectral leakage</li>
+                    <li><strong>Formula:</strong> X(k) = Σ[n=0 to N-1] x(n) * e^(-j2πkn/N)</li>
+                    <li><strong>Application:</strong> Identifies dominant cycle frequencies in price movements</li>
+                </ul>
+
+                <h6 class="mt-4">2. Cycle Detection Algorithm</h6>
+                <p>Custom peak detection algorithm for identifying significant market cycles:</p>
+                <ul>
+                    <li><strong>Input:</strong> FFT frequency spectrum</li>
+                    <li><strong>Process:</strong>
+                        <ul>
+                            <li>Filter frequencies to trading-relevant range (2-252 days)</li>
+                            <li>Calculate relative strength of each frequency component</li>
+                            <li>Apply strength threshold (default 10%) to identify significant cycles</li>
+                            <li>Calculate current phase position within each cycle</li>
+                        </ul>
+                    </li>
+                    <li><strong>Output:</strong> List of dominant cycles with period, strength, and phase</li>
+                </ul>
+
+                <h6 class="mt-4">3. Trading Signal Generation</h6>
+                <p>Decision engine algorithm for generating trading recommendations:</p>
+                <ul>
+                    <li><strong>Inputs:</strong> 
+                        <ul>
+                            <li>Detected cycles and their current phases</li>
+                            <li>Relative strength of each cycle</li>
+                            <li>Recent price momentum</li>
+                        </ul>
+                    </li>
+                    <li><strong>Process:</strong>
+                        <ul>
+                            <li>Weight signals by cycle strength</li>
+                            <li>Calculate days to next peak/trough for each cycle</li>
+                            <li>Aggregate weighted signals for final recommendation</li>
+                        </ul>
+                    </li>
+                    <li><strong>Output:</strong> BUY/SELL/HOLD recommendation with confidence level</li>
+                </ul>
+
+                <h6 class="mt-4">4. Sentiment Analysis Algorithm</h6>
+                <p>Natural language processing approach for market sentiment detection:</p>
+                <ul>
+                    <li><strong>Input:</strong> Financial news text from multiple sources</li>
+                    <li><strong>Process:</strong>
+                        <ul>
+                            <li>Keyword frequency analysis using predefined sentiment dictionaries</li>
+                            <li>Weighted scoring of bullish/bearish/neutral terms</li>
+                            <li>Normalization to 0-100 scale</li>
+                        </ul>
+                    </li>
+                    <li><strong>Output:</strong> Market sentiment score and mood classification</li>
+                </ul>
+
+                <h5 class="mt-4">Data Processing Pipeline</h5>
                 <p>The system processes data through the following stages:</p>
                 <ol>
                     <li>Data acquisition and cleaning</li>
