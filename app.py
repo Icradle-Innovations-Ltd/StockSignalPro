@@ -24,13 +24,16 @@ from utils.portfolio_analysis import (create_portfolio, fetch_portfolio_data, ca
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Configure pdfkit
+pdfkit_config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+
 # Create the app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev_secret_key")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///stocksignalpro.db"  # Using SQLite for local development
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
@@ -239,33 +242,42 @@ def get_plot(analysis_id, plot_type):
 @app.route('/generate_report/<analysis_id>')
 def generate_report(analysis_id):
     """Generate and download a PDF report of the analysis."""
-    # Get analysis from database
-    analysis = Analysis.query.get(analysis_id)
-
-    if not analysis:
-        flash('Analysis not found or expired', 'warning')
-        return redirect(url_for('index'))
-
     try:
-        # Add a helper function for the template to format dates
-        def now():
-            from datetime import datetime
-            return datetime.now()
+        # Get the analysis
+        analysis = Analysis.query.get_or_404(analysis_id)
 
-        # In a real implementation, this would generate a PDF
-        # For now, we'll render an HTML report that could be printed
-        html_report = render_template('report.html', analysis=analysis.to_dict(), now=now)
+        # Generate the report
+        current_time = datetime.now().strftime('%B %d, %Y at %H:%M')
+        html_report = render_template('report.html', analysis=analysis.to_dict(), now=current_time)
+        
+        # Save HTML to a temporary file
+        temp_html = os.path.join(app.root_path, 'temp_report.html')
+        with open(temp_html, 'w', encoding='utf-8') as f:
+            f.write(html_report)
 
-        pdf = pdfkit.from_string(html_report, False)
+        # Configure PDF options
+        options = {
+            'enable-local-file-access': True,
+            'quiet': '',
+            'no-outline': None,
+            'encoding': 'UTF-8',
+            'no-images': None
+        }
+
+        # Generate PDF from the file
+        pdf = pdfkit.from_file(temp_html, False, configuration=pdfkit_config, options=options)
+        
+        # Clean up temporary file
+        os.remove(temp_html)
+
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=analysis_report.pdf'
         return response
 
-
     except Exception as e:
-        logger.error(f"Error generating report: {str(e)}")
-        flash(f'Error generating report: {str(e)}', 'danger')
+        logger.error(f"Error generating PDF: {str(e)}")
+        flash('Error generating report: ' + str(e), 'danger')
         return redirect(url_for('results', analysis_id=analysis_id))
 
 @app.route('/download_csv/<analysis_id>')

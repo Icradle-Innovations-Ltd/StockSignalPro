@@ -6,80 +6,53 @@ import logging
 logger = logging.getLogger(__name__)
 
 def process_data(df):
-    """Process and clean the input data for FFT analysis.
+    """Process and clean the input data.
     
     Args:
-        df (DataFrame): Input dataframe with date and price columns
+        df (DataFrame): Input dataframe with stock data
         
     Returns:
-        DataFrame: Processed dataframe ready for FFT analysis
+        DataFrame: Processed dataframe with date and price columns
     """
     try:
         # Make a copy to avoid modifying the original
         df = df.copy()
         
-        # Standardize column names
-        df.columns = [col.lower() for col in df.columns]
-        
         # Ensure we have a date column
         if 'date' not in df.columns:
-            if 'time' in df.columns:
-                df.rename(columns={'time': 'date'}, inplace=True)
+            # Try to find a date-like column
+            date_cols = [col for col in df.columns if 'date' in col.lower() or 'time' in col.lower()]
+            if date_cols:
+                df.rename(columns={date_cols[0]: 'date'}, inplace=True)
             else:
-                # Try to find a date-like column
-                date_cols = [col for col in df.columns if 'date' in col or 'time' in col]
-                if date_cols:
-                    df.rename(columns={date_cols[0]: 'date'}, inplace=True)
-                else:
-                    raise ValueError("Could not identify a date column in the data")
+                raise ValueError("No date column found")
         
-        # Ensure date is in datetime format
-        if not pd.api.types.is_datetime64_any_dtype(df['date']):
-            df['date'] = pd.to_datetime(df['date'], errors='coerce')
-            
-        # Drop rows with missing dates
-        df.dropna(subset=['date'], inplace=True)
+        # Convert date column to datetime
+        df['date'] = pd.to_datetime(df['date'])
         
         # Sort by date
         df.sort_values('date', inplace=True)
         
-        # Find price column
-        price_cols = [col for col in df.columns if 'price' in col or 'close' in col]
-        if price_cols:
-            price_col = price_cols[0]
-        else:
-            # If no obvious price column, try to find a numeric column that's not date
-            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-            numeric_cols = [col for col in numeric_cols if col != 'date']
-            if numeric_cols:
-                price_col = numeric_cols[0]
+        # Ensure we have a price column
+        if 'price' not in df.columns:
+            # Try to find a price-like column
+            price_cols = [col for col in df.columns if 'price' in col.lower() or 'close' in col.lower()]
+            if price_cols:
+                df.rename(columns={price_cols[0]: 'price'}, inplace=True)
             else:
-                raise ValueError("Could not identify a price column in the data")
+                raise ValueError("No price column found")
         
-        # Ensure price column is numeric
-        df[price_col] = pd.to_numeric(df[price_col], errors='coerce')
+        # Convert price to float
+        df['price'] = pd.to_numeric(df['price'], errors='coerce')
         
-        # Drop rows with missing prices
-        df.dropna(subset=[price_col], inplace=True)
+        # Remove any rows with NaN values
+        df.dropna(subset=['date', 'price'], inplace=True)
         
         # Reset index
         df.reset_index(drop=True, inplace=True)
         
-        # Standardize to just the columns we need
-        result_df = pd.DataFrame({
-            'date': df['date'],
-            'price': df[price_col]
-        })
+        return df
         
-        # Add additional columns that might be useful
-        result_df['day_of_week'] = result_df['date'].dt.dayofweek
-        result_df['is_weekday'] = result_df['day_of_week'] < 5
-        
-        # Optional: detrend the data to focus on cycles rather than trends
-        # result_df['detrended_price'] = signal.detrend(result_df['price'])
-        
-        return result_df
-    
     except Exception as e:
         logger.error(f"Error in data processing: {str(e)}")
         raise
@@ -97,6 +70,14 @@ def perform_fft(df):
         # Get the price data
         prices = df['price'].values
         
+        # Ensure we have enough data points
+        if len(prices) < 2:
+            raise ValueError("Not enough data points for FFT analysis")
+            
+        # Remove any NaN values by interpolation
+        if np.isnan(prices).any():
+            prices = pd.Series(prices).interpolate().values
+        
         # Apply a window function to reduce spectral leakage
         window = signal.windows.hann(len(prices))
         windowed_prices = prices * window
@@ -105,45 +86,30 @@ def perform_fft(df):
         fft_result = np.fft.rfft(windowed_prices)
         
         # Calculate frequencies
-        # The sampling frequency is 1 sample per day
         n = len(prices)
         sample_freq = 1  # 1 sample per day
         freqs = np.fft.rfftfreq(n, d=1/sample_freq)
         
-        # Calculate amplitudes (normalized by dividing by n/2)
+        # Calculate periods (in days)
+        periods = np.zeros_like(freqs)
+        non_zero_freqs = freqs != 0
+        periods[non_zero_freqs] = 1 / freqs[non_zero_freqs]
+        
+        # Calculate amplitudes (normalized)
         amplitudes = np.abs(fft_result) / (n/2)
         
         # Calculate phases
         phases = np.angle(fft_result)
         
-        # Convert frequencies to periods (in days)
-        periods = 1 / freqs[1:]  # Skip the DC component (index 0)
-        
-        # Convert NumPy arrays to Python lists for JSON serialization
-        def convert_numpy_to_lists(obj):
-            if isinstance(obj, np.ndarray):
-                return obj.tolist()
-            elif isinstance(obj, dict):
-                return {k: convert_numpy_to_lists(v) for k, v in obj.items()}
-            elif isinstance(obj, list):
-                return [convert_numpy_to_lists(item) for item in obj]
-            elif isinstance(obj, (np.int64, np.int32, np.float64, np.float32)):
-                return float(obj) if isinstance(obj, (np.float64, np.float32)) else int(obj)
-            else:
-                return obj
-        
-        # Pack results
+        # Create results dictionary
         fft_results = {
             'frequencies': freqs[1:],  # Skip the DC component
-            'periods': periods,
+            'periods': periods[1:],    # Skip the DC component
             'amplitudes': amplitudes[1:],  # Skip the DC component
             'phases': phases[1:],  # Skip the DC component
-            'original_prices': prices,
-            'windowed_prices': windowed_prices
+            'original_prices': prices.tolist(),
+            'windowed_prices': windowed_prices.tolist()
         }
-        
-        # Convert to JSON serializable format
-        fft_results = convert_numpy_to_lists(fft_results)
         
         return fft_results
     

@@ -4,21 +4,30 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import logging
 import json
+from scipy import signal
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 # Helper function to ensure JSON serializable data
 def convert_numpy_to_lists(obj):
     if isinstance(obj, np.ndarray):
-        return obj.tolist()
+        # Convert NaN to None for JSON serialization
+        return [convert_numpy_to_lists(x) for x in obj]
     elif isinstance(obj, dict):
         return {k: convert_numpy_to_lists(v) for k, v in obj.items()}
     elif isinstance(obj, list):
         return [convert_numpy_to_lists(item) for item in obj]
-    elif isinstance(obj, (np.int64, np.int32, np.float64, np.float32)):
-        return float(obj) if isinstance(obj, (np.float64, np.float32)) else int(obj)
+    elif isinstance(obj, (np.int64, np.int32)):
+        return int(obj)
+    elif isinstance(obj, (np.float64, np.float32)):
+        return None if np.isnan(obj) else float(obj)
     elif isinstance(obj, pd.Timestamp):
         return obj.isoformat()
+    elif isinstance(obj, (np.datetime64, datetime)):
+        return pd.Timestamp(obj).isoformat()
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
     else:
         return obj
 
@@ -104,20 +113,17 @@ def create_frequency_plot(fft_results):
         dict: Plotly figure as JSON for rendering in the browser
     """
     try:
-        # Unpack FFT results
-        periods = fft_results['periods']
-        amplitudes = fft_results['amplitudes']
+        # Unpack FFT results and ensure they're numpy arrays
+        periods = np.array(fft_results['periods'])
+        amplitudes = np.array(fft_results['amplitudes'])
         
         # Filter to relevant periods (2 days to 252 days/1 year)
-        # Convert to numpy arrays if they're lists
-        if isinstance(periods, list):
-            periods = np.array(periods)
-        if isinstance(amplitudes, list):
-            amplitudes = np.array(amplitudes)
-            
         mask = (periods >= 2) & (periods <= 252)
         filtered_periods = periods[mask]
         filtered_amplitudes = amplitudes[mask]
+        
+        if len(filtered_periods) == 0 or len(filtered_amplitudes) == 0:
+            raise ValueError("No valid data points for frequency plot")
         
         # Create figure
         fig = go.Figure()
@@ -132,50 +138,38 @@ def create_frequency_plot(fft_results):
             hovertemplate='<b>Period:</b> %{x:.1f} days<br><b>Amplitude:</b> %{y:.4f}<extra></extra>'
         ))
         
-        # Add markers for top 5 peaks
-        # Handle the case where filtered_amplitudes could be a list
-        if isinstance(filtered_amplitudes, list):
-            # Convert to numpy array for processing
-            filtered_amplitudes_np = np.array(filtered_amplitudes)
-            peak_indices = np.argsort(-filtered_amplitudes_np)[:5]
-        else:
-            peak_indices = np.argsort(-filtered_amplitudes)[:5]
+        # Find peaks for annotation
+        peak_indices = signal.find_peaks(filtered_amplitudes, height=np.max(filtered_amplitudes)*0.1)[0]
+        peak_periods = filtered_periods[peak_indices]
+        peak_amplitudes = filtered_amplitudes[peak_indices]
+        
+        # Sort peaks by amplitude and take top 5
+        peak_order = np.argsort(-peak_amplitudes)[:5]
+        top_periods = peak_periods[peak_order]
+        top_amplitudes = peak_amplitudes[peak_order]
+        
+        # Add markers and annotations for peaks
         fig.add_trace(go.Scatter(
-            x=filtered_periods[peak_indices],
-            y=filtered_amplitudes[peak_indices],
-            mode='markers',
+            x=top_periods,
+            y=top_amplitudes,
+            mode='markers+text',
+            name='Major Cycles',
             marker=dict(
-                color='rgba(255, 65, 54, 1)',
-                size=10,
-                line=dict(width=2, color='DarkSlateGrey')
+                color='rgba(255, 127, 14, 1)',
+                size=10
             ),
-            name='Dominant Cycles',
+            text=[f'{p:.1f}d' for p in top_periods],
+            textposition='top center',
             hovertemplate='<b>Period:</b> %{x:.1f} days<br><b>Amplitude:</b> %{y:.4f}<extra></extra>'
         ))
         
-        # Add text annotations for top 3 peaks
-        for i, idx in enumerate(peak_indices[:3]):
-            fig.add_annotation(
-                x=filtered_periods[idx],
-                y=filtered_amplitudes[idx],
-                text=f"{filtered_periods[idx]:.1f} days",
-                showarrow=True,
-                arrowhead=1,
-                ax=0,
-                ay=-40
-            )
-        
         # Update layout
         fig.update_layout(
-            title='Frequency Domain Analysis (Power Spectrum)',
-            xaxis_title='Period (Days)',
+            title='Frequency Domain Analysis',
+            xaxis_title='Period (days)',
             yaxis_title='Amplitude',
-            xaxis=dict(
-                type='log',
-                tickvals=[2, 5, 10, 20, 50, 100, 200],
-                ticktext=['2', '5', '10', '20', '50', '100', '200']
-            ),
             hovermode='x unified',
+            showlegend=True,
             legend=dict(
                 orientation='h',
                 yanchor='bottom',
@@ -188,6 +182,9 @@ def create_frequency_plot(fft_results):
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
         )
+        
+        # Use log scale for x-axis to better show the distribution of periods
+        fig.update_xaxes(type='log')
         
         # Return the figure as a JSON serializable object
         fig_dict = fig.to_dict()
