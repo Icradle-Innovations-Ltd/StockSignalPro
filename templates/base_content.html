@@ -52,6 +52,7 @@
                                     <li><a class="dropdown-item" href="{{ url_for('trading_signals') }}">Trading Signals</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('stock_forecasting') }}">Stock Forecasting</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('sample_data_page') }}">Sample Data Generator</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -113,6 +114,7 @@
                         <li class="mb-2"><a href="{{ url_for('trading_signals') }}" class="text-muted text-decoration-none">Trading Signals</a></li>
                         <li class="mb-2"><a href="{{ url_for('stock_forecasting') }}" class="text-muted text-decoration-none">Stock Forecasting</a></li>
                         <li class="mb-2"><a href="{{ url_for('market_sentiment_page') }}" class="text-muted text-decoration-none">Market Sentiment</a></li>
+                        <li class="mb-2"><a href="{{ url_for('sample_data_page') }}" class="text-muted text-decoration-none">Sample Data Generator</a></li>
                     </ul>
                 </div>
                 
@@ -156,30 +158,54 @@
     <!-- Force menu refresh -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Force update the nav menus to include Market Sentiment
+            // Force update the nav menus to include Market Sentiment and Sample Data Generator
             var featuresDropdown = document.querySelector('.dropdown-menu[aria-labelledby="featuresDropdown"]');
             if (featuresDropdown) {
+                // Add Market Sentiment
                 var marketSentimentItem = document.createElement('li');
                 var marketSentimentLink = document.createElement('a');
                 marketSentimentLink.href = "{{ url_for('market_sentiment_page') }}";
                 marketSentimentLink.className = 'dropdown-item';
                 marketSentimentLink.textContent = 'Market Sentiment';
                 
-                // Check if it's already there
-                var exists = false;
+                // Check if Market Sentiment is already there
+                var marketSentimentExists = false;
                 var items = featuresDropdown.querySelectorAll('a.dropdown-item');
                 for (var i = 0; i < items.length; i++) {
                     if (items[i].textContent.includes('Market Sentiment')) {
-                        exists = true;
+                        marketSentimentExists = true;
                         break;
                     }
                 }
                 
-                // Add it if not present
-                if (!exists) {
+                // Add Market Sentiment if not present
+                if (!marketSentimentExists) {
                     marketSentimentItem.appendChild(marketSentimentLink);
                     featuresDropdown.appendChild(marketSentimentItem);
                     console.log('Added Market Sentiment to menu');
+                }
+                
+                // Add Sample Data Generator
+                var sampleDataItem = document.createElement('li');
+                var sampleDataLink = document.createElement('a');
+                sampleDataLink.href = "{{ url_for('sample_data_page') }}";
+                sampleDataLink.className = 'dropdown-item';
+                sampleDataLink.textContent = 'Sample Data Generator';
+                
+                // Check if Sample Data Generator is already there
+                var sampleDataExists = false;
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].textContent.includes('Sample Data Generator')) {
+                        sampleDataExists = true;
+                        break;
+                    }
+                }
+                
+                // Add Sample Data Generator if not present
+                if (!sampleDataExists) {
+                    sampleDataItem.appendChild(sampleDataLink);
+                    featuresDropdown.appendChild(sampleDataItem);
+                    console.log('Added Sample Data Generator to menu');
                 }
             } else {
                 console.log('Features dropdown not found');
