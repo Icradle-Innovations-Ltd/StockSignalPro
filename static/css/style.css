@@ -75,6 +75,10 @@ body {
   color: var(--text-color);
 }
 
+.form-control::placeholder {
+  color: #495057;
+}
+
 .form-control:focus {
   background-color: #ffffff;
   border-color: var(--primary-color);
