@@ -1,4 +1,3 @@
-
 # Python
 __pycache__/
 *.py[cod]
@@ -22,14 +21,14 @@ wheels/
 *.egg
 
 # Virtual Environment
+.venv
+env/
 venv/
 ENV/
 
 # IDE
 .idea/
 .vscode/
-*.swp
-*.swo
 
 # Project specific
 uploads/*
@@ -41,6 +40,7 @@ uploads/*
 .env.*.local
 
 # Database
+*.sqlite
 *.sqlite3
 *.db
 
@@ -59,3 +59,5 @@ Thumbs.db
 .breakpoints
 replit.nix
 poetry.lock
+instance/
+.webassets-cache
