@@ -241,7 +241,23 @@ def get_plot(analysis_id, plot_type):
 
 @app.route('/generate_report/<analysis_id>')
 def generate_report(analysis_id):
-    """Generate and download a PDF report of the analysis."""
+    """Generate and preview a PDF report of the analysis."""
+    try:
+        # Get the analysis
+        analysis = Analysis.query.get_or_404(analysis_id)
+
+        # Generate the report
+        current_time = datetime.now().strftime('%B %d, %Y at %H:%M')
+        return render_template('report.html', analysis=analysis.to_dict(), now=current_time, print_mode=True)
+
+    except Exception as e:
+        logger.error(f"Error generating report: {str(e)}")
+        flash('Error generating report: ' + str(e), 'danger')
+        return redirect(url_for('results', analysis_id=analysis_id))
+
+@app.route('/download_report/<analysis_id>')
+def download_report(analysis_id):
+    """Download the report as PDF after preview."""
     try:
         # Get the analysis
         analysis = Analysis.query.get_or_404(analysis_id)
