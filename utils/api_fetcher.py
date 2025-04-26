@@ -39,26 +39,27 @@ def fetch_stock_data(ticker, period="2y"):
                 time.sleep(retry_delay * (attempt + 1))
 
                 try:
+                    # Exponential backoff delay
+                    time.sleep(retry_delay * (2 ** attempt))
+                    
                     # Try to get info first to validate the ticker
                     info = stock.info
                     if not info:
                         raise ValueError(f"Could not validate ticker {ticker}")
 
-                    # Add delay between calls
-                    time.sleep(1)
+                    # Additional delay between calls
+                    time.sleep(2)
 
-                    # Now fetch the historical data
-                    hist = stock.history(period=period)
+                    # Now fetch the historical data with a longer timeout
+                    hist = stock.history(period=period, timeout=20)
 
                     if not hist.empty:
                         break
                 except Exception as e:
                     logger.warning(f"API call attempt {attempt + 1} failed: {str(e)}")
-                    if "Expecting value" in str(e):
-                        # This usually means the API is rate limited or temporarily unavailable
-                        time.sleep(retry_delay * 2)  # Double the delay for rate limit issues
-                    if attempt == max_retries - 1:
-                        raise ValueError(f"Failed to fetch data after {max_retries} attempts: Rate limit or API unavailability")
+                    if attempt < max_retries - 1:
+                        continue
+                    raise ValueError(f"Failed to fetch data after {max_retries} attempts: {str(e)}")
 
 
             except Exception as retry_error:
