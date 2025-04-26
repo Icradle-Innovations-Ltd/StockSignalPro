@@ -24,6 +24,8 @@ class Analysis(db.Model):
     time_series_plot = db.Column(JSON)
     frequency_plot = db.Column(JSON)
     forecast_plot = db.Column(JSON)
+    # Link to Portfolio (optional)
+    portfolio_id = db.Column(db.String(36), db.ForeignKey('portfolio.id'), nullable=True)
     
     def to_dict(self):
         """Convert model to dictionary."""
@@ -37,7 +39,8 @@ class Analysis(db.Model):
             'dominant_cycles': self.dominant_cycles,
             'time_series_plot': self.time_series_plot,
             'frequency_plot': self.frequency_plot,
-            'forecast_plot': self.forecast_plot
+            'forecast_plot': self.forecast_plot,
+            'portfolio_id': self.portfolio_id
         }
 
 
@@ -65,4 +68,40 @@ class MarketSentiment(db.Model):
             'mood': self.mood,
             'mood_value': self.mood_value,
             'sentiment_gauge': self.sentiment_gauge
+        }
+
+
+class Portfolio(db.Model):
+    """Model for storing portfolio data with multiple stocks."""
+    id = db.Column(db.String(36), primary_key=True, default=generate_uuid)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # Store stock tickers as a JSON list
+    stocks = db.Column(JSON)
+    # Store allocation percentages as a JSON dictionary (ticker: percentage)
+    allocations = db.Column(JSON)
+    # Store correlation matrix as JSON
+    correlation_matrix = db.Column(JSON)
+    # Store portfolio visualization as JSON (Plotly figure)
+    portfolio_plot = db.Column(JSON)
+    # Store cycle analysis results
+    cycle_analysis = db.Column(JSON)
+    # Relationship with Analysis
+    analyses = db.relationship('Analysis', backref='portfolio', lazy=True)
+    
+    def to_dict(self):
+        """Convert model to dictionary."""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
+            'stocks': self.stocks,
+            'allocations': self.allocations,
+            'correlation_matrix': self.correlation_matrix,
+            'portfolio_plot': self.portfolio_plot,
+            'cycle_analysis': self.cycle_analysis
         }

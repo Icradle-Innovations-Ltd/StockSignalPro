@@ -15,6 +15,9 @@ from utils.decision_engine import generate_recommendation
 from utils.api_fetcher import fetch_stock_data
 from utils.sentiment_analysis import get_market_sentiment, create_sentiment_gauge
 from utils.sample_data_generator import generate_sample_data_csv, get_sample_data_info, sample_ticker_symbol
+from utils.portfolio_analysis import (create_portfolio, fetch_portfolio_data, calculate_correlation_matrix,
+                                     create_correlation_heatmap, analyze_portfolio_cycles, 
+                                     create_portfolio_cycle_chart, create_portfolio_performance_chart)
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -34,7 +37,7 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Import and initialize the database
-from models import db, Analysis, MarketSentiment
+from models import db, Analysis, MarketSentiment, Portfolio
 db.init_app(app)
 
 with app.app_context():
