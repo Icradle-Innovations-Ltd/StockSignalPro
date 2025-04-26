@@ -28,8 +28,13 @@ from utils.portfolio_analysis import (create_portfolio, fetch_portfolio_data, ca
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# Configure pdfkit
-pdfkit_config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+# Configure wkhtmltopdf path based on environment
+if os.name == 'nt':  # Windows
+    wkhtmltopdf_path = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+else:  # Linux/Unix
+    wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
+
+pdfkit_config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
 
 # Create the app
 app = Flask(__name__)
