@@ -179,7 +179,7 @@
                                title="This chart shows the historical price data with moving averages to help identify trends."></i>
                         </div>
                     </div>
-                    <div id="time-series-chart" class="chart-container">
+                    <div id="time-series-chart" class="chart-container" data-analysis-id="{{ analysis.id }}">
                         <div class="d-flex justify-content-center align-items-center h-100">
                             <div class="text-center">
                                 <div class="spinner-border" role="status">
@@ -203,7 +203,7 @@
                                title="This chart shows the frequency domain representation after applying Fast Fourier Transform. Peaks indicate strong market cycles."></i>
                         </div>
                     </div>
-                    <div id="frequency-chart" class="chart-container">
+                    <div id="frequency-chart" class="chart-container" data-analysis-id="{{ analysis.id }}">
                         <div class="d-flex justify-content-center align-items-center h-100">
                             <div class="text-center">
                                 <div class="spinner-border" role="status">
@@ -227,7 +227,7 @@
                                title="This chart shows a price forecast based on the detected cyclical patterns. The dashed line represents the forecasted price movement."></i>
                         </div>
                     </div>
-                    <div id="forecast-chart" class="chart-container">
+                    <div id="forecast-chart" class="chart-container" data-analysis-id="{{ analysis.id }}">
                         <div class="d-flex justify-content-center align-items-center h-100">
                             <div class="text-center">
                                 <div class="spinner-border" role="status">
