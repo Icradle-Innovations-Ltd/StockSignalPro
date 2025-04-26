@@ -48,6 +48,7 @@
                                     <li><a class="dropdown-item" href="{{ url_for('fft_analysis') }}">FFT Analysis</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('trading_signals') }}">Trading Signals</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('stock_forecasting') }}">Stock Forecasting</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -108,6 +109,7 @@
                         <li class="mb-2"><a href="{{ url_for('fft_analysis') }}" class="text-muted text-decoration-none">FFT Analysis</a></li>
                         <li class="mb-2"><a href="{{ url_for('trading_signals') }}" class="text-muted text-decoration-none">Trading Signals</a></li>
                         <li class="mb-2"><a href="{{ url_for('stock_forecasting') }}" class="text-muted text-decoration-none">Stock Forecasting</a></li>
+                        <li class="mb-2"><a href="{{ url_for('market_sentiment_page') }}" class="text-muted text-decoration-none">Market Sentiment</a></li>
                     </ul>
                 </div>
                 
@@ -141,6 +143,9 @@
     
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Plotly.js for charts -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
