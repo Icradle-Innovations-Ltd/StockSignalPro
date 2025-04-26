@@ -796,31 +796,38 @@ def download_system_report():
         html = render_template('system_report.html', now=datetime.now)
 
         try:
-            # First try with pdfkit
-            options = {
-                'page-size': 'A4',
-                'margin-top': '0.75in',
-                'margin-right': '0.75in',
-                'margin-bottom': '0.75in',
-                'margin-left': '0.75in',
-                'encoding': "UTF-8",
-                'no-outline': None
-            }
-            pdf = pdfkit.from_string(html, False, options=options)
-        except Exception as pdfkit_error:
-            logger.warning(f"pdfkit failed, trying WeasyPrint: {str(pdfkit_error)}")
-            # Fallback to WeasyPrint
-            from weasyprint import HTML
-            pdf = HTML(string=html).write_pdf()
+            # Use WeasyPrint for PDF generation
+            from weasyprint import HTML, CSS
+            from weasyprint.fonts import FontConfiguration
 
-        # Create response with inline display
-        response = make_response(pdf)
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = 'inline; filename=system_report.pdf'
-        return response
+            # Configure fonts
+            font_config = FontConfiguration()
+            css = CSS(string='''
+                @page { 
+                    margin: 0.75in;
+                    size: A4;
+                }
+                body { 
+                    font-family: Arial, sans-serif;
+                }
+            ''', font_config=font_config)
+
+            # Generate PDF
+            pdf = HTML(string=html).write_pdf(stylesheets=[css], font_config=font_config)
+
+            # Create response
+            response = make_response(pdf)
+            response.headers['Content-Type'] = 'application/pdf'
+            response.headers['Content-Disposition'] = 'attachment; filename=system_report.pdf'
+            return response
+
+        except Exception as pdf_error:
+            logger.error(f"PDF generation error: {str(pdf_error)}")
+            raise
+
     except Exception as e:
         logger.error(f"Error generating PDF: {str(e)}")
-        flash('Error generating PDF report: Please try again', 'danger')
+        flash('Error generating PDF report: ' + str(e), 'danger')
         return redirect(url_for('system_report'))
 
 @app.route('/api/market-sentiment', methods=['GET'])

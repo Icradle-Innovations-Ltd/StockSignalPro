@@ -18,4 +18,5 @@ dependencies = [
     "yfinance>=0.2.56",
     "flask-wtf>=1.2.2",
     "pdfkit>=1.0.0",
+    "weasyprint>=65.1",
 ]
