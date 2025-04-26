@@ -3,8 +3,24 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import logging
+import json
 
 logger = logging.getLogger(__name__)
+
+# Helper function to ensure JSON serializable data
+def convert_numpy_to_lists(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {k: convert_numpy_to_lists(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_to_lists(item) for item in obj]
+    elif isinstance(obj, (np.int64, np.int32, np.float64, np.float32)):
+        return float(obj) if isinstance(obj, (np.float64, np.float32)) else int(obj)
+    elif isinstance(obj, pd.Timestamp):
+        return obj.isoformat()
+    else:
+        return obj
 
 def create_time_series_plot(df):
     """Create an interactive time series plot of the price data.
@@ -68,8 +84,9 @@ def create_time_series_plot(df):
             template='plotly_dark'
         )
         
-        # Return the figure as a JSON object
-        return fig.to_dict()
+        # Return the figure as a JSON serializable object
+        fig_dict = fig.to_dict()
+        return convert_numpy_to_lists(fig_dict)
     
     except Exception as e:
         logger.error(f"Error creating time series plot: {str(e)}")
@@ -156,8 +173,9 @@ def create_frequency_plot(fft_results):
             template='plotly_dark'
         )
         
-        # Return the figure as a JSON object
-        return fig.to_dict()
+        # Return the figure as a JSON serializable object
+        fig_dict = fig.to_dict()
+        return convert_numpy_to_lists(fig_dict)
     
     except Exception as e:
         logger.error(f"Error creating frequency plot: {str(e)}")
@@ -268,8 +286,9 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
             template='plotly_dark'
         )
         
-        # Return the figure as a JSON object
-        return fig.to_dict()
+        # Return the figure as a JSON serializable object
+        fig_dict = fig.to_dict()
+        return convert_numpy_to_lists(fig_dict)
     
     except Exception as e:
         logger.error(f"Error creating forecast plot: {str(e)}")

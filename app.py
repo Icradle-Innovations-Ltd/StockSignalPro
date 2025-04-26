@@ -79,16 +79,26 @@ def upload_file():
                 
                 # Store in session
                 session_id = str(uuid.uuid4())
+                
+                # We need to ensure all numpy arrays are converted to lists for JSON serialization
+                # Convert time series plot data
+                time_series_plot_json = time_series_plot
+                frequency_plot_json = frequency_plot
+                forecast_plot_json = forecast_plot
+                
+                # Create a deep copy of dominant_cycles to avoid modifying the original
+                import copy
+                dominant_cycles_json = copy.deepcopy(dominant_cycles)
+                
+                # Store only the essential data in the session
                 session['analysis_results'] = {
                     'id': session_id,
                     'filename': secure_filename(file.filename),
-                    'dominant_cycles': dominant_cycles,
+                    'dominant_cycles': dominant_cycles_json,
                     'recommendation': recommendation,
-                    'df': df.to_dict(),  # Store dataframe for regenerating plots
-                    'fft_results': fft_results,  # Store FFT results
-                    'time_series_plot': time_series_plot,
-                    'frequency_plot': frequency_plot,
-                    'forecast_plot': forecast_plot,
+                    'time_series_plot': time_series_plot_json,
+                    'frequency_plot': frequency_plot_json,
+                    'forecast_plot': forecast_plot_json,
                 }
                 
                 # Redirect to results page
@@ -124,16 +134,26 @@ def upload_file():
             
             # Store in session
             session_id = str(uuid.uuid4())
+            
+            # We need to ensure all numpy arrays are converted to lists for JSON serialization
+            # Convert time series plot data
+            time_series_plot_json = time_series_plot
+            frequency_plot_json = frequency_plot
+            forecast_plot_json = forecast_plot
+            
+            # Create a deep copy of dominant_cycles to avoid modifying the original
+            import copy
+            dominant_cycles_json = copy.deepcopy(dominant_cycles)
+            
+            # Store only the essential data in the session
             session['analysis_results'] = {
                 'id': session_id,
                 'ticker': ticker,
-                'dominant_cycles': dominant_cycles,
+                'dominant_cycles': dominant_cycles_json,
                 'recommendation': recommendation,
-                'df': df.to_dict(),  # Store dataframe for regenerating plots
-                'fft_results': fft_results,  # Store FFT results
-                'time_series_plot': time_series_plot,
-                'frequency_plot': frequency_plot,
-                'forecast_plot': forecast_plot,
+                'time_series_plot': time_series_plot_json,
+                'frequency_plot': frequency_plot_json,
+                'forecast_plot': forecast_plot_json,
             }
             
             # Redirect to results page

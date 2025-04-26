@@ -119,6 +119,19 @@ def perform_fft(df):
         # Convert frequencies to periods (in days)
         periods = 1 / freqs[1:]  # Skip the DC component (index 0)
         
+        # Convert NumPy arrays to Python lists for JSON serialization
+        def convert_numpy_to_lists(obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif isinstance(obj, dict):
+                return {k: convert_numpy_to_lists(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_numpy_to_lists(item) for item in obj]
+            elif isinstance(obj, (np.int64, np.int32, np.float64, np.float32)):
+                return float(obj) if isinstance(obj, (np.float64, np.float32)) else int(obj)
+            else:
+                return obj
+        
         # Pack results
         fft_results = {
             'frequencies': freqs[1:],  # Skip the DC component
@@ -128,6 +141,9 @@ def perform_fft(df):
             'original_prices': prices,
             'windowed_prices': windowed_prices
         }
+        
+        # Convert to JSON serializable format
+        fft_results = convert_numpy_to_lists(fft_results)
         
         return fft_results
     
