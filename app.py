@@ -322,7 +322,7 @@ def blog():
 def support():
     return render_template('resources/support.html')
 
-@app.route('/market-sentiment')
+@app.route('/market-sentiment', methods=['GET'])
 def market_sentiment_page():
     """Display the market sentiment page with mood indicator."""
     # Check if we have recent sentiment data

@@ -192,9 +192,9 @@ def create_sentiment_gauge(sentiment):
     """
     # Define the gauge steps and colors
     steps = [
-        {'range': [0, 33], 'color': 'rgba(255, 99, 71, 0.8)', 'text': 'Bearish'},  # Tomato red
-        {'range': [33, 66], 'color': 'rgba(255, 215, 0, 0.8)', 'text': 'Neutral'},  # Gold
-        {'range': [66, 100], 'color': 'rgba(50, 205, 50, 0.8)', 'text': 'Bullish'}  # Lime green
+        {'range': [0, 33], 'color': 'rgba(255, 99, 71, 0.8)'},  # Tomato red (Bearish)
+        {'range': [33, 66], 'color': 'rgba(255, 215, 0, 0.8)'},  # Gold (Neutral)
+        {'range': [66, 100], 'color': 'rgba(50, 205, 50, 0.8)'}  # Lime green (Bullish)
     ]
     
     # Get mood value from sentiment
