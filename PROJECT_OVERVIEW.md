@@ -26,6 +26,13 @@ The application generates trading recommendations (Buy/Hold/Sell) along with con
   - Time series charts with moving averages
   - Frequency domain (power spectrum) plots
   - Cycle-based price forecasting
+  - Market sentiment gauge charts
+
+- **Market Sentiment Analysis**:
+  - Real-time market mood assessment
+  - News-based sentiment scoring
+  - Ticker-specific sentiment analysis
+  - Bullish/Bearish/Neutral classification
 
 - **Export Capabilities**:
   - PDF report generation
@@ -44,6 +51,8 @@ The application generates trading recommendations (Buy/Hold/Sell) along with con
 - **Pandas**: Data manipulation and processing
 - **Plotly**: Chart generation
 - **yfinance**: Stock data API integration
+- **Trafilatura**: Web content extraction for news sentiment
+- **Natural Language Processing**: Text analysis for sentiment scoring
 
 ### Frontend
 - **Bootstrap 5**: Responsive UI framework
@@ -65,9 +74,15 @@ stock-market-signal-processing/
 │   ├── api_fetcher.py      # Stock data API integration
 │   ├── data_processing.py  # Data cleaning and FFT analysis
 │   ├── decision_engine.py  # Trading recommendation logic
-│   └── visualization.py    # Chart generation
+│   ├── visualization.py    # Chart generation
+│   ├── sentiment_analysis.py # Market sentiment processing
+│   └── web_scraper.py      # Web content extraction for news
 ├── static/                 # Static assets
 ├── templates/              # HTML templates
+│   ├── index.html          # Home page
+│   ├── results.html        # Analysis results
+│   ├── market_sentiment.html # Sentiment analysis page
+│   └── ticker_sentiment.html # Ticker-specific sentiment
 ├── uploads/                # Temporary file storage
 └── docs/                   # Documentation
 ```
@@ -99,6 +114,13 @@ stock-market-signal-processing/
    - Generate interactive time series plots
    - Create frequency domain visualizations
    - Produce cycle-based price forecasts
+   - Render sentiment gauge charts
+
+6. **Market Sentiment Analysis**:
+   - Scrape financial news content using web_scraper.py
+   - Process text to identify bullish/bearish/neutral keywords
+   - Calculate sentiment scores and overall market mood
+   - Store results in MarketSentiment database table
 
 ## Use Cases
 
@@ -106,16 +128,21 @@ stock-market-signal-processing/
 - Supplement traditional technical analysis with cycle detection
 - Identify potential turning points in stock prices
 - Make more informed entry and exit decisions
+- Gauge overall market sentiment to understand broader context
 
 ### Technical Analysts
 - Add quantitative cycle analysis to their toolkit
 - Discover hidden patterns in price data
 - Back-test cycle-based trading strategies
+- Correlate market sentiment with technical indicators
+- Analyze sentiment for specific stocks alongside price patterns
 
 ### Trading Education
 - Demonstrate market cyclicality concepts
 - Visualize frequency analysis of financial data
 - Teach signal processing applications in finance
+- Illustrate market sentiment analysis techniques
+- Demonstrate correlation between news sentiment and price movement
 
 ## Future Development Roadmap
 
@@ -123,11 +150,15 @@ stock-market-signal-processing/
 - Add user accounts for saving analyses
 - Implement batch processing for multiple stocks
 - Create email alerts for cycle-based signals
+- Enhance sentiment analysis with more advanced NLP techniques
+- Implement sentiment tracking over time with historical charts
 
 ### Medium-term Features
 - Incorporate machine learning for improved cycle detection
 - Add portfolio-level analysis capabilities
 - Develop customizable dashboard interfaces
+- Integrate sentiment analysis with social media sources
+- Create correlation analytics between sentiment and price movements
 
 ### Long-term Vision
 - Implement real-time data streaming and analysis
@@ -174,6 +205,8 @@ While cycle analysis can provide valuable insights, it's important to understand
 4. **Data Quality Dependency**: The quality of results depends heavily on the quantity and quality of input data.
 
 5. **Market Regime Changes**: Dominant cycles can change over time as market conditions evolve.
+
+6. **Sentiment Analysis Limitations**: Sentiment analysis is based on keyword frequency and may not capture nuanced context or sarcasm in news articles. It provides a general indication rather than precise measurement of market sentiment.
 
 ## Conclusion
 
