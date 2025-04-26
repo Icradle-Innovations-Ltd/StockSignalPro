@@ -271,6 +271,19 @@
                             </a>
                         </p>
                     </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-briefcase text-primary me-2" style="font-size: 1.5rem;"></i>
+                            <h5 class="mb-0">Portfolio Analysis</h5>
+                        </div>
+                        <p class="text-muted">
+                            Analyze multiple stocks for correlations and shared market cycles.
+                            <a href="{{ url_for('portfolios') }}" class="btn btn-sm btn-outline-primary mt-1">
+                                <i class="fas fa-arrow-right"></i> Manage Portfolios
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -447,11 +460,11 @@
                         <div class="col-md-6 col-lg-4 feature-item d-none">
                             <div class="d-flex bg-dark-subtle p-3 rounded h-100">
                                 <div class="me-3">
-                                    <i class="fas fa-briefcase text-primary" style="font-size: 1.5rem;"></i>
+                                    <i class="fas fa-mobile-alt text-primary" style="font-size: 1.5rem;"></i>
                                 </div>
                                 <div>
-                                    <h5>Portfolio analysis for multiple stocks</h5>
-                                    <p class="text-muted mb-0">Analyze cycle correlations across your portfolio.</p>
+                                    <h5>Mobile app integration</h5>
+                                    <p class="text-muted mb-0">Access your analysis on-the-go with our mobile app.</p>
                                 </div>
                             </div>
                         </div>
@@ -496,6 +509,8 @@
                         <li class="mb-2"><a href="{{ url_for('fft_analysis') }}" class="text-muted text-decoration-none">FFT Analysis</a></li>
                         <li class="mb-2"><a href="{{ url_for('trading_signals') }}" class="text-muted text-decoration-none">Trading Signals</a></li>
                         <li class="mb-2"><a href="{{ url_for('stock_forecasting') }}" class="text-muted text-decoration-none">Stock Forecasting</a></li>
+                        <li class="mb-2"><a href="{{ url_for('market_sentiment_page') }}" class="text-muted text-decoration-none">Market Sentiment</a></li>
+                        <li class="mb-2"><a href="{{ url_for('portfolios') }}" class="text-muted text-decoration-none">Portfolio Analysis</a></li>
                     </ul>
                 </div>
                 
