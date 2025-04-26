@@ -791,15 +791,23 @@ def system_report():
 @app.route('/download-system-report')
 def download_system_report():
     """Generate and download system report as PDF."""
-    # Create PDF using pdfkit
-    html = render_template('system_report.html', now=datetime.now)
-    pdf = pdfkit.from_string(html, False)
-    
-    # Create response
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=system_report.pdf'
-    return response
+    try:
+        # Configure pdfkit with wkhtmltopdf path
+        config = pdfkit.configuration(wkhtmltopdf='/nix/store/djxbdx4sh5ni4y0cyi89lw9r5ribq0k4-wkhtmltopdf-0.12.7/bin/wkhtmltopdf')
+        
+        # Create PDF using pdfkit with configuration
+        html = render_template('system_report.html', now=datetime.now)
+        pdf = pdfkit.from_string(html, False, configuration=config)
+        
+        # Create response
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'attachment; filename=system_report.pdf'
+        return response
+    except Exception as e:
+        logger.error(f"Error generating PDF: {str(e)}")
+        flash('Error generating PDF report', 'danger')
+        return redirect(url_for('system_report'))
 
 @app.route('/api/market-sentiment', methods=['GET'])
 def get_market_sentiment_api():
