@@ -1,6 +1,35 @@
 // main.js - JavaScript for CycleTrader
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Toggle Advanced Features
+    const toggleButton = document.getElementById('toggle-features');
+    if (toggleButton) {
+        const toggleText = document.getElementById('toggle-text');
+        const toggleIcon = document.getElementById('toggle-icon');
+        const featureItems = document.querySelectorAll('.feature-item');
+        
+        toggleButton.addEventListener('click', function() {
+            const isExpanded = toggleText.textContent === 'Show less';
+            
+            featureItems.forEach(item => {
+                if (isExpanded) {
+                    item.classList.add('d-none');
+                } else {
+                    item.classList.remove('d-none');
+                }
+            });
+            
+            if (isExpanded) {
+                toggleText.textContent = 'Show more';
+                toggleIcon.classList.remove('fa-chevron-up');
+                toggleIcon.classList.add('fa-chevron-down');
+            } else {
+                toggleText.textContent = 'Show less';
+                toggleIcon.classList.remove('fa-chevron-down');
+                toggleIcon.classList.add('fa-chevron-up');
+            }
+        });
+    }
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
