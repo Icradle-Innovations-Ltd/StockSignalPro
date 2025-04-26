@@ -84,6 +84,11 @@ def upload_file():
                     'filename': secure_filename(file.filename),
                     'dominant_cycles': dominant_cycles,
                     'recommendation': recommendation,
+                    'df': df.to_dict(),  # Store dataframe for regenerating plots
+                    'fft_results': fft_results,  # Store FFT results
+                    'time_series_plot': time_series_plot,
+                    'frequency_plot': frequency_plot,
+                    'forecast_plot': forecast_plot,
                 }
                 
                 # Redirect to results page
@@ -124,6 +129,11 @@ def upload_file():
                 'ticker': ticker,
                 'dominant_cycles': dominant_cycles,
                 'recommendation': recommendation,
+                'df': df.to_dict(),  # Store dataframe for regenerating plots
+                'fft_results': fft_results,  # Store FFT results
+                'time_series_plot': time_series_plot,
+                'frequency_plot': frequency_plot,
+                'forecast_plot': forecast_plot,
             }
             
             # Redirect to results page
@@ -156,35 +166,21 @@ def get_plot(analysis_id, plot_type):
         return jsonify({'error': 'Analysis not found or expired'}), 404
     
     try:
-        # Recreate plots based on stored data
-        # In a real implementation, we might cache these or store them differently
-        if 'ticker' in session['analysis_results']:
-            df = fetch_stock_data(session['analysis_results']['ticker'])
-        else:
-            # This is just a placeholder - in reality we'd need to retrieve the processed data
-            # In a production app, we'd store the processed data or original file
-            flash('Session data incomplete, please re-upload your data', 'warning')
-            return jsonify({'error': 'Session data incomplete'}), 400
+        # Return the stored plot data directly
+        analysis = session['analysis_results']
         
-        df = process_data(df)
-        fft_results = perform_fft(df)
-        dominant_cycles = session['analysis_results']['dominant_cycles']
-        
-        if plot_type == 'time_series':
-            plot_json = create_time_series_plot(df)
-            return jsonify(plot_json)
-        elif plot_type == 'frequency':
-            plot_json = create_frequency_plot(fft_results)
-            return jsonify(plot_json)
-        elif plot_type == 'forecast':
-            plot_json = create_forecast_plot(df, dominant_cycles)
-            return jsonify(plot_json)
+        if plot_type == 'time_series' and 'time_series_plot' in analysis:
+            return jsonify(analysis['time_series_plot'])
+        elif plot_type == 'frequency' and 'frequency_plot' in analysis:
+            return jsonify(analysis['frequency_plot'])
+        elif plot_type == 'forecast' and 'forecast_plot' in analysis:
+            return jsonify(analysis['forecast_plot'])
         else:
-            return jsonify({'error': 'Invalid plot type'}), 400
+            return jsonify({'error': 'Invalid plot type or plot not found'}), 400
     
     except Exception as e:
-        logger.error(f"Error generating plot: {str(e)}")
-        return jsonify({'error': f'Error generating plot: {str(e)}'}), 500
+        logger.error(f"Error retrieving plot: {str(e)}")
+        return jsonify({'error': f'Error retrieving plot: {str(e)}'}), 500
 
 @app.route('/generate_report/<analysis_id>')
 def generate_report(analysis_id):
@@ -195,10 +191,17 @@ def generate_report(analysis_id):
         return redirect(url_for('index'))
     
     try:
+        # Get the analysis data
+        analysis = session['analysis_results']
+        
+        # Add a helper function for the template to format dates
+        def now():
+            from datetime import datetime
+            return datetime.now()
+            
         # In a real implementation, this would generate a PDF
         # For now, we'll render an HTML report that could be printed
-        analysis = session['analysis_results']
-        return render_template('report.html', analysis=analysis)
+        return render_template('report.html', analysis=analysis, now=now)
     
     except Exception as e:
         logger.error(f"Error generating report: {str(e)}")
