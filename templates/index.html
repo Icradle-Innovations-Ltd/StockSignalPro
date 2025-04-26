@@ -40,6 +40,12 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{ url_for('index') }}">Home</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('portfolios') }}">Portfolios</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="featuresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Features
@@ -49,6 +55,9 @@
                                     <li><a class="dropdown-item" href="{{ url_for('fft_analysis') }}">FFT Analysis</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('trading_signals') }}">Trading Signals</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('stock_forecasting') }}">Stock Forecasting</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('portfolios') }}">Portfolio Analysis</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('sample_data_page') }}">Market Data Generator</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
