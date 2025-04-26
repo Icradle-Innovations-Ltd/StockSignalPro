@@ -783,6 +783,11 @@ def market_sentiment_page():
     # Use recent sentiment data
     return render_template('market_sentiment.html', sentiment=recent_sentiment.to_dict())
 
+@app.route('/system-report')
+def system_report():
+    """Display the system report page."""
+    return render_template('system_report.html', now=datetime.now)
+
 @app.route('/api/market-sentiment', methods=['GET'])
 def get_market_sentiment_api():
     """API endpoint to get market sentiment data."""
