@@ -31,6 +31,7 @@ Users can upload their own CSV data files or enter a stock ticker symbol to fetc
   - Fast Fourier Transform (FFT) analysis to detect market cycles
   - Identification of dominant cycles with period length and strength metrics
   - Phase analysis to determine current position within cycles
+  - Market sentiment analysis based on financial news
 
 - **Trading Recommendations**:
   - Buy/Hold/Sell recommendations with confidence ratings
@@ -41,6 +42,7 @@ Users can upload their own CSV data files or enter a stock ticker symbol to fetc
   - Time series plots with moving averages
   - Frequency domain (power spectrum) analysis
   - Price forecasting based on detected cycles
+  - Market sentiment gauge charts with bullish/bearish indicators
 
 - **Export Options**:
   - Generate PDF reports of analysis results
@@ -60,6 +62,8 @@ The application is built using a modern web stack with the following components:
   - NumPy and SciPy for numerical computations and FFT analysis
   - Pandas for data manipulation and processing
   - PostgreSQL database for data persistence
+  - Trafilatura for web content extraction
+  - Natural language processing for sentiment analysis
 
 - **Frontend**:
   - Bootstrap 5 for responsive UI components
@@ -72,8 +76,9 @@ The application is built using a modern web stack with the following components:
   2. Data cleaning and preprocessing
   3. FFT analysis and cycle detection
   4. Trading recommendation generation
-  5. Visualization creation
-  6. Results storage and presentation
+  5. Market sentiment analysis (scraping and processing financial news)
+  6. Visualization creation (including sentiment gauge charts)
+  7. Results storage and presentation
 
 ## Installation
 
@@ -140,6 +145,8 @@ The application is built using a modern web stack with the following components:
 - **Dominant Cycles**: Lists detected market cycles with their periods and strength
 - **Frequency Analysis**: Visualizes the power spectrum of detected cycles
 - **Price Forecast**: Projects potential price movement based on cycle analysis
+- **Market Sentiment**: Displays bullish/bearish/neutral gauge based on financial news
+- **Ticker Sentiment**: Shows sentiment analysis specific to individual stocks
 
 ### Exporting Results
 - Click "Generate PDF Report" to create a downloadable PDF document
@@ -157,7 +164,9 @@ stock-market-signal-processing/
 │   ├── api_fetcher.py      # Stock data API integration
 │   ├── data_processing.py  # Data cleaning and FFT analysis
 │   ├── decision_engine.py  # Trading recommendation logic
-│   └── visualization.py    # Chart and plot generation
+│   ├── visualization.py    # Chart and plot generation
+│   ├── sentiment_analysis.py # Market sentiment processing
+│   └── web_scraper.py      # Web content extraction for news
 ├── static/
 │   ├── css/                # Stylesheets
 │   ├── js/                 # JavaScript files
@@ -165,7 +174,9 @@ stock-market-signal-processing/
 ├── templates/
 │   ├── index.html          # Home page template
 │   ├── results.html        # Analysis results template
-│   └── report.html         # PDF report template
+│   ├── report.html         # PDF report template
+│   ├── market_sentiment.html # Market sentiment analysis page
+│   └── ticker_sentiment.html # Ticker-specific sentiment page
 ├── uploads/                # Temporary storage for uploaded files
 ├── sample_stock_data.csv   # Example data file
 └── README.md               # Project documentation
@@ -207,7 +218,7 @@ The application generates recommendations based on detected cycles and their cur
    - Adjust recommendations based on confidence levels
 
 ### Visualization Creation
-The application creates three main types of visualizations:
+The application creates the following main types of visualizations:
 
 1. **Time Series Plot**:
    - Historical price data with 7-day and 30-day moving averages
@@ -220,6 +231,11 @@ The application creates three main types of visualizations:
 3. **Forecast Plot**:
    - Price projection based on superposition of detected cycles
    - Confidence intervals for forecasted prices
+   
+4. **Sentiment Gauge Chart**:
+   - Circular gauge showing market sentiment from bearish to bullish
+   - Color-coded indicators (red for bearish, green for bullish)
+   - Numeric sentiment score from 0 to 100
 
 ## API Reference
 
@@ -255,6 +271,17 @@ The application creates three main types of visualizations:
 - Downloads CSV file of analysis results
 - Parameters:
   - `analysis_id`: Unique identifier for the analysis
+  
+#### `GET /market-sentiment`
+- Displays overall market sentiment analysis page
+  
+#### `GET /api/market-sentiment`
+- Returns JSON data for market sentiment gauge
+  
+#### `GET /ticker-sentiment/<ticker>`
+- Displays sentiment analysis for specific stock ticker
+- Parameters:
+  - `ticker`: Stock ticker symbol
 
 ### Models
 
