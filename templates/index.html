@@ -63,7 +63,12 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="#upload-section" class="btn btn-primary ms-lg-3">
+                                <a href="{{ url_for('market_sentiment_page') }}" class="btn btn-info ms-lg-2">
+                                    <i class="fas fa-chart-pie me-1"></i> Market Sentiment
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#upload-section" class="btn btn-primary ms-lg-2">
                                     <i class="fas fa-upload me-1"></i> Analyze Stock
                                 </a>
                             </li>
@@ -234,6 +239,19 @@
                             <h5 class="mb-0">Downloadable Reports</h5>
                         </div>
                         <p class="text-muted">Export your analysis results in PDF or CSV formats.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-chart-pie text-primary me-2" style="font-size: 1.5rem;"></i>
+                            <h5 class="mb-0">Market Sentiment Analysis</h5>
+                        </div>
+                        <p class="text-muted">
+                            Analyze real-time market sentiment based on news and social media.
+                            <a href="{{ url_for('market_sentiment_page') }}" class="btn btn-sm btn-outline-primary mt-1">
+                                <i class="fas fa-arrow-right"></i> View Market Sentiment
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
