@@ -228,20 +228,20 @@ def generate_report(analysis_id):
 @app.route('/download_csv/<analysis_id>')
 def download_csv(analysis_id):
     """Download analysis results as CSV."""
-    # Check if analysis exists in session
-    if 'analysis_results' not in session or session['analysis_results']['id'] != analysis_id:
+    # Get analysis from database
+    analysis = Analysis.query.get(analysis_id)
+    
+    if not analysis:
         flash('Analysis not found or expired', 'warning')
         return redirect(url_for('index'))
     
     try:
-        analysis = session['analysis_results']
-        
         # Create a DataFrame with the results
         # In a real implementation, we'd have more complete data
         data = {
-            'Cycle Length (Days)': [cycle['length'] for cycle in analysis['dominant_cycles']],
-            'Cycle Strength': [cycle['strength'] for cycle in analysis['dominant_cycles']],
-            'Current Phase': [cycle['phase'] for cycle in analysis['dominant_cycles']]
+            'Cycle Length (Days)': [cycle['length'] for cycle in analysis.dominant_cycles],
+            'Cycle Strength': [cycle['strength'] for cycle in analysis.dominant_cycles],
+            'Current Phase': [cycle['phase'] for cycle in analysis.dominant_cycles]
         }
         
         results_df = pd.DataFrame(data)
@@ -252,10 +252,10 @@ def download_csv(analysis_id):
         buffer.seek(0)
         
         # Create a unique filename
-        if 'ticker' in analysis:
-            filename = f"{analysis['ticker']}_cycle_analysis.csv"
+        if analysis.ticker:
+            filename = f"{analysis.ticker}_cycle_analysis.csv"
         else:
-            filename = f"{analysis['filename'].split('.')[0]}_cycle_analysis.csv"
+            filename = f"{analysis.filename.split('.')[0]}_cycle_analysis.csv"
         
         # Return the CSV as a downloadable file
         return send_file(
