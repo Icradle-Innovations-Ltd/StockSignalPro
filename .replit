@@ -6,7 +6,7 @@ packages = ["cacert", "fontconfig", "ghostscript", "glib", "glibcLocales", "harf
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 --workers 4 app:app"]
+run = ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 --workers 4 --timeout 120 wsgi:application"]
 
 [workflows]
 runButton = "Start Flask App"
