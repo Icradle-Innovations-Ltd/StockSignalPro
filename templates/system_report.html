@@ -3,147 +3,139 @@
 
 {% block content %}
 <div class="container mt-4 mb-5">
+    <!-- Title Page -->
     <div class="text-center">
         <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="60" class="mb-3">
-        <h1 class="mb-1">Stock Market Signal Processing System Report</h1>
+        <h1 class="mb-1">Stock Market Signal Processing System Documentation</h1>
         <p class="text-muted">Generated on {{ now().strftime('%B %d, %Y at %H:%M') }}</p>
         <hr class="my-4">
     </div>
 
-    <!-- System Overview -->
+    <!-- Abstract -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">System Overview</h2>
+        <h2 class="border-bottom pb-2">Abstract</h2>
         <div class="card">
             <div class="card-body">
-                <h5>Core Functionality</h5>
-                <p>A sophisticated web application that applies signal processing techniques to analyze stock market data and identify cyclic patterns using Fast Fourier Transform (FFT) algorithms.</p>
-                
-                <h5>Key Components</h5>
+                <p>The Stock Market Signal Processing Web Application is a sophisticated platform that leverages Fast Fourier Transform (FFT) algorithms to analyze stock market data and identify cyclic patterns. This system provides traders and analysts with powerful tools for detecting market cycles, generating trading recommendations, and analyzing market sentiment. By combining advanced signal processing techniques with an intuitive user interface, the application makes complex technical analysis accessible to users of all experience levels.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Architecture -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">System Architecture</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Core Components</h5>
                 <ul>
-                    <li>Data Processing Engine</li>
-                    <li>FFT Analysis Module</li>
+                    <li>Data Processing Engine (FFT Analysis)</li>
                     <li>Trading Recommendation System</li>
                     <li>Market Sentiment Analysis</li>
                     <li>Portfolio Management</li>
                     <li>Visualization System</li>
                 </ul>
-            </div>
-        </div>
-    </section>
 
-    <!-- Technical Architecture -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">Technical Architecture</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5>Backend Stack</h5>
+                <h5>Technology Stack</h5>
                 <ul>
-                    <li>Python Flask Web Framework</li>
-                    <li>SQLAlchemy ORM with PostgreSQL</li>
-                    <li>NumPy & SciPy for FFT Analysis</li>
-                    <li>Pandas for Data Processing</li>
-                    <li>Plotly for Visualization</li>
-                </ul>
-
-                <h5>Frontend Stack</h5>
-                <ul>
-                    <li>Bootstrap 5 Framework</li>
-                    <li>Interactive Plotly.js Charts</li>
-                    <li>Custom JavaScript Components</li>
+                    <li>Backend: Python Flask, SQLAlchemy, NumPy, SciPy</li>
+                    <li>Frontend: Bootstrap 5, Plotly.js, Custom JavaScript</li>
+                    <li>Database: PostgreSQL with JSON support</li>
+                    <li>APIs: yfinance for market data</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Data Models -->
+    <!-- Features and Functionality -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">Data Models</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5>Analysis Model</h5>
-                <pre class="bg-light p-3">
-- id (UUID): Primary key
-- ticker (String): Stock symbol
-- created_at (DateTime): Analysis timestamp
-- source_type (String): Data source
-- data (JSON): Processed data
-- recommendation (JSON): Trading signals
-- dominant_cycles (JSON): Detected cycles
-                </pre>
-
-                <h5>MarketSentiment Model</h5>
-                <pre class="bg-light p-3">
-- id (UUID): Primary key
-- ticker (String): Optional stock symbol
-- created_at (DateTime): Analysis timestamp
-- mood (String): Market sentiment
-- mood_value (Float): Sentiment score
-                </pre>
-
-                <h5>Portfolio Model</h5>
-                <pre class="bg-light p-3">
-- id (UUID): Primary key
-- name (String): Portfolio name
-- stocks (JSON): Stock list
-- allocations (JSON): Stock weights
-- correlation_matrix (JSON): Stock correlations
-                </pre>
-            </div>
-        </div>
-    </section>
-
-    <!-- Core Algorithms -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">Core Algorithms</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5>FFT Analysis</h5>
-                <p>Transforms time-domain price data into frequency domain for cycle detection using the Fast Fourier Transform algorithm.</p>
-
-                <h5>Cycle Detection</h5>
-                <p>Identifies dominant market cycles through frequency analysis and peak detection in the power spectrum.</p>
-
-                <h5>Trading Signals</h5>
-                <p>Generates recommendations based on cycle positions, strengths, and confluences.</p>
-
-                <h5>Sentiment Analysis</h5>
-                <p>Processes financial news and market data to determine overall market sentiment.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- System Features -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">System Features</h2>
+        <h2 class="border-bottom pb-2">Features and Functionality</h2>
         <div class="card">
             <div class="card-body">
                 <h5>Data Input Methods</h5>
                 <ul>
-                    <li>CSV File Upload</li>
-                    <li>Stock Ticker Symbol Entry</li>
-                    <li>Real-time Market Data Integration</li>
+                    <li>CSV File Upload: Historical price data analysis</li>
+                    <li>Stock Ticker Symbol: Real-time market data integration</li>
+                    <li>Portfolio Import: Multi-stock analysis capabilities</li>
                 </ul>
 
                 <h5>Analysis Capabilities</h5>
                 <ul>
-                    <li>Cycle Detection and Analysis</li>
+                    <li>Cycle Detection using FFT</li>
                     <li>Market Sentiment Assessment</li>
                     <li>Portfolio Optimization</li>
-                    <li>Trading Recommendations</li>
+                    <li>Trading Signal Generation</li>
                 </ul>
 
                 <h5>Visualization Tools</h5>
                 <ul>
-                    <li>Time Series Charts</li>
+                    <li>Interactive Time Series Charts</li>
                     <li>Frequency Domain Plots</li>
                     <li>Sentiment Gauge Charts</li>
-                    <li>Portfolio Performance Charts</li>
+                    <li>Portfolio Performance Visualization</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Implementation Details -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Implementation Details</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Data Processing Pipeline</h5>
+                <p>The system processes data through the following stages:</p>
+                <ol>
+                    <li>Data acquisition and cleaning</li>
+                    <li>FFT analysis for cycle detection</li>
+                    <li>Trading signal generation</li>
+                    <li>Visualization creation</li>
+                    <li>Result storage and presentation</li>
+                </ol>
+
+                <h5>Market Sentiment Analysis</h5>
+                <p>Sentiment analysis involves:</p>
+                <ul>
+                    <li>Web scraping of financial news</li>
+                    <li>Keyword-based sentiment scoring</li>
+                    <li>Real-time sentiment updates</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testing and Validation -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Testing and Validation</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Testing Methodology</h5>
+                <ul>
+                    <li>Unit Tests: Core algorithm validation</li>
+                    <li>Integration Tests: API and database functionality</li>
+                    <li>User Interface Testing: Responsive design validation</li>
+                    <li>Performance Testing: Load and stress tests</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Improvements -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Recommendations and Future Work</h2>
+        <div class="card">
+            <div class="card-body">
+                <ul>
+                    <li>Implementation of machine learning for improved cycle detection</li>
+                    <li>Enhanced portfolio management capabilities</li>
+                    <li>Advanced sentiment analysis using NLP</li>
+                    <li>Real-time data streaming integration</li>
+                    <li>Mobile application development</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Export Options -->
     <div class="text-center mt-5">
         <a href="#" onclick="window.print()" class="btn btn-primary">
             <i class="fas fa-print me-2"></i>Print Report
