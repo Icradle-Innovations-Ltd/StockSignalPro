@@ -178,7 +178,7 @@ def results(analysis_id):
     analysis = session['analysis_results']
     return render_template('results.html', analysis=analysis)
 
-@app.route('/api/plots/<analysis_id>/<plot_type>')
+@app.route('/api/plots/<analysis_id>/<plot_type>', methods=['GET'])
 def get_plot(analysis_id, plot_type):
     """API endpoint to get plot data."""
     # Check if analysis exists in session
