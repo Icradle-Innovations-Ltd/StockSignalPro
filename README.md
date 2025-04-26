@@ -10,29 +10,36 @@ git clone <your-repository-url>
 cd stock-market-signal-processing
 ```
 
-2. Install required packages:
+2. Install Poetry (if not already installed):
 ```bash
-pip install -r requirements.txt
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-3. Set up PostgreSQL database:
+3. Install dependencies using Poetry:
+```bash
+poetry install
+```
+
+4. Set up PostgreSQL database:
 - Create a new database
 - Set the DATABASE_URL environment variable:
 ```bash
 export DATABASE_URL=postgresql://username:password@localhost/dbname
 ```
 
-4. Initialize the database:
+5. Initialize the database:
 ```bash
-python recreate_db.py
+poetry run python recreate_db.py
 ```
 
-5. Run the application:
+6. Run the application:
 ```bash
-python main.py
+poetry run gunicorn --bind 0.0.0.0:5000 main:app
 ```
 
 The application will be available at `http://0.0.0.0:5000`
+
+Note: All dependencies are defined in `pyproject.toml`. Poetry will automatically manage the virtual environment and install the correct versions of all required packages.
 
 ## Deploying on Replit
 
