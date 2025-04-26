@@ -984,4 +984,12 @@ def server_error(e):
     return render_template('index.html', error="Server error occurred"), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+    port = int(os.getenv('PORT', 5000))
+    if os.getenv('FLASK_ENV') == 'production':
+        # Production mode
+        app.config['SERVER_NAME'] = None
+        from waitress import serve
+        serve(app, host='0.0.0.0', port=port)
+    else:
+        # Development mode
+        app.run(host='0.0.0.0', port=port, debug=True)
