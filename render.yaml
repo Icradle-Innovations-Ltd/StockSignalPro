@@ -5,7 +5,8 @@ services:
     region: oregon
     plan: free
     buildCommand: |
-      python -m pip install --upgrade pip
+      python -m ensurepip --upgrade
+      python -m pip install --upgrade pip setuptools wheel
       apt-get update && apt-get install -y wkhtmltopdf
       pip install -r requirements.txt
     startCommand: gunicorn app:app
