@@ -380,7 +380,7 @@ def create_portfolio():
             
             try:
                 # Fetch data for the tickers (this will run, but we won't block portfolio creation on it)
-                stock_data = fetch_portfolio_data(tickers)
+                stock_data = fetch_portfolio_data(tickers, period="2y")
                 
                 if stock_data:
                     # If we got data, update the portfolio with analysis results
@@ -437,7 +437,7 @@ def view_portfolio(portfolio_id):
             logger.info(f"Generating missing analysis data for portfolio {portfolio_id}")
             
             # Fetch data for the tickers
-            stock_data = fetch_portfolio_data(portfolio.stocks)
+            stock_data = fetch_portfolio_data(portfolio.stocks, period="2y")
             
             if stock_data:
                 # Calculate correlation matrix
@@ -497,7 +497,7 @@ def add_stock_to_portfolio(portfolio_id):
     
     try:
         # Fetch data for the ticker
-        df = fetch_stock_data(ticker)
+        df = fetch_stock_data(ticker, period="2y")
         
         if df.empty:
             flash(f'Could not fetch data for {ticker}', 'danger')
@@ -517,7 +517,7 @@ def add_stock_to_portfolio(portfolio_id):
         portfolio.updated_at = datetime.utcnow()
         
         # Refetch all portfolio data and recalculate metrics
-        stock_data = fetch_portfolio_data(stocks)
+        stock_data = fetch_portfolio_data(stocks, period="2y")
         
         # Update correlation matrix
         correlation_matrix = calculate_correlation_matrix(stock_data)
@@ -580,7 +580,7 @@ def remove_stock_from_portfolio(portfolio_id, ticker):
             return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
         
         # Refetch all portfolio data and recalculate metrics
-        stock_data = fetch_portfolio_data(stocks)
+        stock_data = fetch_portfolio_data(stocks, period="2y")
         
         # Update correlation matrix
         correlation_matrix = calculate_correlation_matrix(stock_data)
@@ -635,7 +635,7 @@ def update_portfolio_allocations(portfolio_id):
         portfolio.updated_at = datetime.utcnow()
         
         # Refetch portfolio data
-        stock_data = fetch_portfolio_data(portfolio.stocks)
+        stock_data = fetch_portfolio_data(portfolio.stocks, period="2y")
         
         # Update portfolio chart with new allocations
         portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
@@ -694,7 +694,7 @@ def get_portfolio_plot(portfolio_id, plot_type):
             return jsonify(heatmap)
         elif plot_type == 'cycles' and portfolio.cycle_analysis:
             # Fetch stock data and recreate cycle chart
-            stock_data = fetch_portfolio_data(portfolio.stocks)
+            stock_data = fetch_portfolio_data(portfolio.stocks, period="2y")
             cycle_chart = create_portfolio_cycle_chart(portfolio.cycle_analysis, stock_data)
             return jsonify(cycle_chart)
         else:
