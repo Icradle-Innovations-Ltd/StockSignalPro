@@ -11,7 +11,7 @@ services:
       # Install Python dependencies
       pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: gunicorn main:app
+    startCommand: gunicorn app:app
     envVars:
       - key: FLASK_ENV
         value: production
