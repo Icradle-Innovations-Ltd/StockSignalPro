@@ -42,6 +42,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('portfolios') }}">Portfolios</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="featuresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Features
@@ -53,6 +56,7 @@
                                     <li><a class="dropdown-item" href="{{ url_for('stock_forecasting') }}">Stock Forecasting</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('sample_data_page') }}">Sample Data Generator</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('portfolios') }}">Portfolio Analysis</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -115,6 +119,7 @@
                         <li class="mb-2"><a href="{{ url_for('stock_forecasting') }}" class="text-muted text-decoration-none">Stock Forecasting</a></li>
                         <li class="mb-2"><a href="{{ url_for('market_sentiment_page') }}" class="text-muted text-decoration-none">Market Sentiment</a></li>
                         <li class="mb-2"><a href="{{ url_for('sample_data_page') }}" class="text-muted text-decoration-none">Sample Data Generator</a></li>
+                        <li class="mb-2"><a href="{{ url_for('portfolios') }}" class="text-muted text-decoration-none">Portfolio Analysis</a></li>
                     </ul>
                 </div>
                 

@@ -1,0 +1,419 @@
+{% extends "base_content.html" %}
+
+{% block title %}{{ portfolio.name }} - Portfolio Analysis | CycleTrader{% endblock %}
+
+{% block page_title %}{{ portfolio.name }}{% endblock %}
+{% block page_subtitle %}{% if portfolio.description %}{{ portfolio.description }}{% else %}Portfolio Analysis{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stock-card {
+        transition: transform 0.2s ease-in-out;
+    }
+    .stock-card:hover {
+        transform: translateY(-5px);
+    }
+    .allocation-bar {
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .ticker-badge {
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Actions Bar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{{ url_for('portfolios') }}" class="btn btn-outline-secondary mb-2 me-2">
+                <i class="fas fa-arrow-left me-1"></i> Back to Portfolios
+            </a>
+            <button class="btn btn-outline-primary mb-2" data-bs-toggle="modal" data-bs-target="#addStockModal">
+                <i class="fas fa-plus me-1"></i> Add Stock
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-outline-secondary mb-2 me-2" data-bs-toggle="modal" data-bs-target="#editAllocationsModal">
+                <i class="fas fa-sliders-h me-1"></i> Adjust Allocations
+            </button>
+            <button class="btn btn-outline-danger mb-2" data-bs-toggle="modal" data-bs-target="#deletePortfolioModal">
+                <i class="fas fa-trash-alt me-1"></i> Delete Portfolio
+            </button>
+        </div>
+    </div>
+
+    <!-- Portfolio Overview -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                    <h3 class="card-title text-primary h5 mb-0">Portfolio Performance</h3>
+                </div>
+                <div class="card-body">
+                    <div id="performance-chart" class="chart-container" style="height: 400px;">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock Allocations -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h3 class="h5 text-primary mb-3">Stock Allocations</h3>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% if portfolio.stocks %}
+                    {% for ticker in portfolio.stocks %}
+                        {% set allocation = portfolio.allocations.get(ticker, 0) %}
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm stock-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <span class="ticker-badge bg-primary text-white">{{ ticker }}</span>
+                                        <div class="text-end">
+                                            <div class="h5 mb-0">{{ allocation|round(1) }}%</div>
+                                            <small class="text-muted">Allocation</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="allocation-bar bg-light">
+                                            <div class="bg-primary" style="width: {{ allocation }}%; height: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="{{ url_for('ticker_sentiment', ticker=ticker) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-chart-line me-1"></i> Analysis
+                                        </a>
+                                        <form action="{{ url_for('remove_stock_from_portfolio', portfolio_id=portfolio.id, ticker=ticker) }}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove {{ ticker }} from portfolio?')">
+                                                <i class="fas fa-times"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> This portfolio doesn't have any stocks yet. 
+                            <button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#addStockModal">
+                                Add a stock
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Correlation Analysis -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                    <h3 class="card-title text-primary h5 mb-0">Correlation Matrix</h3>
+                </div>
+                <div class="card-body">
+                    <div id="correlation-chart" class="chart-container" style="height: 400px;">
+                        {% if portfolio.correlation_matrix %}
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle me-2"></i> Add more stocks to generate a correlation matrix.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-muted small">
+                    <i class="fas fa-info-circle me-1"></i> Correlation values range from -1 (perfect negative correlation) to 1 (perfect positive correlation).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cycle Analysis -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                    <h3 class="card-title text-primary h5 mb-0">Shared Market Cycles</h3>
+                </div>
+                <div class="card-body">
+                    <div id="cycles-chart" class="chart-container" style="height: 400px;">
+                        {% if portfolio.cycle_analysis %}
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle me-2"></i> Add more stocks to identify shared market cycles.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-muted small">
+                    <i class="fas fa-info-circle me-1"></i> This chart shows market cycles that appear in multiple stocks in your portfolio.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Analyses Section -->
+    {% if analyses %}
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <h3 class="h5 text-primary mb-3">Individual Stock Analyses</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ticker</th>
+                                <th>Created</th>
+                                <th>Dominant Cycles</th>
+                                <th>Recommendation</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for analysis in analyses %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-primary">{{ analysis.ticker }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="small text-muted datetime">{{ analysis.created_at }}</span>
+                                    </td>
+                                    <td>
+                                        {% if analysis.dominant_cycles %}
+                                            {% for cycle in analysis.dominant_cycles[:2] %}
+                                                <span class="badge bg-light text-dark border me-1">{{ cycle.period|round(1) }} days</span>
+                                            {% endfor %}
+                                            {% if analysis.dominant_cycles|length > 2 %}
+                                                <span class="small text-muted">+{{ analysis.dominant_cycles|length - 2 }} more</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="text-muted">None detected</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if analysis.recommendation %}
+                                            {% set action = analysis.recommendation.action %}
+                                            {% if action == 'buy' %}
+                                                <span class="badge bg-success">Buy</span>
+                                            {% elif action == 'sell' %}
+                                                <span class="badge bg-danger">Sell</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Hold</span>
+                                            {% endif %}
+                                            <span class="ms-1 small">({{ analysis.recommendation.confidence }}% confidence)</span>
+                                        {% else %}
+                                            <span class="text-muted">No recommendation</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('results', analysis_id=analysis.id) }}" class="btn btn-sm btn-outline-primary">
+                                            View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Add Stock Modal -->
+    <div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStockModalLabel">Add Stock to Portfolio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('add_stock_to_portfolio', portfolio_id=portfolio.id) }}" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="ticker-input" class="form-label">Ticker Symbol</label>
+                            <input type="text" class="form-control" id="ticker-input" name="ticker" required placeholder="e.g., AAPL">
+                        </div>
+                        <div class="mb-3">
+                            <label for="allocation-input" class="form-label">Allocation Percentage</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="allocation-input" name="allocation" value="10" min="0" max="100" step="0.1">
+                                <span class="input-group-text">%</span>
+                            </div>
+                            <div class="form-text">Other allocations will be adjusted automatically</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Allocations Modal -->
+    <div class="modal fade" id="editAllocationsModal" tabindex="-1" aria-labelledby="editAllocationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAllocationsModalLabel">Edit Allocations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('update_portfolio_allocations', portfolio_id=portfolio.id) }}" method="post">
+                    <div class="modal-body">
+                        {% if portfolio.stocks %}
+                            <div class="alert alert-info small">
+                                <i class="fas fa-info-circle me-2"></i> 
+                                Percentages will be automatically normalized to sum to 100%.
+                            </div>
+                            
+                            {% for ticker in portfolio.stocks %}
+                                {% set allocation = portfolio.allocations.get(ticker, 0) %}
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-4">
+                                        <label class="form-label mb-0 fw-medium">{{ ticker }}</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control allocation-input" 
+                                                name="allocation_{{ ticker }}" value="{{ allocation|round(1) }}" 
+                                                min="0" max="100" step="0.1">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i> Add stocks to your portfolio first.
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" {% if not portfolio.stocks %}disabled{% endif %}>Update Allocations</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Portfolio Modal -->
+    <div class="modal fade" id="deletePortfolioModal" tabindex="-1" aria-labelledby="deletePortfolioModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletePortfolioModalLabel">Delete Portfolio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this portfolio? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ url_for('delete_portfolio', portfolio_id=portfolio.id) }}" method="post">
+                        <button type="submit" class="btn btn-danger">Delete Portfolio</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load charts
+        {% if portfolio.stocks and portfolio.portfolio_plot %}
+            fetch("{{ url_for('get_portfolio_plot', portfolio_id=portfolio.id, plot_type='performance') }}")
+                .then(response => response.json())
+                .then(data => {
+                    // Load the performance chart
+                    Plotly.newPlot('performance-chart', data.data, data.layout, {responsive: true});
+                })
+                .catch(error => {
+                    console.error('Error loading performance chart:', error);
+                    document.getElementById('performance-chart').innerHTML = '<div class="alert alert-danger">Error loading chart.</div>';
+                });
+        {% else %}
+            document.getElementById('performance-chart').innerHTML = '<div class="alert alert-info text-center">Add stocks to generate performance data.</div>';
+        {% endif %}
+            
+        {% if portfolio.stocks and portfolio.stocks|length > 1 and portfolio.correlation_matrix %}
+            fetch("{{ url_for('get_portfolio_plot', portfolio_id=portfolio.id, plot_type='correlation') }}")
+                .then(response => response.json())
+                .then(data => {
+                    // Load the correlation chart
+                    Plotly.newPlot('correlation-chart', data.data, data.layout, {responsive: true});
+                })
+                .catch(error => {
+                    console.error('Error loading correlation chart:', error);
+                    document.getElementById('correlation-chart').innerHTML = '<div class="alert alert-danger">Error loading chart.</div>';
+                });
+        {% elif portfolio.stocks and portfolio.stocks|length <= 1 %}
+            document.getElementById('correlation-chart').innerHTML = '<div class="alert alert-info text-center">Add more stocks to generate correlation data.</div>';
+        {% endif %}
+            
+        {% if portfolio.stocks and portfolio.stocks|length > 1 and portfolio.cycle_analysis %}
+            fetch("{{ url_for('get_portfolio_plot', portfolio_id=portfolio.id, plot_type='cycles') }}")
+                .then(response => response.json())
+                .then(data => {
+                    // Load the cycles chart
+                    Plotly.newPlot('cycles-chart', data.data, data.layout, {responsive: true});
+                })
+                .catch(error => {
+                    console.error('Error loading cycles chart:', error);
+                    document.getElementById('cycles-chart').innerHTML = '<div class="alert alert-danger">Error loading chart.</div>';
+                });
+        {% elif portfolio.stocks and portfolio.stocks|length <= 1 %}
+            document.getElementById('cycles-chart').innerHTML = '<div class="alert alert-info text-center">Add more stocks to identify shared market cycles.</div>';
+        {% endif %}
+        
+        // Format dates
+        const dateElements = document.querySelectorAll('.datetime');
+        dateElements.forEach(function(element) {
+            const dateStr = element.textContent.trim();
+            try {
+                const date = new Date(dateStr);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                element.textContent = formattedDate;
+            } catch (e) {
+                console.error("Error formatting date:", e);
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -52,6 +52,22 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 # Create upload directory if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# Custom Jinja2 filters
+@app.template_filter('datetime')
+def format_datetime(value):
+    """Format a datetime object to a readable string."""
+    if isinstance(value, str):
+        try:
+            from dateutil import parser
+            value = parser.parse(value)
+        except (ValueError, ImportError):
+            return value
+    
+    try:
+        return value.strftime('%b %d, %Y at %I:%M %p')
+    except:
+        return value
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -292,6 +308,350 @@ def download_csv(analysis_id):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('index.html', error="Page not found"), 404
+
+# Portfolio Analysis Routes
+@app.route('/portfolios')
+def portfolios():
+    """Display all portfolios."""
+    portfolios = Portfolio.query.order_by(Portfolio.updated_at.desc()).all()
+    return render_template('portfolios/index.html', portfolios=portfolios)
+
+@app.route('/portfolios/new', methods=['GET', 'POST'])
+def create_portfolio():
+    """Create a new portfolio."""
+    if request.method == 'POST':
+        # Get form data
+        name = request.form.get('name')
+        description = request.form.get('description')
+        tickers = request.form.get('tickers', '').strip().upper().split(',')
+        
+        # Filter empty strings and strip whitespace
+        tickers = [ticker.strip() for ticker in tickers if ticker.strip()]
+        
+        # Handle allocations if provided
+        allocations = {}
+        if all(f'allocation_{ticker}' in request.form for ticker in tickers):
+            for ticker in tickers:
+                allocation_key = f'allocation_{ticker}'
+                try:
+                    allocation = float(request.form.get(allocation_key, 0))
+                    allocations[ticker] = allocation
+                except ValueError:
+                    allocations[ticker] = 0
+        
+        # Validate
+        if not name:
+            flash('Portfolio name is required', 'danger')
+            return render_template('portfolios/new.html')
+        
+        if not tickers:
+            flash('At least one ticker is required', 'danger')
+            return render_template('portfolios/new.html')
+        
+        try:
+            # Fetch data for the tickers
+            stock_data = fetch_portfolio_data(tickers)
+            
+            # Check if we got data for at least one ticker
+            if not stock_data:
+                flash('Could not fetch data for any of the provided tickers', 'danger')
+                return render_template('portfolios/new.html')
+            
+            # If some tickers failed, update the list
+            valid_tickers = list(stock_data.keys())
+            
+            # Calculate correlation matrix
+            correlation_matrix = calculate_correlation_matrix(stock_data)
+            correlation_heatmap = create_correlation_heatmap(correlation_matrix)
+            
+            # Analyze cycles
+            cycle_analysis = analyze_portfolio_cycles(stock_data)
+            cycle_chart = create_portfolio_cycle_chart(cycle_analysis, stock_data)
+            
+            # Create portfolio performance chart
+            if allocations:
+                # Normalize allocations to 100%
+                total = sum(allocations.values())
+                if total > 0:
+                    allocations = {ticker: (alloc / total * 100) for ticker, alloc in allocations.items()}
+            
+            portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
+            
+            # Create portfolio
+            portfolio = Portfolio(
+                name=name,
+                description=description,
+                stocks=valid_tickers,
+                allocations=allocations,
+                correlation_matrix=correlation_matrix.to_dict() if not correlation_matrix.empty else None,
+                portfolio_plot=portfolio_chart,
+                cycle_analysis=cycle_analysis
+            )
+            
+            # Save to database
+            db.session.add(portfolio)
+            db.session.commit()
+            
+            flash('Portfolio created successfully', 'success')
+            return redirect(url_for('view_portfolio', portfolio_id=portfolio.id))
+            
+        except Exception as e:
+            logger.error(f"Error creating portfolio: {str(e)}")
+            flash(f'Error creating portfolio: {str(e)}', 'danger')
+            return render_template('portfolios/new.html')
+    
+    return render_template('portfolios/new.html')
+
+@app.route('/portfolios/<portfolio_id>')
+def view_portfolio(portfolio_id):
+    """View a specific portfolio with analysis."""
+    portfolio = Portfolio.query.get(portfolio_id)
+    
+    if not portfolio:
+        flash('Portfolio not found', 'warning')
+        return redirect(url_for('portfolios'))
+    
+    # Get all analyses associated with this portfolio
+    analyses = Analysis.query.filter_by(portfolio_id=portfolio_id).all()
+    
+    return render_template('portfolios/view.html', 
+                          portfolio=portfolio.to_dict(), 
+                          analyses=[a.to_dict() for a in analyses])
+
+@app.route('/portfolios/<portfolio_id>/add_stock', methods=['POST'])
+def add_stock_to_portfolio(portfolio_id):
+    """Add a stock to an existing portfolio."""
+    portfolio = Portfolio.query.get(portfolio_id)
+    
+    if not portfolio:
+        flash('Portfolio not found', 'warning')
+        return redirect(url_for('portfolios'))
+    
+    ticker = request.form.get('ticker', '').strip().upper()
+    allocation = request.form.get('allocation', 0)
+    
+    try:
+        allocation = float(allocation)
+    except ValueError:
+        allocation = 0
+    
+    if not ticker:
+        flash('Ticker symbol is required', 'danger')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+    
+    # Check if ticker already exists in portfolio
+    if ticker in portfolio.stocks:
+        flash(f'{ticker} is already in this portfolio', 'warning')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+    
+    try:
+        # Fetch data for the ticker
+        df = fetch_stock_data(ticker)
+        
+        if df.empty:
+            flash(f'Could not fetch data for {ticker}', 'danger')
+            return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+        
+        # Add ticker to portfolio
+        stocks = portfolio.stocks.copy() if portfolio.stocks else []
+        stocks.append(ticker)
+        
+        # Update allocations
+        allocations = portfolio.allocations.copy() if portfolio.allocations else {}
+        allocations[ticker] = allocation
+        
+        # Update portfolio
+        portfolio.stocks = stocks
+        portfolio.allocations = allocations
+        portfolio.updated_at = datetime.utcnow()
+        
+        # Refetch all portfolio data and recalculate metrics
+        stock_data = fetch_portfolio_data(stocks)
+        
+        # Update correlation matrix
+        correlation_matrix = calculate_correlation_matrix(stock_data)
+        portfolio.correlation_matrix = correlation_matrix.to_dict() if not correlation_matrix.empty else None
+        
+        # Update cycle analysis
+        cycle_analysis = analyze_portfolio_cycles(stock_data)
+        portfolio.cycle_analysis = cycle_analysis
+        
+        # Update portfolio chart
+        portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
+        portfolio.portfolio_plot = portfolio_chart
+        
+        # Save to database
+        db.session.commit()
+        
+        flash(f'{ticker} added to portfolio successfully', 'success')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+        
+    except Exception as e:
+        logger.error(f"Error adding stock to portfolio: {str(e)}")
+        flash(f'Error adding stock to portfolio: {str(e)}', 'danger')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+
+@app.route('/portfolios/<portfolio_id>/remove_stock/<ticker>', methods=['POST'])
+def remove_stock_from_portfolio(portfolio_id, ticker):
+    """Remove a stock from a portfolio."""
+    portfolio = Portfolio.query.get(portfolio_id)
+    
+    if not portfolio:
+        flash('Portfolio not found', 'warning')
+        return redirect(url_for('portfolios'))
+    
+    if not ticker or ticker not in portfolio.stocks:
+        flash('Stock not found in portfolio', 'warning')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+    
+    try:
+        # Remove ticker from portfolio
+        stocks = [t for t in portfolio.stocks if t != ticker]
+        
+        # Update allocations
+        allocations = {t: a for t, a in portfolio.allocations.items() if t != ticker}
+        
+        # Update portfolio
+        portfolio.stocks = stocks
+        portfolio.allocations = allocations
+        portfolio.updated_at = datetime.utcnow()
+        
+        # If portfolio is now empty, handle gracefully
+        if not stocks:
+            portfolio.correlation_matrix = None
+            portfolio.cycle_analysis = None
+            portfolio.portfolio_plot = None
+            
+            # Save to database
+            db.session.commit()
+            
+            flash(f'{ticker} removed from portfolio', 'success')
+            return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+        
+        # Refetch all portfolio data and recalculate metrics
+        stock_data = fetch_portfolio_data(stocks)
+        
+        # Update correlation matrix
+        correlation_matrix = calculate_correlation_matrix(stock_data)
+        portfolio.correlation_matrix = correlation_matrix.to_dict() if not correlation_matrix.empty else None
+        
+        # Update cycle analysis
+        cycle_analysis = analyze_portfolio_cycles(stock_data)
+        portfolio.cycle_analysis = cycle_analysis
+        
+        # Update portfolio chart
+        portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
+        portfolio.portfolio_plot = portfolio_chart
+        
+        # Save to database
+        db.session.commit()
+        
+        flash(f'{ticker} removed from portfolio', 'success')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+        
+    except Exception as e:
+        logger.error(f"Error removing stock from portfolio: {str(e)}")
+        flash(f'Error removing stock from portfolio: {str(e)}', 'danger')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+
+@app.route('/portfolios/<portfolio_id>/update_allocations', methods=['POST'])
+def update_portfolio_allocations(portfolio_id):
+    """Update allocation percentages for a portfolio."""
+    portfolio = Portfolio.query.get(portfolio_id)
+    
+    if not portfolio:
+        flash('Portfolio not found', 'warning')
+        return redirect(url_for('portfolios'))
+    
+    try:
+        # Get allocations from form
+        allocations = {}
+        for ticker in portfolio.stocks:
+            allocation_key = f'allocation_{ticker}'
+            try:
+                allocation = float(request.form.get(allocation_key, 0))
+                allocations[ticker] = allocation
+            except ValueError:
+                allocations[ticker] = 0
+        
+        # Normalize to 100%
+        total = sum(allocations.values())
+        if total > 0:
+            allocations = {ticker: (alloc / total * 100) for ticker, alloc in allocations.items()}
+        
+        # Update portfolio
+        portfolio.allocations = allocations
+        portfolio.updated_at = datetime.utcnow()
+        
+        # Refetch portfolio data
+        stock_data = fetch_portfolio_data(portfolio.stocks)
+        
+        # Update portfolio chart with new allocations
+        portfolio_chart = create_portfolio_performance_chart(stock_data, allocations)
+        portfolio.portfolio_plot = portfolio_chart
+        
+        # Save to database
+        db.session.commit()
+        
+        flash('Portfolio allocations updated successfully', 'success')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+        
+    except Exception as e:
+        logger.error(f"Error updating portfolio allocations: {str(e)}")
+        flash(f'Error updating portfolio allocations: {str(e)}', 'danger')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+
+@app.route('/portfolios/<portfolio_id>/delete', methods=['POST'])
+def delete_portfolio(portfolio_id):
+    """Delete a portfolio."""
+    portfolio = Portfolio.query.get(portfolio_id)
+    
+    if not portfolio:
+        flash('Portfolio not found', 'warning')
+        return redirect(url_for('portfolios'))
+    
+    try:
+        # Remove portfolio
+        db.session.delete(portfolio)
+        db.session.commit()
+        
+        flash('Portfolio deleted successfully', 'success')
+        return redirect(url_for('portfolios'))
+        
+    except Exception as e:
+        logger.error(f"Error deleting portfolio: {str(e)}")
+        flash(f'Error deleting portfolio: {str(e)}', 'danger')
+        return redirect(url_for('view_portfolio', portfolio_id=portfolio_id))
+
+@app.route('/api/portfolio_plots/<portfolio_id>/<plot_type>')
+def get_portfolio_plot(portfolio_id, plot_type):
+    """API endpoint to get portfolio plot data."""
+    portfolio = Portfolio.query.get(portfolio_id)
+    
+    if not portfolio:
+        return jsonify({'error': 'Portfolio not found'}), 404
+    
+    try:
+        if plot_type == 'performance' and portfolio.portfolio_plot:
+            return jsonify(portfolio.portfolio_plot)
+        elif plot_type == 'correlation' and portfolio.correlation_matrix:
+            # Create correlation heatmap from stored matrix
+            import pandas as pd
+            matrix_dict = portfolio.correlation_matrix
+            correlation_df = pd.DataFrame(matrix_dict)
+            heatmap = create_correlation_heatmap(correlation_df)
+            return jsonify(heatmap)
+        elif plot_type == 'cycles' and portfolio.cycle_analysis:
+            # Fetch stock data and recreate cycle chart
+            stock_data = fetch_portfolio_data(portfolio.stocks)
+            cycle_chart = create_portfolio_cycle_chart(portfolio.cycle_analysis, stock_data)
+            return jsonify(cycle_chart)
+        else:
+            return jsonify({'error': 'Invalid plot type or plot not found'}), 400
+    
+    except Exception as e:
+        logger.error(f"Error retrieving portfolio plot: {str(e)}")
+        return jsonify({'error': f'Error retrieving plot: {str(e)}'}), 500
 
 # Feature and Resource Pages
 @app.route('/features/cycle-detection')
