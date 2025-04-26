@@ -10,8 +10,6 @@ services:
       apt-get install -y wkhtmltopdf xvfb
       # Install Python dependencies
       python -m pip install --upgrade pip setuptools wheel
-      pip install charset-normalizer==3.0.1
-      pip install -r requirements.txt --no-deps
       pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
