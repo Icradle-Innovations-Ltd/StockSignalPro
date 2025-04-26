@@ -9,7 +9,7 @@ import io
 
 # Import utility modules
 from utils.data_processing import process_data, perform_fft, detect_cycles
-from utils.visualization import create_time_series_plot, create_frequency_plot, create_forecast_plot
+from utils.visualization import create_time_series_plot, create_frequency_plot, create_forecast_plot, convert_numpy_to_lists
 from utils.decision_engine import generate_recommendation
 from utils.api_fetcher import fetch_stock_data
 
@@ -96,11 +96,11 @@ def upload_file():
                 analysis = Analysis(
                     source_type='file',
                     filename=secure_filename(file.filename),
-                    dominant_cycles=dominant_cycles,
-                    recommendation=recommendation,
-                    time_series_plot=time_series_plot,
-                    frequency_plot=frequency_plot,
-                    forecast_plot=forecast_plot
+                    dominant_cycles=convert_numpy_to_lists(dominant_cycles),
+                    recommendation=convert_numpy_to_lists(recommendation),
+                    time_series_plot=convert_numpy_to_lists(time_series_plot),
+                    frequency_plot=convert_numpy_to_lists(frequency_plot),
+                    forecast_plot=convert_numpy_to_lists(forecast_plot)
                 )
                 
                 # Save to database
@@ -142,11 +142,11 @@ def upload_file():
             analysis = Analysis(
                 source_type='api',
                 ticker=ticker,
-                dominant_cycles=dominant_cycles,
-                recommendation=recommendation,
-                time_series_plot=time_series_plot,
-                frequency_plot=frequency_plot,
-                forecast_plot=forecast_plot
+                dominant_cycles=convert_numpy_to_lists(dominant_cycles),
+                recommendation=convert_numpy_to_lists(recommendation),
+                time_series_plot=convert_numpy_to_lists(time_series_plot),
+                frequency_plot=convert_numpy_to_lists(frequency_plot),
+                forecast_plot=convert_numpy_to_lists(forecast_plot)
             )
             
             # Save to database
