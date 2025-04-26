@@ -23,33 +23,48 @@ def fetch_stock_data(ticker, period="2y"):
         if not ticker or len(ticker) > 10:
             raise ValueError("Invalid ticker symbol")
         
-        # Fetch data from Yahoo Finance
-        stock = yf.Ticker(ticker)
-        hist = stock.history(period=period)
-        
-        # Check if we got data
-        if hist.empty:
-            raise ValueError(f"No data found for ticker {ticker}")
-        
-        logger.info(f"Successfully fetched {len(hist)} rows for {ticker}")
-        
-        # Reset index to make Date a column
-        hist = hist.reset_index()
-        
-        # Rename columns to match our expected format
-        hist.rename(columns={
-            'Date': 'date',
-            'Close': 'price',
-            'Open': 'open',
-            'High': 'high',
-            'Low': 'low',
-            'Volume': 'volume'
-        }, inplace=True)
-        
-        return hist
+        # Fetch data from Yahoo Finance with error handling
+        try:
+            stock = yf.Ticker(ticker)
+            # Add a small delay to avoid rate limiting
+            import time
+            time.sleep(1)
+            
+            # Try to get info first to validate the ticker
+            info = stock.info
+            if not info:
+                raise ValueError(f"Could not validate ticker {ticker}")
+                
+            # Now fetch the historical data
+            hist = stock.history(period=period)
+            
+            # Check if we got data
+            if hist.empty:
+                raise ValueError(f"No data found for ticker {ticker}")
+            
+            logger.info(f"Successfully fetched {len(hist)} rows for {ticker}")
+            
+            # Reset index to make Date a column
+            hist = hist.reset_index()
+            
+            # Rename columns to match our expected format
+            hist.rename(columns={
+                'Date': 'date',
+                'Close': 'price',
+                'Open': 'open',
+                'High': 'high',
+                'Low': 'low',
+                'Volume': 'volume'
+            }, inplace=True)
+            
+            return hist
+            
+        except Exception as api_error:
+            logger.error(f"API Error for {ticker}: {str(api_error)}")
+            raise ValueError(f"Failed to fetch data from Yahoo Finance API: {str(api_error)}")
     
     except Exception as e:
-        logger.error(f"Error fetching stock data for {ticker}: {str(e)}")
+        logger.error(f"Error in fetch_stock_data for {ticker}: {str(e)}")
         raise ValueError(f"Error fetching data for {ticker}: {str(e)}")
 
 def search_tickers(query):
