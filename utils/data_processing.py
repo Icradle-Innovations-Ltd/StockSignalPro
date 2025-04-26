@@ -169,13 +169,24 @@ def detect_cycles(fft_results, min_period=2, max_period=252, strength_threshold=
         phases = fft_results['phases']
         
         # Filter by period range
+        # Convert to numpy arrays if they're lists (ensures proper comparison)
+        if isinstance(periods, list):
+            periods = np.array(periods)
+        if isinstance(amplitudes, list):
+            amplitudes = np.array(amplitudes)
+        if isinstance(phases, list):
+            phases = np.array(phases)
+            
         mask = (periods >= min_period) & (periods <= max_period)
         filtered_periods = periods[mask]
         filtered_amplitudes = amplitudes[mask]
         filtered_phases = phases[mask]
         
         # Find the maximum amplitude
-        max_amplitude = np.max(filtered_amplitudes) if len(filtered_amplitudes) > 0 else 1
+        if isinstance(filtered_amplitudes, list):
+            max_amplitude = max(filtered_amplitudes) if filtered_amplitudes else 1 
+        else:
+            max_amplitude = np.max(filtered_amplitudes) if len(filtered_amplitudes) > 0 else 1
         
         # Calculate relative strengths
         relative_strengths = filtered_amplitudes / max_amplitude
