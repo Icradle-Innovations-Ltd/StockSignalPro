@@ -301,6 +301,74 @@
         </div>
     </section>
 
+    <!-- Methodology -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Methodology</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>1. Signal Processing Approach</h5>
+                <p>Our methodology employs advanced signal processing techniques to analyze financial market data:</p>
+                <ul>
+                    <li><strong>Data Preprocessing</strong>: Raw price data is cleaned, normalized, and detrended</li>
+                    <li><strong>Fast Fourier Transform</strong>: Price data is transformed into frequency domain</li>
+                    <li><strong>Cycle Detection</strong>: Dominant frequencies are identified and analyzed</li>
+                    <li><strong>Signal Generation</strong>: Trading signals are generated based on cycle analysis</li>
+                </ul>
+
+                <h5 class="mt-4">2. Mathematical Foundation</h5>
+                <p>The core mathematical components include:</p>
+                <ul>
+                    <li><strong>Fourier Transform</strong>: X(k) = Σ[n=0 to N-1] x(n) * e^(-j2πkn/N)</li>
+                    <li><strong>Amplitude Calculation</strong>: |X(k)| = sqrt(real(X(k))^2 + imag(X(k))^2)</li>
+                    <li><strong>Phase Calculation</strong>: φ(k) = atan2(imag(X(k)), real(X(k)))</li>
+                    <li><strong>Period Conversion</strong>: T = N/k (where N is data length, k is frequency index)</li>
+                </ul>
+
+                <h5 class="mt-4">3. Cycle Analysis Process</h5>
+                <ol>
+                    <li><strong>Data Acquisition</strong>
+                        <ul>
+                            <li>CSV file upload for historical data</li>
+                            <li>Real-time API fetching for live data</li>
+                            <li>Data validation and cleaning</li>
+                        </ul>
+                    </li>
+                    <li><strong>Signal Processing</strong>
+                        <ul>
+                            <li>Application of FFT algorithm</li>
+                            <li>Frequency spectrum analysis</li>
+                            <li>Dominant cycle identification</li>
+                        </ul>
+                    </li>
+                    <li><strong>Pattern Recognition</strong>
+                        <ul>
+                            <li>Cycle strength calculation</li>
+                            <li>Phase analysis</li>
+                            <li>Pattern validation</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h5 class="mt-4">4. Decision Engine</h5>
+                <p>Trading signals are generated through:</p>
+                <ul>
+                    <li><strong>Multi-cycle Analysis</strong>: Combining signals from multiple cycles</li>
+                    <li><strong>Strength Weighting</strong>: Stronger cycles given higher importance</li>
+                    <li><strong>Confluence Detection</strong>: Identifying areas where multiple cycles align</li>
+                    <li><strong>Confidence Calculation</strong>: Based on signal clarity and cycle strength</li>
+                </ul>
+
+                <h5 class="mt-4">5. Validation Process</h5>
+                <ul>
+                    <li><strong>Historical Backtesting</strong>: Testing against historical data</li>
+                    <li><strong>Statistical Validation</strong>: Ensuring statistical significance</li>
+                    <li><strong>Performance Metrics</strong>: Measuring accuracy and reliability</li>
+                    <li><strong>Continuous Refinement</strong>: Ongoing improvement of algorithms</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
     <!-- Implementation Details -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Implementation Details</h2>
