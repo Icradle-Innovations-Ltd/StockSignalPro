@@ -14,365 +14,28 @@
     <style>
         /* Base styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             margin: 0;
             padding: 20px;
-            background-color: #f8f9fa;
         }
 
-        .container {
-            max-width: 1140px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* Card styles */
-        .custom-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            padding: 20px;
-        }
-
-        /* Typography */
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #2c3e50;
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #34495e;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-
-        h4 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-            color: #2c3e50;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        /* Grid system */
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: -15px;
-        }
-
-        .col-md-6 {
-            flex: 0 0 50%;
-            max-width: 50%;
-            padding: 15px;
-        }
-
-        /* Utility classes */
-        .text-center {
-            text-align: center;
-        }
-
-        .text-muted {
-            color: #6c757d;
-        }
-
-        .mb-1 { margin-bottom: 0.25rem; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-3 { margin-bottom: 1rem; }
-        .mb-4 { margin-bottom: 1.5rem; }
-        .mb-5 { margin-bottom: 3rem; }
-
-        .mt-4 { margin-top: 1.5rem; }
-        .mt-5 { margin-top: 3rem; }
-
-        .pb-2 { padding-bottom: 0.5rem; }
-        .pb-4 { padding-bottom: 1.5rem; }
-
-        .pt-4 { padding-top: 1.5rem; }
-
-        .border-top {
-            border-top: 1px solid #dee2e6;
-        }
-
-        /* Print-specific styles */
-        @media print {
-            body {
-                background-color: white !important;
-                color: black !important;
-            }
-            
-            .custom-card {
-                border: 1px solid #ddd !important;
-                box-shadow: none !important;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-            
-            .page-break {
-                page-break-before: always;
-            }
-            
-            .print-bg-white {
-                background-color: white !important;
-            }
-            
-            .print-text-dark {
-                color: #333 !important;
-            }
-            
-            .chart-container {
-                height: 400px !important;
-                width: 100% !important;
-                margin: 20px 0 !important;
-                display: block !important;
-                overflow: visible !important;
-                page-break-inside: avoid !important;
-            }
-
-            .js-plotly-plot, 
-            .plot-container, 
-            .svg-container {
-                height: 400px !important;
-                width: 100% !important;
-                display: block !important;
-                page-break-inside: avoid !important;
-            }
-        }
-
-        /* Chart styles */
+        /* Chart container styles */
         .chart-container {
-            width: 100%;
-            height: 400px;
             margin-bottom: 2rem;
-            page-break-inside: avoid;
-        }
-
-        /* Recommendation styles */
-        .recommendation-card {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .confidence-meter {
-            background-color: #e9ecef;
-            border-radius: 4px;
-            height: 8px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-
-        .confidence-value {
-            height: 100%;
-            background-color: #007bff;
-        }
-
-        .confidence-buy { background-color: #28a745; }
-        .confidence-sell { background-color: #dc3545; }
-        .confidence-hold { background-color: #ffc107; }
-
-        /* List styles */
-        ul {
-            padding-left: 20px;
-            margin-bottom: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Action buttons */
-        .action-buttons {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 1000;
-        }
-
-        .btn {
-            display: inline-block;
-            font-weight: 500;
-            text-align: center;
-            vertical-align: middle;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            line-height: 1.5;
-            border-radius: 0.25rem;
-            text-decoration: none;
-            transition: all 0.15s ease-in-out;
-        }
-
-        .btn-primary {
-            color: #fff;
-            background-color: #007bff;
-            border: 1px solid #0056b3;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-outline-primary {
-            color: #007bff;
-            border: 1px solid #007bff;
-            background-color: transparent;
-        }
-
-        .btn-outline-primary:hover {
-            color: #fff;
-            background-color: #007bff;
-        }
-
-        @media print {
-            .action-buttons {
-                display: none !important;
-            }
-        }
-        
-        /* Cycle card styles */
-        .cycle-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .cycle-card {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            background: white;
             padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .cycle-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .cycle-stats {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .cycle-stats li {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .cycle-stats .label {
-            color: #6c757d;
-        }
-
-        .cycle-stats .value {
-            font-weight: 500;
-            color: #2c3e50;
-        }
-
-        @media print {
-            .cycle-cards {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-            
-            .cycle-card {
-                break-inside: avoid;
-                page-break-inside: avoid;
-                background-color: #fff !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .cycle-cards {
-                grid-template-columns: repeat(1, 1fr);
-            }
-        }
-
-        /* Table styles */
-        .table-container {
-            margin-bottom: 2rem;
-        }
-
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-            background-color: #fff;
-        }
-
-        .custom-table th,
-        .custom-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border: 1px solid #dee2e6;
-        }
-
-        .custom-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .custom-table tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        @media print {
-            .table-container {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-
-            .custom-table {
-                border: 1px solid #000 !important;
-            }
-
-            .custom-table th,
-            .custom-table td {
-                border: 1px solid #000 !important;
-                background-color: #fff !important;
-                color: #000 !important;
-            }
-
-            .custom-table th {
-                background-color: #f0f0f0 !important;
-            }
-        }
-        
-        /* Dominant Market Cycles styles */
+        /* Cycle visualization */
         .cycles-visual {
+            margin-top: 2rem;
             background: #f8f9fa;
             padding: 1.5rem;
             border-radius: 8px;
-        }
-
-        .cycle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 0.5rem;
-            background: white;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .cycle-info {
@@ -390,18 +53,11 @@
         .cycle-strength {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            min-width: 200px;
-        }
-
-        .strength-bar {
-            height: 24px;
-            background: #007bff;
-            border-radius: 12px;
+            gap: 0.5rem;
             flex: 1;
         }
 
-        .strength-value {
+        .strength-label {
             font-weight: bold;
             min-width: 60px;
         }
@@ -414,48 +70,27 @@
             margin-left: 1rem;
         }
 
-        @media print {
-            .cycles-visual {
-                background: #f8f9fa !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .cycle-row {
-                background: white !important;
-                box-shadow: none;
-                border: 1px solid #ddd;
-            }
-
-            .strength-bar {
-                background: #007bff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .cycles-visual,
-            .table-responsive {
-                page-break-inside: avoid;
-            }
-        }
-        
-        /* Cycle visualization */
-        .cycle-visualization {
-            margin: 2rem 0;
+        .strength-bar {
+            height: 20px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 10px;
+            margin-right: 10px;
         }
 
-        .cycle-item {
+        .cycle-row {
             display: flex;
             align-items: center;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
             margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .cycle-bar {
-            background: #007bff;
-            height: 40px;
-            min-width: 200px;
-            border-radius: 4px;
-            position: relative;
+            background: #3498db;
+            height: 24px;
+            border-radius: 12px;
             color: white;
             display: flex;
             align-items: center;
@@ -480,15 +115,61 @@
         }
 
         @media print {
-            .cycle-visualization,
-            .table-responsive {
-                page-break-inside: avoid;
+            .cycles-visual {
+                background: #f8f9fa !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .cycle-row {
+                background: #f8f9fa !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .strength-bar {
+                background: linear-gradient(to right, #3498db, #2ecc71) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             .cycle-bar {
-                print-color-adjust: exact;
+                background: #3498db !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
+
+            .table-responsive {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Table styles */
+        .table-container {
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
     </style>
     
@@ -511,15 +192,21 @@
         }
 
         window.onload = function() {
+            // Parse the template variables into JavaScript objects
+            const timeSeriesData = JSON.parse('{{ analysis.time_series_plot | tojson | safe }}');
+            const frequencyData = JSON.parse('{{ analysis.frequency_plot | tojson | safe }}');
+            const forecastData = JSON.parse('{{ analysis.forecast_plot | tojson | safe }}');
+            const cycleLabels = JSON.parse('{{ analysis.cycle_labels | tojson | safe }}');
+            const cycleStrengths = JSON.parse('{{ analysis.cycle_strengths | tojson | safe }}');
+
             // Time series plot
-            var timeSeriesData = {{ analysis.time_series_plot | tojson | safe }};
             Plotly.newPlot('time-series-plot', 
                 timeSeriesData.data, 
-                {...timeSeriesData.layout, 
+                Object.assign({}, timeSeriesData.layout, {
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
                     autosize: true
-                },
+                }),
                 {
                     staticPlot: true,
                     displayModeBar: false,
@@ -528,14 +215,13 @@
             ).then(checkAllChartsRendered);
 
             // Frequency plot
-            var frequencyData = {{ analysis.frequency_plot | tojson | safe }};
             Plotly.newPlot('frequency-plot', 
                 frequencyData.data, 
-                {...frequencyData.layout, 
+                Object.assign({}, frequencyData.layout, {
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
                     autosize: true
-                },
+                }),
                 {
                     staticPlot: true,
                     displayModeBar: false,
@@ -544,14 +230,13 @@
             ).then(checkAllChartsRendered);
 
             // Forecast plot
-            var forecastData = {{ analysis.forecast_plot | tojson | safe }};
             Plotly.newPlot('forecast-plot', 
                 forecastData.data, 
-                {...forecastData.layout, 
+                Object.assign({}, forecastData.layout, {
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
                     autosize: true
-                },
+                }),
                 {
                     staticPlot: true,
                     displayModeBar: false,
@@ -560,28 +245,25 @@
             ).then(checkAllChartsRendered);
 
             // Create cycles plot
-            var cyclesData = {
+            const cyclesData = {
                 data: [
                     {
                         type: 'bar',
-                        x: {{ analysis.dominant_cycles|map(attribute='length')|list|tojson|safe }},
-                        y: {{ analysis.dominant_cycles|map(attribute='amplitude')|list|tojson|safe }},
-                        name: 'Cycle Amplitude',
+                        x: cycleLabels,
+                        y: cycleStrengths,
                         marker: {
-                            color: '#2c3e50'
+                            color: 'rgb(55, 83, 109)'
                         }
                     }
                 ],
                 layout: {
-                    title: 'Dominant Market Cycles',
+                    title: 'Cycle Strengths',
                     xaxis: {
-                        title: 'Cycle Length (Days)',
-                        tickmode: 'array',
-                        ticktext: {{ analysis.dominant_cycles|map(attribute='length')|map('round')|map('int')|list|tojson|safe }}.map(x => x + ' days'),
-                        tickvals: {{ analysis.dominant_cycles|map(attribute='length')|list|tojson|safe }}
+                        title: 'Cycle Length (Days)'
                     },
                     yaxis: {
-                        title: 'Amplitude (%)'
+                        title: 'Relative Strength',
+                        range: [0, 100]
                     },
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
@@ -590,7 +272,7 @@
             };
 
             Plotly.newPlot('cycles-plot', 
-                cyclesData.data, 
+                cyclesData.data,
                 cyclesData.layout,
                 {
                     staticPlot: true,
@@ -598,20 +280,6 @@
                     responsive: true
                 }
             ).then(checkAllChartsRendered);
-        };
-
-        // Handle print events
-        window.onbeforeprint = function() {
-            document.querySelectorAll('.js-plotly-plot').forEach(plot => {
-                Plotly.relayout(plot, {
-                    width: plot.offsetWidth,
-                    height: 400
-                });
-            });
-        };
-
-        window.onafterprint = function() {
-            window.dispatchEvent(new Event('resize'));
         };
     </script>
     {% endif %}

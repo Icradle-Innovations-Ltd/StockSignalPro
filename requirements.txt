@@ -8,7 +8,7 @@ scipy==1.10.1
 plotly==5.14.1
 pdfkit==1.0.0
 yfinance==0.2.18
-trafilatura==1.5.0
+trafilatura==1.4.1
 gunicorn==20.1.0
 wkhtmltopdf-pack==0.12.3.0.post1
 requests==2.28.2
@@ -28,3 +28,11 @@ charset-normalizer==3.0.1
 idna==3.4
 waitress==2.1.2
 python-dotenv==0.21.1
+importlib-metadata==8.6.1
+greenlet==3.2.1
+packaging==25.0
+tenacity==9.1.2
+frozendict==2.4.6
+multitasking==0.0.11
+cryptography==44.0.2
+appdirs==1.4.4

@@ -5,17 +5,20 @@ A web application that leverages Fast Fourier Transform (FFT) algorithms to anal
 ## Running Locally
 
 1. Clone the repository:
+
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/yourusername/stock-market-signal-processing.git
 cd stock-market-signal-processing
 ```
 
 2. Install Poetry (if not already installed):
+
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 3. Install dependencies using Poetry:
+
 ```bash
 poetry install
 ```
@@ -23,16 +26,19 @@ poetry install
 4. Set up PostgreSQL database:
 - Create a new database
 - Set the DATABASE_URL environment variable:
+
 ```bash
 export DATABASE_URL=postgresql://username:password@localhost/dbname
 ```
 
 5. Initialize the database:
+
 ```bash
 poetry run python recreate_db.py
 ```
 
 6. Run the application:
+
 ```bash
 poetry run gunicorn --bind 0.0.0.0:5000 main:app
 ```
@@ -65,12 +71,6 @@ Note: All dependencies are defined in `pyproject.toml`. Poetry will automaticall
 - Click "Deploy"
 
 Your app will be live in a few minutes!
-
-## Deployment on Render
-
-1. Environment: Python 3.9.7
-2. Build Command: `pip install -r requirements.txt`
-3. Start Command: `gunicorn app:app`
 
 ## Features
 
@@ -145,44 +145,52 @@ The application is built using a modern web stack with the following components:
 - pip package manager
 
 ### Setup Instructions
+
 1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/stock-market-signal-processing.git
-   cd stock-market-signal-processing
-   ```
 
-2. Create and activate a virtual environment:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+```bash
+git clone https://github.com/yourusername/stock-market-signal-processing.git
+cd stock-market-signal-processing
+```
 
-3. Install required packages:
-   ```
-   pip install -r requirements.txt
-   ```
+1. Create and activate a virtual environment:
 
-4. Set up environment variables:
-   ```
-   export DATABASE_URL=postgresql://username:password@localhost/dbname
-   # On Windows: set DATABASE_URL=postgresql://username:password@localhost/dbname
-   ```
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-5. Initialize the database:
-   ```
-   python initialize_db.py
-   ```
+1. Install required packages:
 
-6. Start the application:
-   ```
-   python main.py
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-7. Access the application at http://localhost:5000
+1. Set up environment variables:
+
+```bash
+export DATABASE_URL=postgresql://username:password@localhost/dbname
+# On Windows: set DATABASE_URL=postgresql://username:password@localhost/dbname
+```
+
+1. Initialize the database:
+
+```bash
+python initialize_db.py
+```
+
+1. Start the application:
+
+```bash
+python main.py
+```
+
+1. Access the application at http://localhost:5000
 
 ## Usage
 
 ### Analyzing Stock Data with CSV Upload
+
 1. Prepare a CSV file with date and price columns (format: date,price)
 2. Navigate to the home page
 3. Click "Upload CSV File" and select your file
@@ -190,6 +198,7 @@ The application is built using a modern web stack with the following components:
 5. View the results, including detected cycles and recommendations
 
 ### Analyzing Stock Data with Ticker Symbol
+
 1. Navigate to the home page
 2. Enter a valid stock ticker symbol (e.g., AAPL, MSFT, GOOGL)
 3. Select the desired time period
@@ -197,6 +206,7 @@ The application is built using a modern web stack with the following components:
 5. View the results, including detected cycles and recommendations
 
 ### Understanding the Results
+
 - **Time Series Chart**: Shows historical price data with moving averages
 - **Recommendation**: Displays Buy/Hold/Sell advice with confidence rating
 - **Dominant Cycles**: Lists detected market cycles with their periods and strength
@@ -206,6 +216,7 @@ The application is built using a modern web stack with the following components:
 - **Ticker Sentiment**: Shows sentiment analysis specific to individual stocks
 
 ### Exporting Results
+
 - Click "Generate PDF Report" to create a downloadable PDF document
 - Click "Download CSV" to export the analysis data in CSV format
 
@@ -242,6 +253,7 @@ stock-market-signal-processing/
 ## How It Works
 
 ### Fast Fourier Transform (FFT) Analysis
+
 The application applies FFT to transform time-domain price data into the frequency domain. This mathematical technique helps identify cyclical patterns in seemingly random price movements.
 
 1. **Data Preprocessing**:
@@ -260,6 +272,7 @@ The application applies FFT to transform time-domain price data into the frequen
    - Rank cycles by significance
 
 ### Trading Recommendation Generation
+
 The application generates recommendations based on detected cycles and their current position:
 
 1. **Phase Analysis**:
@@ -275,6 +288,7 @@ The application generates recommendations based on detected cycles and their cur
    - Adjust recommendations based on confidence levels
 
 ### Market Sentiment Analysis
+
 The application analyzes financial news and content to determine market sentiment:
 
 1. **Data Collection**:
@@ -293,6 +307,7 @@ The application analyzes financial news and content to determine market sentimen
    - Assign a numeric value between 0-100
 
 ### Visualization Creation
+
 The application creates the following main types of visualizations:
 
 1. **Time Series Plot**:
@@ -397,3 +412,28 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License.
+
+```python
+# Example code for using the FFT analysis
+import numpy as np
+from scipy.fft import fft, fftfreq
+
+def analyze_cycles(data, sampling_rate):
+    # Perform FFT
+    fft_result = fft(data)
+    freqs = fftfreq(len(data), 1/sampling_rate)
+    
+    # Get the power spectrum
+    power = np.abs(fft_result)**2
+    
+    return freqs, power
+```
+
+```json
+{
+    "dominant_cycles": [
+        {"length": 21, "strength": 85},
+        {"length": 55, "strength": 65},
+        {"length": 89, "strength": 45}
+    ]
+}
