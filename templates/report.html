@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if 'ticker' in analysis %}
+            Report for {{ analysis.ticker }} - CycleTrader
+        {% else %}
+            Report for {{ analysis.filename }} - CycleTrader
+        {% endif %}
+    </title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Plotly.js for charts -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <style>
+        /* Print-specific styles */
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            
+            .custom-card {
+                border: 1px solid #ddd !important;
+                box-shadow: none !important;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            .print-bg-white {
+                background-color: white !important;
+            }
+            
+            .print-text-dark {
+                color: #333 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Analysis data for JavaScript -->
+    <div id="analysis-data" data-analysis-id="{{ analysis.id }}" class="d-none"></div>
+    
+    <!-- Header -->
+    <header class="app-header no-print">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="{{ url_for('index') }}">
+                        <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="40">
+                    </a>
+                </div>
+                <div>
+                    <button onclick="window.print()" class="btn btn-primary btn-sm me-2">
+                        <i class="fas fa-print me-1"></i> Print Report
+                    </button>
+                    <a href="{{ url_for('results', analysis_id=analysis.id) }}" class="btn btn-outline-light btn-sm me-2">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Results
+                    </a>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Report Header for Print -->
+    <div class="container mt-4 mb-5">
+        <div class="text-center">
+            <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="60" class="mb-3">
+            <h1 class="mb-1">
+                {% if 'ticker' in analysis %}
+                    Market Cycle Analysis Report for {{ analysis.ticker }}
+                {% else %}
+                    Market Cycle Analysis Report for {{ analysis.filename }}
+                {% endif %}
+            </h1>
+            <p class="text-muted">Generated on {{ now().strftime('%B %d, %Y at %H:%M') }}</p>
+            <hr class="my-4">
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Executive Summary -->
+        <section class="mb-5">
+            <div class="custom-card p-4">
+                <h2 class="mb-4 border-bottom pb-2">Executive Summary</h2>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Analysis Overview</h4>
+                        <p>
+                            This report presents the results of a Fourier Transform-based cycle analysis of 
+                            {% if 'ticker' in analysis %}
+                                {{ analysis.ticker }} stock price data.
+                            {% else %}
+                                the uploaded price data.
+                            {% endif %}
+                            The analysis identifies hidden market cycles and provides trading recommendations based on these patterns.
+                        </p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h4>Key Findings</h4>
+                        <ul>
+                            {% for cycle in analysis.dominant_cycles[:3] %}
+                                <li>Detected a {{ cycle.length }} day cycle with {{ cycle.strength|float * 100 }}% relative strength</li>
+                            {% endfor %}
+                            <li>Current recommendation: <strong>{{ analysis.recommendation.action }}</strong> with {{ analysis.recommendation.confidence_pct }} confidence</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Recommendation Section -->
+        <section class="mb-5">
+            <div class="custom-card">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <div class="recommendation-card h-100 d-flex flex-column justify-content-center p-4">
+                            <div class="recommendation-icon
+                                {% if analysis.recommendation.action == 'BUY' %}buy-indicator{% endif %}
+                                {% if analysis.recommendation.action == 'HOLD' %}hold-indicator{% endif %}
+                                {% if analysis.recommendation.action == 'SELL' %}sell-indicator{% endif %}">
+                                {% if analysis.recommendation.action == 'BUY' %}
+                                    <i class="fas fa-arrow-up"></i>
+                                {% elif analysis.recommendation.action == 'SELL' %}
+                                    <i class="fas fa-arrow-down"></i>
+                                {% else %}
+                                    <i class="fas fa-grip-lines"></i>
+                                {% endif %}
+                            </div>
+                            <h2 class="mb-2">{{ analysis.recommendation.action }}</h2>
+                            <p class="text-muted">Trading Recommendation</p>
+                            
+                            <div class="confidence-meter">
+                                <div class="confidence-value
+                                    {% if analysis.recommendation.action == 'BUY' %}confidence-buy{% endif %}
+                                    {% if analysis.recommendation.action == 'HOLD' %}confidence-hold{% endif %}
+                                    {% if analysis.recommendation.action == 'SELL' %}confidence-sell{% endif %}"
+                                    style="width: {{ analysis.recommendation.confidence_pct }};">
+                                </div>
+                            </div>
+                            <p class="mb-0">Confidence: {{ analysis.recommendation.confidence_pct }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="p-4">
+                            <h3 class="mb-3">Recommendation Reasoning</h3>
+                            <ul class="list-group list-group-flush">
+                                {% for reason in analysis.recommendation.reasoning %}
+                                    <li class="list-group-item bg-transparent border-bottom-light">{{ reason }}</li>
+                                {% endfor %}
+                            </ul>
+                            
+                            <div class="mt-4">
+                                <h4 class="mb-3">Dominant Market Cycles</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Cycle Length</th>
+                                                <th>Relative Strength</th>
+                                                <th>Days to Next Trough</th>
+                                                <th>Days to Next Peak</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cycle in analysis.dominant_cycles %}
+                                                <tr>
+                                                    <td>{{ cycle.length }} days</td>
+                                                    <td>{{ cycle.strength|float * 100 }}%</td>
+                                                    <td>{{ cycle.days_to_trough|int }} days</td>
+                                                    <td>{{ cycle.days_to_peak|int }} days</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Charts Section -->
+        <div class="page-break"></div>
+        
+        <section class="mb-5">
+            <h2 class="mb-4">Analysis Visualizations</h2>
+            
+            <!-- Time Series Chart -->
+            <div class="mb-5">
+                <div class="custom-card p-4">
+                    <h3 class="mb-3">Historical Price Analysis</h3>
+                    <div id="time-series-chart" class="chart-container">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3">Loading chart...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Frequency Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="custom-card p-4 h-100">
+                        <h3 class="mb-3">Frequency Analysis</h3>
+                        <div id="frequency-chart" class="chart-container">
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading chart...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Forecast Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="custom-card p-4 h-100">
+                        <h3 class="mb-3">Price Forecast</h3>
+                        <div id="forecast-chart" class="chart-container">
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading chart...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="page-break"></div>
+        
+        <!-- Methodology Section -->
+        <section class="mb-5">
+            <div class="custom-card p-4">
+                <h2 class="mb-4 border-bottom pb-2">Methodology</h2>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h4>Fast Fourier Transform (FFT)</h4>
+                        <p>
+                            The Fast Fourier Transform is a mathematical technique that decomposes a time series into its constituent frequencies. 
+                            In this analysis, we apply FFT to historical price data to identify periodic patterns that may not be visible in the raw time series.
+                        </p>
+                        
+                        <h4>Cycle Detection</h4>
+                        <p>
+                            After applying FFT, we analyze the frequency domain representation to identify dominant cycles. 
+                            We filter out noise and focus on cycles with significant relative strength, which are more likely to 
+                            represent genuine market patterns rather than random fluctuations.
+                        </p>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <h4>Trading Signal Generation</h4>
+                        <p>
+                            Our decision engine analyzes the current position within each detected cycle to generate trading recommendations:
+                        </p>
+                        
+                        <ul>
+                            <li><strong>BUY signals</strong> are generated when approaching the troughs of multiple strong cycles.</li>
+                            <li><strong>SELL signals</strong> are generated when approaching the peaks of multiple strong cycles.</li>
+                            <li><strong>HOLD signals</strong> are generated during transition phases or when cycles provide mixed signals.</li>
+                        </ul>
+                        
+                        <p>
+                            The confidence level is calculated based on the strength of the cycles and the clarity of the signals.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Disclaimer Section -->
+        <section class="mb-5">
+            <div class="custom-card p-4">
+                <h2 class="mb-4 border-bottom pb-2">Disclaimer and Limitations</h2>
+                
+                <p>
+                    This analysis is provided for educational and informational purposes only. It does not constitute financial advice, 
+                    and should not be the sole basis for making investment decisions.
+                </p>
+                
+                <p>
+                    <strong>Limitations of Cycle Analysis:</strong>
+                </p>
+                
+                <ul>
+                    <li>Past patterns do not guarantee future results.</li>
+                    <li>Market cycles can be disrupted by external events and fundamental changes.</li>
+                    <li>This analysis focuses solely on technical patterns and does not consider fundamental factors.</li>
+                    <li>Cycle detection works best in markets with relatively stable conditions.</li>
+                </ul>
+                
+                <p>
+                    We recommend combining this analysis with other forms of analysis, risk management strategies, 
+                    and consultation with qualified financial advisors.
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer for Print -->
+    <footer class="container mt-5 mb-4 text-center">
+        <div class="border-top pt-4">
+            <p>© 2023 CycleTrader. All rights reserved.</p>
+            <p class="small text-muted">Generated by CycleTrader - Advanced Stock Market Signal Processing Application</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

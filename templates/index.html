@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycleTrader - Stock Market Signal Processing</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Plotly.js for charts -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="40">
+                </div>
+                <div>
+                    <a href="https://github.com" target="_blank" class="btn btn-outline-light btn-sm">
+                        <i class="fab fa-github me-1"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="hero-heading text-white">Stock Market Signal Processing</h1>
+            <p class="hero-subheading text-light">Detect hidden market cycles using Fast Fourier Transform (FFT) analysis and get actionable trading recommendations.</p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="#upload-section" class="btn btn-primary">
+                    <i class="fas fa-upload me-1"></i> Upload Data
+                </a>
+                <a href="#how-it-works" class="btn btn-outline-light">
+                    <i class="fas fa-info-circle me-1"></i> How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Alerts Container -->
+    <div class="container mt-3" id="alerts-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container py-4">
+        <div class="row">
+            <!-- Upload Section -->
+            <div class="col-lg-8 mb-4" id="upload-section">
+                <div class="custom-card p-4">
+                    <h2 class="mb-4 text-primary">Analyze Stock Data</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="h-100">
+                                <h4>Upload CSV File</h4>
+                                <p class="text-muted">Upload a CSV file containing historical stock price data.</p>
+                                
+                                <form id="upload-form" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                                    <div id="upload-area" class="upload-area mb-3">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-file-csv"></i>
+                                        </div>
+                                        <p class="mb-1">Drag & drop your CSV file here</p>
+                                        <p class="text-muted small">or click to browse</p>
+                                        <p id="upload-filename" class="text-primary mt-2"></p>
+                                        
+                                        <input type="file" id="file-input" name="file" class="d-none" accept=".csv">
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <p class="small text-muted">Your CSV should include date and price columns. Format: date,price</p>
+                                    </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="h-100">
+                                <h4>Or Enter Ticker Symbol</h4>
+                                <p class="text-muted">We'll fetch the latest data for analysis.</p>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="ticker-input" class="form-label">Stock Ticker Symbol</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <input type="text" id="ticker-input" name="ticker" class="form-control" placeholder="e.g., AAPL, MSFT, GOOGL">
+                                    </div>
+                                    <div id="ticker-suggestions" class="list-group mt-1 position-absolute z-3" style="width: calc(100% - 3rem);"></div>
+                                    <div class="form-text">Enter a valid NYSE or NASDAQ ticker symbol.</div>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label class="form-label d-flex align-items-center">
+                                        Time Period
+                                        <i class="fas fa-info-circle ms-2 text-primary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="Amount of historical data to analyze. Longer periods might reveal longer-term cycles."></i>
+                                    </label>
+                                    <select class="form-select" name="period">
+                                        <option value="1y">1 Year</option>
+                                        <option value="2y" selected>2 Years</option>
+                                        <option value="5y">5 Years</option>
+                                        <option value="10y">10 Years</option>
+                                        <option value="max">Max Available</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                            <i class="fas fa-chart-line me-2"></i> Analyze Stock Data
+                        </button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Information Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="custom-card p-4 h-100">
+                    <h3 class="mb-3 text-primary">What You'll Get</h3>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-wave-square text-primary me-2" style="font-size: 1.5rem;"></i>
+                            <h5 class="mb-0">Cycle Detection</h5>
+                        </div>
+                        <p class="text-muted">Identify hidden market cycles using Fast Fourier Transform analysis.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-chart-line text-primary me-2" style="font-size: 1.5rem;"></i>
+                            <h5 class="mb-0">Interactive Visualizations</h5>
+                        </div>
+                        <p class="text-muted">Beautiful, interactive charts showing price history and detected cycles.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-robot text-primary me-2" style="font-size: 1.5rem;"></i>
+                            <h5 class="mb-0">Smart Recommendations</h5>
+                        </div>
+                        <p class="text-muted">Get Buy/Hold/Sell recommendations based on cycle analysis.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-file-download text-primary me-2" style="font-size: 1.5rem;"></i>
+                            <h5 class="mb-0">Downloadable Reports</h5>
+                        </div>
+                        <p class="text-muted">Export your analysis results in PDF or CSV formats.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="my-5">
+            <h2 class="text-primary text-center mb-4">How It Works</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="custom-card p-3 text-center h-100">
+                        <div class="mb-3">
+                            <i class="fas fa-upload text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4>1. Upload Data</h4>
+                        <p class="text-muted">Upload your CSV file or enter a ticker symbol to fetch live data.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="custom-card p-3 text-center h-100">
+                        <div class="mb-3">
+                            <i class="fas fa-wave-square text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4>2. FFT Analysis</h4>
+                        <p class="text-muted">We apply Fast Fourier Transform to detect periodic patterns in the price data.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="custom-card p-3 text-center h-100">
+                        <div class="mb-3">
+                            <i class="fas fa-brain text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4>3. Cycle Detection</h4>
+                        <p class="text-muted">Our algorithm identifies dominant cycles and their current positions.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="custom-card p-3 text-center h-100">
+                        <div class="mb-3">
+                            <i class="fas fa-lightbulb text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4>4. Get Insights</h4>
+                        <p class="text-muted">Receive actionable recommendations and visualize the detected patterns.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feature Showcase -->
+        <section class="my-5">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="text-primary mb-3">Advanced Cycle Analysis</h2>
+                    <p class="lead">Discover hidden patterns that traditional technical analysis might miss.</p>
+                    <p>Markets often exhibit cyclical behavior that can be difficult to spot with the naked eye. Our FFT-based analysis helps reveal these patterns by transforming time-domain data into the frequency domain.</p>
+                    <div class="mt-4">
+                        <a href="#upload-section" class="btn btn-outline-primary">Try It Now</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1639825988283-39e5408b75e8" alt="Stock Market Analysis" class="img-fluid rounded shadow">
+                </div>
+            </div>
+            
+            <div class="row align-items-center mb-5 flex-row-reverse">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="text-primary mb-3">Data-Driven Decisions</h2>
+                    <p class="lead">Move beyond gut feelings with quantitative cycle analysis.</p>
+                    <p>Our decision engine analyzes the strength, position, and phase of detected market cycles to generate Buy, Hold, or Sell recommendations with confidence ratings.</p>
+                    <div class="mt-4">
+                        <a href="#upload-section" class="btn btn-outline-primary">Analyze Your Stocks</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40" alt="Data-Driven Trading Decisions" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="40" class="mb-3">
+                    <p class="text-muted">Advanced stock market signal processing using Fast Fourier Transform to detect hidden market cycles and generate trading recommendations.</p>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Features</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Cycle Detection</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">FFT Analysis</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Trading Signals</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Stock Forecasting</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Documentation</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">API</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Blog</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 col-md-4">
+                    <h5 class="text-white mb-3">About</h5>
+                    <p class="text-muted">CycleTrader is an educational tool designed to help traders and investors understand market cycles through signal processing techniques.</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="text-muted text-decoration-none"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary mt-4 pt-4 text-center text-muted">
+                <p>&copy; 2023 CycleTrader. All rights reserved.</p>
+                <p class="small">Disclaimer: This application is for educational purposes only. It does not constitute financial advice.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

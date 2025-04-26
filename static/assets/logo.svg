@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="40" viewBox="0 0 160 40">
+  <style>
+    .logo-text { font: bold 20px 'Arial', sans-serif; fill: #3498db; }
+    .graph-line { stroke: #3498db; stroke-width: 2; fill: none; }
+    .graph-accent { stroke: #2ecc71; stroke-width: 2; fill: none; }
+    .graph-pattern { stroke: #e74c3c; stroke-width: 1.5; fill: none; stroke-dasharray: 3,3; }
+  </style>
+  
+  <!-- Graph Background -->
+  <rect x="5" y="5" width="30" height="30" rx="4" fill="#2c3e50" />
+  
+  <!-- Stock Chart Lines -->
+  <path class="graph-line" d="M7,25 L10,22 L15,28 L20,15 L25,20 L30,17 L33,10" />
+  <path class="graph-accent" d="M7,30 L13,27 L18,22 L25,25 L33,20" />
+  <path class="graph-pattern" d="M7,18 C12,13 18,22 25,12 S30,18 33,15" />
+  
+  <!-- Text -->
+  <text x="40" y="25" class="logo-text">CycleTrader</text>
+  
+  <!-- Decorative Waves (FFT Visualization) -->
+  <path class="graph-accent" 
+        d="M100,25 C105,20 107,30 112,25 C117,20 119,30 124,25" 
+        stroke-opacity="0.6" />
+  <path class="graph-line" 
+        d="M130,25 C133,22 135,28 138,25 C141,22 143,28 146,25 C149,22 151,28 154,25" 
+        stroke-opacity="0.8" />
+</svg>
