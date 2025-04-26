@@ -61,3 +61,4 @@ pdfkit
 werkzeug
 gunicorn
 wkhtmltopdf
+flask-talisman
