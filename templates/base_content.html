@@ -190,22 +190,22 @@
                 var sampleDataLink = document.createElement('a');
                 sampleDataLink.href = "{{ url_for('sample_data_page') }}";
                 sampleDataLink.className = 'dropdown-item';
-                sampleDataLink.textContent = 'Sample Data Generator';
+                sampleDataLink.textContent = 'Market Data Generator';
                 
-                // Check if Sample Data Generator is already there
+                // Check if Market Data Generator is already there
                 var sampleDataExists = false;
                 for (var i = 0; i < items.length; i++) {
-                    if (items[i].textContent.includes('Sample Data Generator')) {
+                    if (items[i].textContent.includes('Market Data Generator')) {
                         sampleDataExists = true;
                         break;
                     }
                 }
                 
-                // Add Sample Data Generator if not present
+                // Add Market Data Generator if not present
                 if (!sampleDataExists) {
                     sampleDataItem.appendChild(sampleDataLink);
                     featuresDropdown.appendChild(sampleDataItem);
-                    console.log('Added Sample Data Generator to menu');
+                    console.log('Added Market Data Generator to menu');
                 }
             } else {
                 console.log('Features dropdown not found');
