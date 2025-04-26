@@ -13,10 +13,12 @@ yfinance==0.1.63
 pdfkit==1.0.0
 Werkzeug==2.0.1
 beautifulsoup4==4.9.3
-lxml==4.9.2
-trafilatura==1.5.0
+lxml==4.6.5
+trafilatura==1.4.0
 html5lib==1.1
 python-dateutil==2.8.2
 urllib3==1.26.15
 certifi==2022.12.7
 idna==3.4
+justext==3.0.0
+courlan==0.9.3
