@@ -1,0 +1,196 @@
+{% extends "base_content.html" %}
+
+{% block title %}Stock Forecasting - CycleTrader{% endblock %}
+
+{% block page_title %}Stock Forecasting{% endblock %}
+{% block page_subtitle %}Using cycle analysis to project future price movements{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Cycle-Based Price Forecasting</h2>
+            
+            <p>Our stock forecasting feature uses detected market cycles to project potential future price movements. By understanding the length, strength, and current phase of dominant cycles, we can create forecasts that help visualize how these cycles might influence price in the coming days and weeks.</p>
+            
+            <div class="alert alert-warning mt-4 mb-4">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+                    </div>
+                    <div>
+                        <h5>Important Note</h5>
+                        <p class="mb-0">These forecasts are projections based on mathematical analysis of historical cycles and should not be interpreted as guaranteed predictions. Markets are influenced by many factors beyond cyclical patterns, including news events, economic reports, and unexpected developments that no model can predict with certainty.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center my-5">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" alt="Price Forecast Visualization" class="img-fluid rounded shadow">
+            </div>
+            
+            <h3 class="text-primary mt-5 mb-3">How Our Forecasting Works</h3>
+            
+            <ol>
+                <li>
+                    <h5>Cycle Identification</h5>
+                    <p>We first identify dominant cycles in historical price data using Fast Fourier Transform (FFT) analysis.</p>
+                </li>
+                
+                <li>
+                    <h5>Cycle Parameterization</h5>
+                    <p>For each dominant cycle, we determine its period (length), amplitude (strength), and phase (current position).</p>
+                </li>
+                
+                <li>
+                    <h5>Cycle Projection</h5>
+                    <p>Using these parameters, we extend each cycle forward in time to project its future path.</p>
+                </li>
+                
+                <li>
+                    <h5>Cycle Superposition</h5>
+                    <p>We combine multiple cycle projections, giving more weight to stronger cycles, to create a composite forecast.</p>
+                </li>
+                
+                <li>
+                    <h5>Visualization</h5>
+                    <p>The final forecast is presented as an interactive chart showing both historical data and projected price movement.</p>
+                </li>
+            </ol>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Cycle Superposition Principle</h2>
+            
+            <p>Our forecasting model is based on the principle of cycle superposition, which states that complex price movements can be broken down into simpler cyclic components, and these components can be recombined to project future movement.</p>
+            
+            <div class="row g-4 mt-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Mathematical Foundation</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>For each detected cycle, we model its contribution as:</p>
+                            <div class="text-center my-3">
+                                <span class="p-2 bg-light border rounded">C(t) = A × cos(2π × t/P + φ)</span>
+                            </div>
+                            <p class="mb-0">Where A is amplitude, P is period, φ is phase, and t is time. The total forecast is the sum of all cycle contributions plus the last known price.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Weighted Influence</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Not all cycles are created equal. In our model:</p>
+                            <ul class="mb-0">
+                                <li>Stronger cycles (higher amplitude) have more influence on the forecast</li>
+                                <li>More recent cycles are given higher weight than older patterns</li>
+                                <li>Shorter cycles may diminish in importance over longer forecast horizons</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Forecast Interpretation Guidelines</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-calendar-alt" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Forecast Horizon</h5>
+                            <p>Forecasts are typically most reliable in the near term (1-2 weeks) and become less certain as the horizon extends.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-arrows-alt-v" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Direction vs. Magnitude</h5>
+                            <p>Focus more on the projected direction of price movement rather than exact price targets.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-sync-alt" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Regular Updates</h5>
+                            <p>Forecasts should be updated regularly as new data becomes available.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4 class="text-primary mt-5 mb-3">Common Forecast Patterns</h4>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Visual Characteristics</th>
+                            <th>Interpretation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Upward Trajectory</td>
+                            <td>Forecast line trending upward</td>
+                            <td>Multiple cycles aligned in bullish phase</td>
+                        </tr>
+                        <tr>
+                            <td>Downward Trajectory</td>
+                            <td>Forecast line trending downward</td>
+                            <td>Multiple cycles aligned in bearish phase</td>
+                        </tr>
+                        <tr>
+                            <td>Consolidation</td>
+                            <td>Relatively flat or choppy forecast</td>
+                            <td>Cycles in transitional phases or conflicting</td>
+                        </tr>
+                        <tr>
+                            <td>Reversal Point</td>
+                            <td>Forecast shows inflection from up to down (or vice versa)</td>
+                            <td>Potential turning point as cycles reach extremes</td>
+                        </tr>
+                        <tr>
+                            <td>Wave Pattern</td>
+                            <td>Clear up and down oscillations</td>
+                            <td>Strong single dominant cycle influencing price</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="alert alert-info mt-5">
+                <h5><i class="fas fa-info-circle me-2"></i>Practical Application</h5>
+                <p class="mb-0">The most effective way to use our forecasts is as part of a comprehensive trading approach. Consider them alongside traditional technical analysis, fundamental analysis, market sentiment, and risk management strategies. Pay particular attention to forecast turning points that align with other technical indicators.</p>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{{ url_for('index') }}#upload-section" class="btn btn-primary btn-lg">
+                    <i class="fas fa-chart-line me-2"></i> Generate Price Forecast
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,444 @@
+{% extends "base_content.html" %}
+
+{% block title %}Documentation - CycleTrader{% endblock %}
+
+{% block page_title %}Documentation{% endblock %}
+{% block page_subtitle %}Comprehensive guides and reference materials for CycleTrader{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3 mb-4">
+        <div class="list-group sticky-top" style="top: 2rem;">
+            <a href="#getting-started" class="list-group-item list-group-item-action">Getting Started</a>
+            <a href="#data-input" class="list-group-item list-group-item-action">Data Input Options</a>
+            <a href="#understanding-results" class="list-group-item list-group-item-action">Understanding Results</a>
+            <a href="#interpreting-recommendations" class="list-group-item list-group-item-action">Interpreting Recommendations</a>
+            <a href="#saving-exporting" class="list-group-item list-group-item-action">Saving & Exporting</a>
+            <a href="#faq" class="list-group-item list-group-item-action">FAQ</a>
+            <a href="#glossary" class="list-group-item list-group-item-action">Glossary</a>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="custom-card p-4 mb-5" id="getting-started">
+            <h2 class="text-primary mb-4">Getting Started</h2>
+            
+            <p>Welcome to CycleTrader, a sophisticated tool for analyzing stock market cycles using Fast Fourier Transform (FFT) analysis. This documentation will help you understand how to use the application effectively.</p>
+            
+            <h4 class="text-primary mt-4 mb-3">What You Can Do with CycleTrader</h4>
+            
+            <ul>
+                <li>Identify hidden market cycles in stock price data</li>
+                <li>Receive actionable Buy/Hold/Sell recommendations with confidence ratings</li>
+                <li>Visualize price data and detected cycles through interactive charts</li>
+                <li>Generate forecasts based on detected cycles</li>
+                <li>Export analysis results in PDF and CSV formats</li>
+            </ul>
+            
+            <h4 class="text-primary mt-4 mb-3">System Requirements</h4>
+            
+            <p>CycleTrader is a web-based application that works on most modern browsers. For optimal performance, we recommend:</p>
+            
+            <ul>
+                <li>Chrome 88+, Firefox 85+, Safari 14+, or Edge 88+</li>
+                <li>JavaScript enabled</li>
+                <li>Screen resolution of at least 1280 × 720</li>
+                <li>Stable internet connection</li>
+            </ul>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="data-input">
+            <h2 class="text-primary mb-4">Data Input Options</h2>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Option 1: Upload CSV File</h4>
+                        </div>
+                        <div class="card-body">
+                            <h5>CSV Format Requirements:</h5>
+                            <ul>
+                                <li>Must contain at least two columns: date and price</li>
+                                <li>Date column should be in YYYY-MM-DD format</li>
+                                <li>Price column should contain numerical values</li>
+                                <li>CSV should have a header row</li>
+                                <li>Maximum file size: 10MB</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Example CSV Format:</h5>
+                            <div class="bg-light p-3 rounded">
+<pre>date,price
+2023-01-01,150.25
+2023-01-02,152.30
+2023-01-03,149.75
+...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Option 2: Enter Ticker Symbol</h4>
+                        </div>
+                        <div class="card-body">
+                            <h5>Ticker Requirements:</h5>
+                            <ul>
+                                <li>Valid stock symbol from major exchanges (NYSE, NASDAQ)</li>
+                                <li>Examples: AAPL (Apple), MSFT (Microsoft), GOOGL (Google)</li>
+                                <li>Case-insensitive (both "aapl" and "AAPL" work)</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Time Period Options:</h5>
+                            <ul>
+                                <li><strong>1 Year:</strong> Good for short-term cycle analysis</li>
+                                <li><strong>2 Years:</strong> Balanced for most analyses (default)</li>
+                                <li><strong>5 Years:</strong> Better for detecting longer-term cycles</li>
+                                <li><strong>10 Years:</strong> Best for very long-term analysis</li>
+                                <li><strong>Max Available:</strong> All available historical data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>Pro Tip</h5>
+                <p class="mb-0">For most effective cycle analysis, we recommend using at least 1-2 years of daily price data. Too little data may not reveal meaningful cycles, while too much data might include different market regimes that could confuse the analysis.</p>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="understanding-results">
+            <h2 class="text-primary mb-4">Understanding Results</h2>
+            
+            <p>Once your data is processed, you'll be presented with a comprehensive results page containing several sections:</p>
+            
+            <h4 class="text-primary mt-4 mb-3">1. Summary Section</h4>
+            
+            <p>This section provides an overview of your analysis, including:</p>
+            <ul>
+                <li><strong>Stock Information:</strong> Ticker symbol, date range, and analysis timestamp</li>
+                <li><strong>Trading Recommendation:</strong> Buy, Hold, or Sell with confidence percentage</li>
+                <li><strong>Reasoning:</strong> Explanation of why this recommendation was generated</li>
+            </ul>
+            
+            <h4 class="text-primary mt-4 mb-3">2. Time Series Chart</h4>
+            
+            <p>An interactive chart showing:</p>
+            <ul>
+                <li><strong>Blue Line:</strong> Historical price data</li>
+                <li><strong>Orange Line:</strong> 7-day moving average</li>
+                <li><strong>Red Line:</strong> 30-day moving average</li>
+            </ul>
+            
+            <p>You can hover over points to see exact values, zoom in/out, pan, and reset the view by double-clicking.</p>
+            
+            <h4 class="text-primary mt-4 mb-3">3. Dominant Cycles</h4>
+            
+            <p>This section displays the significant cycles detected in your data, with each cycle card showing:</p>
+            <ul>
+                <li><strong>Period:</strong> The length of the cycle in trading days</li>
+                <li><strong>Strength:</strong> How prominent this cycle is in the overall data</li>
+                <li><strong>Current Position:</strong> Where in the cycle we currently are</li>
+                <li><strong>Cycle Bar:</strong> Visual representation of cycle strength</li>
+            </ul>
+            
+            <h4 class="text-primary mt-4 mb-3">4. Frequency Analysis Chart</h4>
+            
+            <p>This chart shows the power spectrum from the FFT analysis:</p>
+            <ul>
+                <li><strong>X-axis:</strong> Cycle length in days (logarithmic scale)</li>
+                <li><strong>Y-axis:</strong> Amplitude (cycle strength)</li>
+                <li><strong>Blue Line:</strong> Power spectrum showing all detected cycles</li>
+                <li><strong>Red Dots:</strong> Dominant cycles</li>
+                <li><strong>Text Labels:</strong> Period length of top cycles</li>
+            </ul>
+            
+            <h4 class="text-primary mt-4 mb-3">5. Forecast Chart</h4>
+            
+            <p>This chart shows projected price movement:</p>
+            <ul>
+                <li><strong>Blue Line:</strong> Historical price data</li>
+                <li><strong>Orange Dashed Line:</strong> Projected price based on detected cycles</li>
+                <li><strong>Vertical Line:</strong> Divides historical data from forecast</li>
+            </ul>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="interpreting-recommendations">
+            <h2 class="text-primary mb-4">Interpreting Recommendations</h2>
+            
+            <p>CycleTrader provides actionable trading recommendations based on detected cycles. Here's how to interpret them:</p>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Buy Recommendation</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>What it means:</strong> The analysis suggests that price is likely to increase based on detected cycles.</p>
+                    <p><strong>When you'll see it:</strong> Typically when multiple cycles are at or near their bottom phase.</p>
+                    <p><strong>Confidence levels:</strong></p>
+                    <ul>
+                        <li><strong>High (80-100%):</strong> Strong cycle alignment suggesting upward movement</li>
+                        <li><strong>Medium (60-79%):</strong> Moderate cycle alignment</li>
+                        <li><strong>Low (below 60%):</strong> Some signals present but with significant uncertainty</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Hold Recommendation</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>What it means:</strong> The analysis suggests that no significant move is imminent, or signals are mixed.</p>
+                    <p><strong>When you'll see it:</strong> When cycles are in transitional phases or conflicting with each other.</p>
+                    <p><strong>Confidence levels:</strong></p>
+                    <ul>
+                        <li><strong>High (80-100%):</strong> Strong evidence of sideways movement</li>
+                        <li><strong>Medium (60-79%):</strong> Balanced opposing signals</li>
+                        <li><strong>Low (below 60%):</strong> Unclear situation with low confidence in any direction</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Sell Recommendation</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>What it means:</strong> The analysis suggests that price is likely to decrease based on detected cycles.</p>
+                    <p><strong>When you'll see it:</strong> Typically when multiple cycles are at or near their peak phase.</p>
+                    <p><strong>Confidence levels:</strong></p>
+                    <ul>
+                        <li><strong>High (80-100%):</strong> Strong cycle alignment suggesting downward movement</li>
+                        <li><strong>Medium (60-79%):</strong> Moderate cycle alignment</li>
+                        <li><strong>Low (below 60%):</strong> Some signals present but with significant uncertainty</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning mt-4">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Important Note</h5>
+                <p class="mb-0">These recommendations are based solely on cycle analysis and should not be considered financial advice. Use them as one tool among many in your investment decision-making process. Past performance does not guarantee future results.</p>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="saving-exporting">
+            <h2 class="text-primary mb-4">Saving & Exporting</h2>
+            
+            <p>CycleTrader provides several options for saving and exporting your analysis results:</p>
+            
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">PDF Report</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>How to generate:</strong> Click the "Generate PDF Report" button on the results page.</p>
+                            <p><strong>What's included:</strong></p>
+                            <ul>
+                                <li>Summary information</li>
+                                <li>Recommendation details</li>
+                                <li>All charts and visualizations</li>
+                                <li>Detected cycle information</li>
+                                <li>Disclaimer and methodology notes</li>
+                            </ul>
+                            <p><strong>Use case:</strong> Ideal for printing, sharing with others, or keeping a permanent record of your analysis.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">CSV Data Export</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>How to generate:</strong> Click the "Download CSV" button on the results page.</p>
+                            <p><strong>What's included:</strong></p>
+                            <ul>
+                                <li>Original price data</li>
+                                <li>Processed data points</li>
+                                <li>Detected cycle information</li>
+                                <li>Forecast values</li>
+                            </ul>
+                            <p><strong>Use case:</strong> Ideal for further analysis in spreadsheet software or custom tools.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>Tip for Professionals</h5>
+                <p class="mb-0">The CSV export contains raw data that can be imported into other trading platforms, backtesting systems, or custom analysis tools. This allows you to incorporate cycle analysis into your existing trading systems.</p>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="faq">
+            <h2 class="text-primary mb-4">Frequently Asked Questions</h2>
+            
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faqOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How accurate is cycle analysis for predicting market movements?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="faqOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Cycle analysis can be very useful for identifying recurring patterns, but it's not a crystal ball. Markets are influenced by many factors beyond cycles, including news events, economic indicators, and sentiment changes.</p>
+                            <p class="mb-0">The accuracy tends to be higher when markets are in stable, trending conditions and lower during chaotic or news-driven periods. We recommend using cycle analysis as one component of a comprehensive trading approach.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faqTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            How is the confidence rating calculated?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="faqTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p class="mb-0">Confidence ratings are calculated based on multiple factors:</p>
+                            <ul class="mb-0">
+                                <li>The strength and clarity of detected cycles</li>
+                                <li>The alignment of multiple cycles</li>
+                                <li>The historical reliability of the detected cycle lengths</li>
+                                <li>The signal-to-noise ratio in the data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faqThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How far into the future can the forecast predict?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="faqThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>The forecast is generally displayed for 30 trading days, but its reliability decreases as you look further into the future. The first 1-2 weeks are usually the most reliable part of any forecast.</p>
+                            <p class="mb-0">Market conditions can change rapidly, and external events can disrupt cyclical patterns at any time, so forecasts should be updated regularly as new data becomes available.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faqFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            What format should my CSV file be in?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="faqFour" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Your CSV file should have at least two columns: date and price. The date should be in YYYY-MM-DD format, and price should be numeric. Column headers should be included.</p>
+                            <p class="mb-0">Example:</p>
+                            <pre class="bg-light p-2 mt-2 mb-0">date,price
+2023-01-01,150.25
+2023-01-02,152.30
+2023-01-03,149.75</pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faqFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            How much historical data is ideal for analysis?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="faqFive" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p class="mb-0">For most stocks, 1-2 years of daily data provides a good balance. Too little data (less than 6 months) may not reveal meaningful cycles, while too much data (over 5 years) might include different market regimes that could confuse the analysis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="glossary">
+            <h2 class="text-primary mb-4">Glossary of Terms</h2>
+            
+            <dl>
+                <dt>Amplitude</dt>
+                <dd>The strength or magnitude of a cycle, representing how much influence it has on price movement.</dd>
+                
+                <dt>Cycle</dt>
+                <dd>A recurring pattern in price movement that completes at regular intervals.</dd>
+                
+                <dt>Cycle Period</dt>
+                <dd>The length of time it takes for a cycle to complete one full oscillation, measured in trading days.</dd>
+                
+                <dt>Dominant Cycle</dt>
+                <dd>A cycle with significant amplitude that has a strong influence on price movement.</dd>
+                
+                <dt>Fast Fourier Transform (FFT)</dt>
+                <dd>A mathematical algorithm that transforms time-domain data into the frequency domain, revealing cyclical patterns.</dd>
+                
+                <dt>Frequency Domain</dt>
+                <dd>A representation of data in terms of its frequency components, showing cycle lengths and strengths.</dd>
+                
+                <dt>Phase</dt>
+                <dd>The current position within a cycle, indicating whether it's at a bottom, top, or somewhere in between.</dd>
+                
+                <dt>Power Spectrum</dt>
+                <dd>A plot showing the strength of cycles at different frequencies or periods.</dd>
+                
+                <dt>Signal-to-Noise Ratio</dt>
+                <dd>The ratio of meaningful cycle patterns to random price fluctuations.</dd>
+                
+                <dt>Time Domain</dt>
+                <dd>The original representation of data as a series of price points over time.</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('.list-group-item').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Highlight active section in sidebar
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.custom-card');
+        const navItems = document.querySelectorAll('.list-group-item');
+        
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 150;
+            const sectionHeight = section.clientHeight;
+            
+            if(window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                currentSection = '#' + section.getAttribute('id');
+            }
+        });
+        
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if(item.getAttribute('href') === currentSection) {
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}

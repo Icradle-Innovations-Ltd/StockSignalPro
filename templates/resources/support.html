@@ -1,0 +1,259 @@
+{% extends "base_content.html" %}
+
+{% block title %}Support - CycleTrader{% endblock %}
+
+{% block page_title %}Support Center{% endblock %}
+{% block page_subtitle %}Get help, troubleshooting, and answers to your questions{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Contact Options -->
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">How Can We Help You?</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="p-3 bg-light rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-envelope text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Email Support</h5>
+                        <p>For general inquiries and non-urgent issues.</p>
+                        <a href="mailto:support@cycletrader.com" class="btn btn-outline-primary">support@cycletrader.com</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="p-3 bg-light rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-headset text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Live Chat</h5>
+                        <p>Available Monday-Friday, 9 AM - 5 PM EST.</p>
+                        <button class="btn btn-outline-primary">Start Chat</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="p-3 bg-light rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-comments text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Community Forum</h5>
+                        <p>Connect with other users and share insights.</p>
+                        <a href="#" class="btn btn-outline-primary">Visit Forum</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Contact Us</h2>
+            
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Your name">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Your email address">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="topic" class="form-label">Topic</label>
+                    <select class="form-select" id="topic">
+                        <option selected disabled>Select a topic</option>
+                        <option>Technical Issue</option>
+                        <option>Billing Question</option>
+                        <option>Feature Request</option>
+                        <option>Account Management</option>
+                        <option>API Assistance</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="5" placeholder="Please describe your issue or question in detail"></textarea>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="attachLogs">
+                    <label class="form-check-label" for="attachLogs">Include system logs (helps us troubleshoot technical issues)</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        </div>
+        
+        <!-- FAQ -->
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Frequently Asked Questions</h2>
+            
+            <div class="accordion" id="faqAccordion">
+                <!-- Question 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How do I upload my own CSV data?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>To upload your own CSV data:</p>
+                            <ol>
+                                <li>Go to the homepage</li>
+                                <li>In the "Upload CSV File" section, either drag and drop your file or click to browse</li>
+                                <li>Make sure your CSV contains at least date and price columns</li>
+                                <li>Click "Analyze Stock Data" to process your file</li>
+                            </ol>
+                            <p>For more details on CSV format requirements, please see our <a href="{{ url_for('documentation') }}">documentation</a>.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            My analysis shows "No strong cycles detected". What does this mean?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>This message appears when our algorithm cannot detect any cycles that meet the minimum strength threshold in your data. This could happen for several reasons:</p>
+                            <ul>
+                                <li>The price movement is largely random or non-cyclical</li>
+                                <li>The data period is too short to reveal meaningful cycles</li>
+                                <li>The stock is primarily trending rather than cycling</li>
+                                <li>External events have disrupted normal cyclical patterns</li>
+                            </ul>
+                            <p>Try analyzing a different time period or a different security that might exhibit more cyclical behavior.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How accurate are the cycle-based forecasts?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Our forecasts are projections based on detected cycles and should not be interpreted as guaranteed predictions. The accuracy varies depending on several factors:</p>
+                            <ul>
+                                <li>The clarity and strength of detected cycles</li>
+                                <li>The stability of market conditions</li>
+                                <li>The time horizon (shorter forecasts tend to be more accurate)</li>
+                                <li>External events that can disrupt cyclical patterns</li>
+                            </ul>
+                            <p>For best results, use our forecasts as one tool among many in your investment decision-making process, and always implement proper risk management.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Do you offer an API for integration with my trading platform?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Yes, we offer a REST API that allows you to integrate our cycle analysis capabilities into your own applications or trading platforms.</p>
+                            <p>Our API provides programmatic access to all features available in the web interface, including data processing, cycle detection, recommendation generation, and visualization creation.</p>
+                            <p>For detailed documentation and integration guides, please visit our <a href="{{ url_for('api_docs') }}">API Documentation</a> page.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 5 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            How do I cancel or change my subscription?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>To manage your subscription:</p>
+                            <ol>
+                                <li>Log in to your account</li>
+                                <li>Go to Account Settings > Subscription</li>
+                                <li>From there, you can upgrade, downgrade, or cancel your subscription</li>
+                            </ol>
+                            <p>Please note that cancellations will take effect at the end of your current billing cycle. If you need immediate assistance with your subscription, please contact our billing department at <a href="mailto:billing@cycletrader.com">billing@cycletrader.com</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <a href="{{ url_for('documentation') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-book me-2"></i> View Full Documentation
+                </a>
+            </div>
+        </div>
+        
+        <!-- Troubleshooting -->
+        <div class="custom-card p-4 mb-5">
+            <h2 class="text-primary mb-4">Common Troubleshooting Steps</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">CSV Import Issues</h5>
+                        </div>
+                        <div class="card-body">
+                            <ol>
+                                <li>Ensure your CSV has date and price columns</li>
+                                <li>Check that dates are in YYYY-MM-DD format</li>
+                                <li>Verify that price values are numerical</li>
+                                <li>Remove any special characters or formatting</li>
+                                <li>Keep file size under 10MB</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Chart Display Problems</h5>
+                        </div>
+                        <div class="card-body">
+                            <ol>
+                                <li>Clear your browser cache</li>
+                                <li>Disable browser extensions that might interfere</li>
+                                <li>Try a different browser</li>
+                                <li>Ensure JavaScript is enabled</li>
+                                <li>Check your internet connection</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-4">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="fas fa-info-circle" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <div>
+                        <h5>Technical Support</h5>
+                        <p class="mb-0">If you're experiencing persistent technical issues, please contact our technical support team at <a href="mailto:tech-support@cycletrader.com">tech-support@cycletrader.com</a> with a description of your problem, screenshots if applicable, and your system information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

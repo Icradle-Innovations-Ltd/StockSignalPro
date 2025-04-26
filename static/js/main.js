@@ -1,226 +1,214 @@
-/**
- * Stock Market Signal Processing Web App - Main JavaScript
- */
+// main.js - JavaScript for CycleTrader
 
-// Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Bootstrap tooltips
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            html: true
-        });
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
     });
-
-    // File Upload Handling
-    const uploadArea = document.getElementById('upload-area');
-    const fileInput = document.getElementById('file-input');
+    
+    // Initialize popovers
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    });
+    
+    // Add active class to current nav item
+    const currentLocation = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+    
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentLocation || currentLocation.startsWith(href) && href !== '/') {
+            link.classList.add('active');
+            
+            // If it's in a dropdown, also activate the dropdown
+            const dropdown = link.closest('.dropdown');
+            if (dropdown) {
+                dropdown.querySelector('.dropdown-toggle').classList.add('active');
+            }
+        }
+    });
+    
+    // File upload handling
     const uploadForm = document.getElementById('upload-form');
-    const uploadFileName = document.getElementById('upload-filename');
-
-    // Handle the upload area click
+    const fileInput = document.getElementById('file-input');
+    const uploadArea = document.querySelector('.upload-area');
+    
     if (uploadArea) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            uploadArea.classList.add('highlight');
+        }
+        
+        function unhighlight() {
+            uploadArea.classList.remove('highlight');
+        }
+        
+        uploadArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            
+            // Show file name
+            if (files.length > 0) {
+                const fileNameElement = uploadArea.querySelector('.file-name');
+                if (fileNameElement) {
+                    fileNameElement.textContent = files[0].name;
+                }
+            }
+        }
+        
+        // Click to upload
         uploadArea.addEventListener('click', function() {
             fileInput.click();
         });
-
-        // Update UI when a file is selected
+        
+        // Show file name when selected via dialog
         fileInput.addEventListener('change', function() {
-            if (this.files && this.files.length > 0) {
-                uploadFileName.textContent = this.files[0].name;
-                uploadArea.classList.add('border-primary');
-            }
-        });
-
-        // Handle drag and drop
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function() {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                fileInput.files = e.dataTransfer.files;
-                uploadFileName.textContent = e.dataTransfer.files[0].name;
-                uploadArea.classList.add('border-primary');
+            const fileNameElement = uploadArea.querySelector('.file-name');
+            if (fileNameElement && this.files.length > 0) {
+                fileNameElement.textContent = this.files[0].name;
             }
         });
     }
-
-    // Handle form submission
-    if (uploadForm) {
-        uploadForm.addEventListener('submit', function(e) {
-            // Validate form before submission
-            const fileInput = document.getElementById('file-input');
-            const tickerInput = document.getElementById('ticker-input');
-            
-            // If neither file nor ticker is provided, prevent submission
-            if ((!fileInput.files || fileInput.files.length === 0) && 
-                (!tickerInput.value || tickerInput.value.trim() === '')) {
-                e.preventDefault();
-                showAlert('Please provide a CSV file or enter a ticker symbol', 'warning');
-            }
-            
-            // Show loading state
-            const submitBtn = document.querySelector('button[type="submit"]');
-            if (submitBtn && (fileInput.files.length > 0 || tickerInput.value.trim() !== '')) {
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Analyzing...';
-                submitBtn.disabled = true;
+    
+    // Initialize charts on results page
+    initializeCharts();
+    
+    // Add loading spinner to form submissions
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function() {
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
             }
         });
-    }
-
-    // Handle ticker search/suggestion (simplified implementation)
+    });
+    
+    // Ticker search autocomplete
+    // This would normally connect to a real API for stock symbols
+    // For demonstration purposes, we'll just have a simple example
     const tickerInput = document.getElementById('ticker-input');
-    const suggestionsList = document.getElementById('ticker-suggestions');
-    
-    if (tickerInput && suggestionsList) {
-        // Sample suggestions (in a real implementation, these would come from an API)
-        const popularTickers = [
-            { ticker: 'AAPL', name: 'Apple Inc.' },
-            { ticker: 'MSFT', name: 'Microsoft Corporation' },
-            { ticker: 'GOOGL', name: 'Alphabet Inc.' },
-            { ticker: 'AMZN', name: 'Amazon.com, Inc.' },
-            { ticker: 'META', name: 'Meta Platforms, Inc.' },
-            { ticker: 'TSLA', name: 'Tesla, Inc.' },
-            { ticker: 'NVDA', name: 'NVIDIA Corporation' },
-            { ticker: 'JPM', name: 'JPMorgan Chase & Co.' }
-        ];
-        
+    if (tickerInput) {
         tickerInput.addEventListener('input', function() {
-            const query = this.value.toUpperCase().trim();
-            
-            // Clear previous suggestions
-            suggestionsList.innerHTML = '';
-            
-            if (query.length > 0) {
-                // Filter suggestions based on input
-                const matches = popularTickers.filter(item => 
-                    item.ticker.includes(query) || 
-                    item.name.toUpperCase().includes(query)
-                );
-                
-                // Display matches
-                matches.slice(0, 5).forEach(match => {
-                    const item = document.createElement('a');
-                    item.classList.add('list-group-item', 'list-group-item-action', 'bg-dark', 'text-white');
-                    item.innerHTML = `<strong>${match.ticker}</strong> - ${match.name}`;
-                    item.href = '#';
-                    
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        tickerInput.value = match.ticker;
-                        suggestionsList.innerHTML = '';
-                    });
-                    
-                    suggestionsList.appendChild(item);
-                });
-            }
-        });
-        
-        // Hide suggestions when clicking outside
-        document.addEventListener('click', function(e) {
-            if (e.target !== tickerInput) {
-                suggestionsList.innerHTML = '';
-            }
+            // Real implementation would fetch suggestions from server
+            console.log('Would fetch suggestions for:', this.value);
         });
     }
-
-    // Initialize charts if on results page
-    const timeSeriesChart = document.getElementById('time-series-chart');
-    const frequencyChart = document.getElementById('frequency-chart');
-    const forecastChart = document.getElementById('forecast-chart');
     
-    if (timeSeriesChart || frequencyChart || forecastChart) {
-        initializeCharts();
-    }
-
-    // Helper Functions
+    // Show alert function for dynamic notifications
     function showAlert(message, type = 'info') {
-        const alertsContainer = document.getElementById('alerts-container');
-        if (!alertsContainer) return;
+        const alertContainer = document.getElementById('alert-container');
+        if (!alertContainer) return;
         
         const alert = document.createElement('div');
-        alert.classList.add('alert', `alert-${type}`, 'alert-dismissible', 'fade', 'show');
+        alert.className = `alert alert-${type} alert-dismissible fade show`;
         alert.role = 'alert';
-        
         alert.innerHTML = `
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         `;
         
-        alertsContainer.appendChild(alert);
+        alertContainer.appendChild(alert);
         
         // Auto-dismiss after 5 seconds
         setTimeout(() => {
-            alert.classList.remove('show');
-            setTimeout(() => alert.remove(), 150);
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
         }, 5000);
     }
-
+    
+    // Initialize Plotly charts if they exist
     function initializeCharts() {
-        const analysisId = document.getElementById('analysis-data')?.dataset.analysisId;
-        if (!analysisId) return;
-        
-        // Load Time Series Chart
-        if (timeSeriesChart) {
+        // Time Series Chart
+        const timeSeriesContainer = document.getElementById('time-series-chart');
+        if (timeSeriesContainer && timeSeriesContainer.dataset.analysisId) {
+            const analysisId = timeSeriesContainer.dataset.analysisId;
+            
             fetch(`/api/plots/${analysisId}/time_series`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load time series data');
-                    }
-                    return response.json();
-                })
-                .then(plotData => {
-                    Plotly.newPlot('time-series-chart', plotData.data, plotData.layout, {responsive: true});
+                .then(response => response.json())
+                .then(data => {
+                    Plotly.newPlot('time-series-chart', data.data, data.layout, {responsive: true});
                 })
                 .catch(error => {
                     console.error('Error loading time series chart:', error);
-                    timeSeriesChart.innerHTML = `<div class="alert alert-danger">Error loading chart: ${error.message}</div>`;
+                    timeSeriesContainer.innerHTML = '<div class="alert alert-danger">Error loading chart data</div>';
                 });
         }
         
-        // Load Frequency Chart
-        if (frequencyChart) {
+        // Frequency Chart
+        const frequencyContainer = document.getElementById('frequency-chart');
+        if (frequencyContainer && frequencyContainer.dataset.analysisId) {
+            const analysisId = frequencyContainer.dataset.analysisId;
+            
             fetch(`/api/plots/${analysisId}/frequency`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load frequency data');
-                    }
-                    return response.json();
-                })
-                .then(plotData => {
-                    Plotly.newPlot('frequency-chart', plotData.data, plotData.layout, {responsive: true});
+                .then(response => response.json())
+                .then(data => {
+                    Plotly.newPlot('frequency-chart', data.data, data.layout, {responsive: true});
                 })
                 .catch(error => {
                     console.error('Error loading frequency chart:', error);
-                    frequencyChart.innerHTML = `<div class="alert alert-danger">Error loading chart: ${error.message}</div>`;
+                    frequencyContainer.innerHTML = '<div class="alert alert-danger">Error loading chart data</div>';
                 });
         }
         
-        // Load Forecast Chart
-        if (forecastChart) {
+        // Forecast Chart
+        const forecastContainer = document.getElementById('forecast-chart');
+        if (forecastContainer && forecastContainer.dataset.analysisId) {
+            const analysisId = forecastContainer.dataset.analysisId;
+            
             fetch(`/api/plots/${analysisId}/forecast`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load forecast data');
-                    }
-                    return response.json();
-                })
-                .then(plotData => {
-                    Plotly.newPlot('forecast-chart', plotData.data, plotData.layout, {responsive: true});
+                .then(response => response.json())
+                .then(data => {
+                    Plotly.newPlot('forecast-chart', data.data, data.layout, {responsive: true});
                 })
                 .catch(error => {
                     console.error('Error loading forecast chart:', error);
-                    forecastChart.innerHTML = `<div class="alert alert-danger">Error loading chart: ${error.message}</div>`;
+                    forecastContainer.innerHTML = '<div class="alert alert-danger">Error loading chart data</div>';
                 });
         }
     }
+    
+    // Expose utility functions to global scope if needed
+    window.showAlert = showAlert;
+    window.initializeCharts = initializeCharts;
+});
+
+// Add smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (!targetElement) return;
+        
+        window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+        });
+    });
 });

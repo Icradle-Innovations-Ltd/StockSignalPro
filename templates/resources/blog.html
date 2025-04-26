@@ -1,0 +1,229 @@
+{% extends "base_content.html" %}
+
+{% block title %}Blog - CycleTrader{% endblock %}
+
+{% block page_title %}Blog{% endblock %}
+{% block page_subtitle %}Insights, tutorials, and updates on market cycles and trading{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Featured Article -->
+        <div class="custom-card p-4 mb-5">
+            <div class="mb-3 text-muted">
+                <span class="badge bg-primary">Featured</span>
+                <span>October 15, 2023</span>
+            </div>
+            <h2 class="text-primary mb-3">Understanding Market Cycles: The Hidden Rhythms of Price Movement</h2>
+            <div class="mb-4">
+                <img src="https://images.unsplash.com/photo-1642543348745-722959526220" alt="Market Cycles Visualization" class="img-fluid rounded shadow">
+            </div>
+            <p class="lead">Dive into the fascinating world of market cycles and discover how they can be detected, analyzed, and leveraged for better trading decisions.</p>
+            <p>Markets don't move in straight lines. Instead, they pulse with rhythmic cycles of various lengths—from intraday oscillations to multi-year waves. These cycles are the heartbeat of the market, and understanding them can give traders a significant edge.</p>
+            <p>In this comprehensive guide, we explore the science behind cycle detection, the mathematics of Fast Fourier Transform, and practical applications for both novice and experienced traders.</p>
+            <div class="mt-4">
+                <a href="#" class="btn btn-outline-primary">Read Full Article</a>
+            </div>
+        </div>
+
+        <!-- Recent Articles -->
+        <h3 class="text-primary mb-4">Recent Articles</h3>
+        
+        <div class="row g-4">
+            <!-- Article 1 -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f" class="card-img-top" alt="FFT Analysis Explanation">
+                    <div class="card-body">
+                        <div class="mb-2 text-muted small">
+                            <span class="badge bg-success">Technical Analysis</span>
+                            <span>October 10, 2023</span>
+                        </div>
+                        <h5 class="card-title">Demystifying Fast Fourier Transform for Stock Analysis</h5>
+                        <p class="card-text">A beginner-friendly explanation of how FFT works and why it's a powerful tool for cycle detection in financial markets.</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Article 2 -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" class="card-img-top" alt="Trading Strategies">
+                    <div class="card-body">
+                        <div class="mb-2 text-muted small">
+                            <span class="badge bg-info">Trading Strategy</span>
+                            <span>October 5, 2023</span>
+                        </div>
+                        <h5 class="card-title">5 Powerful Trading Strategies Based on Cycle Analysis</h5>
+                        <p class="card-text">Learn practical ways to incorporate market cycle analysis into your trading system for more consistent results.</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Article 3 -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1642543348745-722959526220" class="card-img-top" alt="Case Studies">
+                    <div class="card-body">
+                        <div class="mb-2 text-muted small">
+                            <span class="badge bg-warning text-dark">Case Study</span>
+                            <span>September 28, 2023</span>
+                        </div>
+                        <h5 class="card-title">Case Study: How Cycle Analysis Predicted the 2023 Summer Rally</h5>
+                        <p class="card-text">A detailed look at how cycle alignment correctly anticipated the major market move in summer 2023.</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Article 4 -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1618044619888-009e412ff12a" class="card-img-top" alt="Risk Management">
+                    <div class="card-body">
+                        <div class="mb-2 text-muted small">
+                            <span class="badge bg-danger">Risk Management</span>
+                            <span>September 22, 2023</span>
+                        </div>
+                        <h5 class="card-title">Cycle-Based Risk Management: Protecting Your Capital</h5>
+                        <p class="card-text">How to adjust position sizing, set stop-losses, and manage overall risk based on cycle analysis.</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Blog navigation" class="my-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Search Box -->
+        <div class="custom-card p-4 mb-4">
+            <h4 class="text-primary mb-3">Search Articles</h4>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search the blog...">
+                <button class="btn btn-primary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Categories -->
+        <div class="custom-card p-4 mb-4">
+            <h4 class="text-primary mb-3">Categories</h4>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Technical Analysis
+                    <span class="badge bg-primary rounded-pill">12</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Trading Strategies
+                    <span class="badge bg-primary rounded-pill">8</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Case Studies
+                    <span class="badge bg-primary rounded-pill">5</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Risk Management
+                    <span class="badge bg-primary rounded-pill">7</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Market Psychology
+                    <span class="badge bg-primary rounded-pill">4</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Product Updates
+                    <span class="badge bg-primary rounded-pill">3</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Popular Posts -->
+        <div class="custom-card p-4 mb-4">
+            <h4 class="text-primary mb-3">Popular Posts</h4>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">The Mathematics Behind Market Cycles</h6>
+                        <small class="text-muted">3d ago</small>
+                    </div>
+                    <small class="text-muted">A deep dive into the science of cyclical market behavior.</small>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">Combining Cycle Analysis with Traditional Indicators</h6>
+                        <small class="text-muted">1w ago</small>
+                    </div>
+                    <small class="text-muted">How to create a powerful trading system using multiple approaches.</small>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">Why Most Traders Miss Market Cycles</h6>
+                        <small class="text-muted">2w ago</small>
+                    </div>
+                    <small class="text-muted">Common pitfalls and how to avoid them in cycle analysis.</small>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">Setting Up Your First Cycle Analysis</h6>
+                        <small class="text-muted">3w ago</small>
+                    </div>
+                    <small class="text-muted">A step-by-step guide for beginners.</small>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Newsletter Signup -->
+        <div class="custom-card p-4 mb-4 bg-primary text-white">
+            <h4 class="mb-3">Subscribe to Our Newsletter</h4>
+            <p>Get the latest articles, tutorials, and market insights delivered to your inbox.</p>
+            <form>
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="Your email address">
+                </div>
+                <button type="submit" class="btn btn-light">Subscribe</button>
+            </form>
+        </div>
+        
+        <!-- Tags -->
+        <div class="custom-card p-4">
+            <h4 class="text-primary mb-3">Popular Tags</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Market Cycles</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">FFT</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Technical Analysis</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Trading Strategy</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Risk Management</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Case Studies</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Algorithmic Trading</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Market Psychology</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Backtesting</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Forecasting</a>
+                <a href="#" class="badge bg-light text-dark text-decoration-none p-2">Signal Processing</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

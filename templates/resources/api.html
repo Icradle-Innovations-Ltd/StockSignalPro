@@ -1,0 +1,885 @@
+{% extends "base_content.html" %}
+
+{% block title %}API Documentation - CycleTrader{% endblock %}
+
+{% block page_title %}API Documentation{% endblock %}
+{% block page_subtitle %}Technical reference for integrating with CycleTrader{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3 mb-4">
+        <div class="list-group sticky-top" style="top: 2rem;">
+            <a href="#introduction" class="list-group-item list-group-item-action">Introduction</a>
+            <a href="#authentication" class="list-group-item list-group-item-action">Authentication</a>
+            <a href="#rate-limits" class="list-group-item list-group-item-action">Rate Limits</a>
+            <a href="#error-handling" class="list-group-item list-group-item-action">Error Handling</a>
+            <a href="#endpoints" class="list-group-item list-group-item-action">API Endpoints</a>
+            <a href="#data-models" class="list-group-item list-group-item-action">Data Models</a>
+            <a href="#examples" class="list-group-item list-group-item-action">Code Examples</a>
+            <a href="#best-practices" class="list-group-item list-group-item-action">Best Practices</a>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="custom-card p-4 mb-5" id="introduction">
+            <h2 class="text-primary mb-4">Introduction</h2>
+            
+            <p>The CycleTrader API allows developers to integrate our advanced cycle analysis capabilities into their own applications. This RESTful API provides programmatic access to all features available in the web interface, including data processing, cycle detection, recommendation generation, and visualization creation.</p>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>API Status</h5>
+                <p class="mb-0">The CycleTrader API is currently in beta. While we strive for stability, endpoints and response formats may change. Please check this documentation regularly for updates.</p>
+            </div>
+            
+            <h4 class="text-primary mt-5 mb-3">Use Cases</h4>
+            
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Automated Trading Systems</h5>
+                            <p class="card-text">Integrate cycle analysis into algorithmic trading strategies, using our API to generate signals for your trading bots.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Custom Dashboards</h5>
+                            <p class="card-text">Build personalized trading dashboards that incorporate cycle analysis alongside other technical indicators.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Portfolio Analysis</h5>
+                            <p class="card-text">Analyze multiple securities programmatically and aggregate results for portfolio-level insights.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Research Applications</h5>
+                            <p class="card-text">Incorporate cycle analysis into financial research projects, backtesting frameworks, or educational tools.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="authentication">
+            <h2 class="text-primary mb-4">Authentication</h2>
+            
+            <p>All API requests require authentication using an API key. To obtain an API key, please contact our support team.</p>
+            
+            <h4 class="text-primary mt-4 mb-3">API Key Authentication</h4>
+            
+            <p>Include your API key in the request header:</p>
+            
+            <div class="bg-light p-3 rounded">
+<pre>X-API-Key: your_api_key_here</pre>
+            </div>
+            
+            <div class="alert alert-warning mt-4">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Security Notice</h5>
+                <p class="mb-0">Your API key grants access to perform actions on your behalf. Keep it secure and never share it publicly. If you believe your API key has been compromised, contact us immediately for a replacement.</p>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="rate-limits">
+            <h2 class="text-primary mb-4">Rate Limits</h2>
+            
+            <p>To ensure service quality for all users, the API enforces rate limits. Current limits are as follows:</p>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Plan</th>
+                            <th>Rate Limit</th>
+                            <th>Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Basic</td>
+                            <td>100 requests</td>
+                            <td>Per day</td>
+                        </tr>
+                        <tr>
+                            <td>Professional</td>
+                            <td>1,000 requests</td>
+                            <td>Per day</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise</td>
+                            <td>5,000 requests</td>
+                            <td>Per day</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="text-primary mt-4 mb-3">Rate Limit Headers</h4>
+            
+            <p>The API includes rate limit information in the response headers:</p>
+            
+            <div class="bg-light p-3 rounded">
+<pre>X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1640995200</pre>
+            </div>
+            
+            <p class="mt-3">Exceeding the rate limit will result in a 429 (Too Many Requests) response. We recommend implementing proper retry logic with exponential backoff in your application.</p>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="error-handling">
+            <h2 class="text-primary mb-4">Error Handling</h2>
+            
+            <p>The API uses standard HTTP status codes to indicate success or failure:</p>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Status Code</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>200 - OK</td>
+                            <td>Request succeeded</td>
+                        </tr>
+                        <tr>
+                            <td>400 - Bad Request</td>
+                            <td>Invalid request parameters</td>
+                        </tr>
+                        <tr>
+                            <td>401 - Unauthorized</td>
+                            <td>Authentication failed</td>
+                        </tr>
+                        <tr>
+                            <td>403 - Forbidden</td>
+                            <td>You don't have permission to access this resource</td>
+                        </tr>
+                        <tr>
+                            <td>404 - Not Found</td>
+                            <td>The requested resource could not be found</td>
+                        </tr>
+                        <tr>
+                            <td>429 - Too Many Requests</td>
+                            <td>Rate limit exceeded</td>
+                        </tr>
+                        <tr>
+                            <td>500 - Internal Server Error</td>
+                            <td>Server error occurred</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="text-primary mt-4 mb-3">Error Response Format</h4>
+            
+            <p>Error responses include a JSON body with detailed information:</p>
+            
+            <div class="bg-light p-3 rounded">
+<pre>{
+  "error": {
+    "code": "invalid_parameters",
+    "message": "The ticker symbol provided is not valid",
+    "details": {
+      "parameter": "ticker",
+      "value": "INVALIDTICKER",
+      "reason": "Not found in our database"
+    }
+  }
+}</pre>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="endpoints">
+            <h2 class="text-primary mb-4">API Endpoints</h2>
+            
+            <h4 class="text-primary mt-4 mb-3">Analysis Endpoints</h4>
+            
+            <!-- POST /api/v1/analyze/ticker -->
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-success me-2">POST</span>
+                        <span class="flex-grow-1">/api/v1/analyze/ticker</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5>Analyze Stock by Ticker Symbol</h5>
+                    <p>Perform cycle analysis on a stock based on its ticker symbol.</p>
+                    
+                    <h6 class="mt-3">Request Parameters:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ticker</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Valid stock ticker symbol (e.g., AAPL)</td>
+                                </tr>
+                                <tr>
+                                    <td>period</td>
+                                    <td>string</td>
+                                    <td>No</td>
+                                    <td>Time period for analysis (1y, 2y, 5y, 10y, max). Default: 2y</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h6 class="mt-3">Example Request:</h6>
+                    <div class="bg-light p-3 rounded">
+<pre>curl -X POST https://api.cycletrader.com/api/v1/analyze/ticker \
+  -H "X-API-Key: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"ticker": "AAPL", "period": "2y"}'</pre>
+                    </div>
+                    
+                    <h6 class="mt-3">Example Response:</h6>
+                    <div class="bg-light p-3 rounded">
+<pre>{
+  "analysis_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "ticker": "AAPL",
+  "created_at": "2023-10-15T14:30:45Z",
+  "recommendation": {
+    "action": "buy",
+    "confidence": 75,
+    "reasoning": "Multiple cycles approaching bottom phase"
+  },
+  "dominant_cycles": [
+    {
+      "period": 21.5,
+      "strength": 0.78,
+      "phase": 0.25,
+      "description": "21-day cycle in rising phase"
+    },
+    ...
+  ],
+  "links": {
+    "time_series_plot": "/api/v1/plots/a1b2c3d4-e5f6-7890-abcd-ef1234567890/time_series",
+    "frequency_plot": "/api/v1/plots/a1b2c3d4-e5f6-7890-abcd-ef1234567890/frequency",
+    "forecast_plot": "/api/v1/plots/a1b2c3d4-e5f6-7890-abcd-ef1234567890/forecast"
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- POST /api/v1/analyze/csv -->
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-success me-2">POST</span>
+                        <span class="flex-grow-1">/api/v1/analyze/csv</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5>Analyze Custom CSV Data</h5>
+                    <p>Perform cycle analysis on custom price data provided in CSV format.</p>
+                    
+                    <h6 class="mt-3">Request Parameters:</h6>
+                    <p>Content-Type: multipart/form-data</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>file</td>
+                                    <td>file</td>
+                                    <td>Yes</td>
+                                    <td>CSV file with date and price columns</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h6 class="mt-3">Example Request:</h6>
+                    <div class="bg-light p-3 rounded">
+<pre>curl -X POST https://api.cycletrader.com/api/v1/analyze/csv \
+  -H "X-API-Key: your_api_key_here" \
+  -F "file=@/path/to/your/data.csv"</pre>
+                    </div>
+                    
+                    <h6 class="mt-3">Example Response:</h6>
+                    <p>Same format as the ticker analysis endpoint.</p>
+                </div>
+            </div>
+            
+            <h4 class="text-primary mt-5 mb-3">Results Endpoints</h4>
+            
+            <!-- GET /api/v1/analysis/{analysis_id} -->
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-info me-2">GET</span>
+                        <span class="flex-grow-1">/api/v1/analysis/{analysis_id}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5>Get Analysis Results</h5>
+                    <p>Retrieve the results of a previously performed analysis.</p>
+                    
+                    <h6 class="mt-3">Path Parameters:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>analysis_id</td>
+                                    <td>string</td>
+                                    <td>Unique identifier for the analysis</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h6 class="mt-3">Example Request:</h6>
+                    <div class="bg-light p-3 rounded">
+<pre>curl -X GET https://api.cycletrader.com/api/v1/analysis/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
+  -H "X-API-Key: your_api_key_here"</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GET /api/v1/plots/{analysis_id}/{plot_type} -->
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-info me-2">GET</span>
+                        <span class="flex-grow-1">/api/v1/plots/{analysis_id}/{plot_type}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5>Get Plot Data</h5>
+                    <p>Retrieve the data for a specific plot type from an analysis.</p>
+                    
+                    <h6 class="mt-3">Path Parameters:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>analysis_id</td>
+                                    <td>string</td>
+                                    <td>Unique identifier for the analysis</td>
+                                </tr>
+                                <tr>
+                                    <td>plot_type</td>
+                                    <td>string</td>
+                                    <td>Type of plot (time_series, frequency, forecast)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h6 class="mt-3">Example Request:</h6>
+                    <div class="bg-light p-3 rounded">
+<pre>curl -X GET https://api.cycletrader.com/api/v1/plots/a1b2c3d4-e5f6-7890-abcd-ef1234567890/time_series \
+  -H "X-API-Key: your_api_key_here"</pre>
+                    </div>
+                    
+                    <h6 class="mt-3">Response Format:</h6>
+                    <p>Returns a JSON object with Plotly.js figure data that can be directly rendered in a web application.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="data-models">
+            <h2 class="text-primary mb-4">Data Models</h2>
+            
+            <h4 class="text-primary mt-4 mb-3">Analysis Object</h4>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>analysis_id</td>
+                            <td>string</td>
+                            <td>Unique identifier for the analysis (UUID format)</td>
+                        </tr>
+                        <tr>
+                            <td>ticker</td>
+                            <td>string</td>
+                            <td>Stock ticker symbol (null if analysis was performed on CSV data)</td>
+                        </tr>
+                        <tr>
+                            <td>created_at</td>
+                            <td>string</td>
+                            <td>Timestamp of analysis creation (ISO 8601 format)</td>
+                        </tr>
+                        <tr>
+                            <td>source_type</td>
+                            <td>string</td>
+                            <td>Data source type ("api" or "file")</td>
+                        </tr>
+                        <tr>
+                            <td>recommendation</td>
+                            <td>object</td>
+                            <td>Trading recommendation object</td>
+                        </tr>
+                        <tr>
+                            <td>dominant_cycles</td>
+                            <td>array</td>
+                            <td>Array of cycle objects</td>
+                        </tr>
+                        <tr>
+                            <td>links</td>
+                            <td>object</td>
+                            <td>Links to related resources</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="text-primary mt-5 mb-3">Recommendation Object</h4>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>action</td>
+                            <td>string</td>
+                            <td>Recommended action ("buy", "hold", or "sell")</td>
+                        </tr>
+                        <tr>
+                            <td>confidence</td>
+                            <td>number</td>
+                            <td>Confidence level as a percentage (0-100)</td>
+                        </tr>
+                        <tr>
+                            <td>reasoning</td>
+                            <td>string</td>
+                            <td>Explanation of the recommendation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="text-primary mt-5 mb-3">Cycle Object</h4>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>period</td>
+                            <td>number</td>
+                            <td>Length of the cycle in trading days</td>
+                        </tr>
+                        <tr>
+                            <td>strength</td>
+                            <td>number</td>
+                            <td>Relative strength of the cycle (0-1)</td>
+                        </tr>
+                        <tr>
+                            <td>phase</td>
+                            <td>number</td>
+                            <td>Current phase position (0-1, where 0 is the cycle bottom)</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td>Human-readable description of the cycle</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="examples">
+            <h2 class="text-primary mb-4">Code Examples</h2>
+            
+            <ul class="nav nav-tabs mb-4" id="codeExampleTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="python-tab" data-bs-toggle="tab" data-bs-target="#python" type="button" role="tab" aria-controls="python" aria-selected="true">Python</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="javascript-tab" data-bs-toggle="tab" data-bs-target="#javascript" type="button" role="tab" aria-controls="javascript" aria-selected="false">JavaScript</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="r-tab" data-bs-toggle="tab" data-bs-target="#r" type="button" role="tab" aria-controls="r" aria-selected="false">R</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="codeExampleTabsContent">
+                <div class="tab-pane fade show active" id="python" role="tabpanel" aria-labelledby="python-tab">
+                    <div class="bg-light p-3 rounded">
+<pre>import requests
+import json
+
+API_KEY = "your_api_key_here"
+BASE_URL = "https://api.cycletrader.com/api/v1"
+
+# Set up headers
+headers = {
+    "X-API-Key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# Analyze a stock by ticker
+def analyze_ticker(ticker, period="2y"):
+    url = f"{BASE_URL}/analyze/ticker"
+    payload = {
+        "ticker": ticker,
+        "period": period
+    }
+    
+    response = requests.post(url, headers=headers, json=payload)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
+        return None
+
+# Get analysis results
+def get_analysis(analysis_id):
+    url = f"{BASE_URL}/analysis/{analysis_id}"
+    
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
+        return None
+
+# Example usage
+if __name__ == "__main__":
+    # Analyze Apple stock
+    analysis = analyze_ticker("AAPL")
+    
+    if analysis:
+        analysis_id = analysis["analysis_id"]
+        print(f"Analysis ID: {analysis_id}")
+        print(f"Recommendation: {analysis['recommendation']['action']} (Confidence: {analysis['recommendation']['confidence']}%)")
+        print(f"Reasoning: {analysis['recommendation']['reasoning']}")
+        
+        # Print dominant cycles
+        print("\nDominant Cycles:")
+        for cycle in analysis["dominant_cycles"]:
+            print(f"- {cycle['period']:.1f} days (Strength: {cycle['strength']:.2f})")
+</pre>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="javascript" role="tabpanel" aria-labelledby="javascript-tab">
+                    <div class="bg-light p-3 rounded">
+<pre>const API_KEY = 'your_api_key_here';
+const BASE_URL = 'https://api.cycletrader.com/api/v1';
+
+// Analyze a stock by ticker
+async function analyzeTicker(ticker, period = '2y') {
+  try {
+    const response = await fetch(`${BASE_URL}/analyze/ticker`, {
+      method: 'POST',
+      headers: {
+        'X-API-Key': API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ticker,
+        period
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error analyzing ticker:', error);
+    return null;
+  }
+}
+
+// Get analysis results
+async function getAnalysis(analysisId) {
+  try {
+    const response = await fetch(`${BASE_URL}/analysis/${analysisId}`, {
+      method: 'GET',
+      headers: {
+        'X-API-Key': API_KEY
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error getting analysis:', error);
+    return null;
+  }
+}
+
+// Example usage
+async function runExample() {
+  // Analyze Apple stock
+  const analysis = await analyzeTicker('AAPL');
+  
+  if (analysis) {
+    const analysisId = analysis.analysis_id;
+    console.log(`Analysis ID: ${analysisId}`);
+    console.log(`Recommendation: ${analysis.recommendation.action} (Confidence: ${analysis.recommendation.confidence}%)`);
+    console.log(`Reasoning: ${analysis.recommendation.reasoning}`);
+    
+    // Print dominant cycles
+    console.log('\nDominant Cycles:');
+    analysis.dominant_cycles.forEach(cycle => {
+      console.log(`- ${cycle.period.toFixed(1)} days (Strength: ${cycle.strength.toFixed(2)})`);
+    });
+  }
+}
+
+runExample();</pre>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="r" role="tabpanel" aria-labelledby="r-tab">
+                    <div class="bg-light p-3 rounded">
+<pre>library(httr)
+library(jsonlite)
+
+API_KEY <- "your_api_key_here"
+BASE_URL <- "https://api.cycletrader.com/api/v1"
+
+# Set up headers
+headers <- c(
+  `X-API-Key` = API_KEY,
+  `Content-Type` = "application/json"
+)
+
+# Analyze a stock by ticker
+analyze_ticker <- function(ticker, period = "2y") {
+  url <- paste0(BASE_URL, "/analyze/ticker")
+  payload <- list(
+    ticker = ticker,
+    period = period
+  )
+  
+  response <- POST(
+    url = url,
+    add_headers(.headers = headers),
+    body = toJSON(payload, auto_unbox = TRUE),
+    encode = "json"
+  )
+  
+  if (status_code(response) == 200) {
+    return(fromJSON(content(response, "text", encoding = "UTF-8")))
+  } else {
+    cat("Error:", status_code(response), "\n")
+    cat(content(response, "text", encoding = "UTF-8"), "\n")
+    return(NULL)
+  }
+}
+
+# Get analysis results
+get_analysis <- function(analysis_id) {
+  url <- paste0(BASE_URL, "/analysis/", analysis_id)
+  
+  response <- GET(
+    url = url,
+    add_headers(.headers = headers)
+  )
+  
+  if (status_code(response) == 200) {
+    return(fromJSON(content(response, "text", encoding = "UTF-8")))
+  } else {
+    cat("Error:", status_code(response), "\n")
+    cat(content(response, "text", encoding = "UTF-8"), "\n")
+    return(NULL)
+  }
+}
+
+# Example usage
+# Analyze Apple stock
+analysis <- analyze_ticker("AAPL")
+
+if (!is.null(analysis)) {
+  analysis_id <- analysis$analysis_id
+  cat("Analysis ID:", analysis_id, "\n")
+  cat("Recommendation:", analysis$recommendation$action, 
+      "(Confidence:", analysis$recommendation$confidence, "%)\n")
+  cat("Reasoning:", analysis$recommendation$reasoning, "\n\n")
+  
+  # Print dominant cycles
+  cat("Dominant Cycles:\n")
+  for (cycle in analysis$dominant_cycles) {
+    cat("- ", sprintf("%.1f", cycle$period), " days (Strength: ", 
+        sprintf("%.2f", cycle$strength), ")\n", sep = "")
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-card p-4 mb-5" id="best-practices">
+            <h2 class="text-primary mb-4">Best Practices</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-redo-alt" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Implement Proper Error Handling</h5>
+                            <p>Always check for and handle error responses. Implement retry logic with exponential backoff for rate limit errors (429).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-database" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Cache Results When Possible</h5>
+                            <p>Analysis results are stored for 30 days. Cache results locally when appropriate to minimize API calls.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-sync" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Use Polling for Long Operations</h5>
+                            <p>For large datasets, analysis may take time. Use status endpoints to poll for completion rather than blocking.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary">
+                            <i class="fas fa-tachometer-alt" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h5>Optimize Batch Processing</h5>
+                            <p>When analyzing multiple securities, process them in batches and respect rate limits.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-5">
+                <h5><i class="fas fa-info-circle me-2"></i>Need More Help?</h5>
+                <p class="mb-0">For additional assistance with API integration, please contact our developer support team at <a href="mailto:api-support@cycletrader.com">api-support@cycletrader.com</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('.list-group-item').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Highlight active section in sidebar
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.custom-card');
+        const navItems = document.querySelectorAll('.list-group-item');
+        
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 150;
+            const sectionHeight = section.clientHeight;
+            
+            if(window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                currentSection = '#' + section.getAttribute('id');
+            }
+        });
+        
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if(item.getAttribute('href') === currentSection) {
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}
