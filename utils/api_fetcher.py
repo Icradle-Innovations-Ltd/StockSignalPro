@@ -30,20 +30,31 @@ def fetch_stock_data(ticker, period="2y"):
             import time
             time.sleep(1)
             
-            # Add delay before API call
-            time.sleep(2)
+            # Add delay before API call with exponential backoff
+            max_retries = 3
+            retry_delay = 2
             
-            try:
-                # Try to get info first to validate the ticker
-                info = stock.info
-                if not info:
-                    raise ValueError(f"Could not validate ticker {ticker}")
-                
-                # Add delay between calls
-                time.sleep(1)
-                
-                # Now fetch the historical data
-                hist = stock.history(period=period)
+            for attempt in range(max_retries):
+                try:
+                    time.sleep(retry_delay * (attempt + 1))
+                    
+                    # Try to get info first to validate the ticker
+                    info = stock.info
+                    if not info:
+                        raise ValueError(f"Could not validate ticker {ticker}")
+                    
+                    # Add delay between calls
+                    time.sleep(1)
+                    
+                    # Now fetch the historical data
+                    hist = stock.history(period=period)
+                    
+                    if not hist.empty:
+                        break
+                except Exception as retry_error:
+                    logger.warning(f"Attempt {attempt + 1} failed: {str(retry_error)}")
+                    if attempt == max_retries - 1:
+                        raise ValueError(f"Failed to fetch data after {max_retries} attempts: {str(retry_error)}")
                 
                 if hist.empty:
                     raise ValueError(f"No historical data available for {ticker}")
