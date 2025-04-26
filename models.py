@@ -34,5 +34,8 @@ class Analysis(db.Model):
             'source_type': self.source_type,
             'filename': self.filename,
             'recommendation': self.recommendation,
-            'dominant_cycles': self.dominant_cycles
+            'dominant_cycles': self.dominant_cycles,
+            'time_series_plot': self.time_series_plot,
+            'frequency_plot': self.frequency_plot,
+            'forecast_plot': self.forecast_plot
         }

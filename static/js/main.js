@@ -178,14 +178,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize Plotly charts if they exist
     function initializeCharts() {
+        console.log("Initializing charts...");
+        
         // Time Series Chart
         const timeSeriesContainer = document.getElementById('time-series-chart');
+        console.log("Time series container:", timeSeriesContainer);
+        console.log("Time series data-analysis-id:", timeSeriesContainer ? timeSeriesContainer.dataset.analysisId : "not found");
+        
         if (timeSeriesContainer && timeSeriesContainer.dataset.analysisId) {
             const analysisId = timeSeriesContainer.dataset.analysisId;
+            console.log("Found analysis ID for time series chart:", analysisId);
             
             fetch(`/api/plots/${analysisId}/time_series`)
-                .then(response => response.json())
+                .then(response => {
+                    console.log("Time series response status:", response.status);
+                    if (!response.ok) {
+                        console.error("Error response:", response.status, response.statusText);
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log("Time series data received:", data);
                     Plotly.newPlot('time-series-chart', data.data, data.layout, {responsive: true});
                 })
                 .catch(error => {

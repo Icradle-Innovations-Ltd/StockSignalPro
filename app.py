@@ -179,24 +179,37 @@ def results(analysis_id):
 @app.route('/api/plots/<analysis_id>/<plot_type>', methods=['GET'])
 def get_plot(analysis_id, plot_type):
     """API endpoint to get plot data."""
+    # Debug log to track API requests
+    print(f"DEBUG: API request received for plot. Analysis ID: {analysis_id}, Plot Type: {plot_type}")
+    
     # Get analysis from database
     analysis = Analysis.query.get(analysis_id)
     
     if not analysis:
+        print(f"DEBUG: Analysis not found with ID: {analysis_id}")
         return jsonify({'error': 'Analysis not found or expired'}), 404
     
     try:
+        print(f"DEBUG: Analysis found, checking for plot data. Has time_series_plot: {analysis.time_series_plot is not None}")
+        print(f"DEBUG: Has frequency_plot: {analysis.frequency_plot is not None}")
+        print(f"DEBUG: Has forecast_plot: {analysis.forecast_plot is not None}")
+        
         # Return the stored plot data directly
         if plot_type == 'time_series' and analysis.time_series_plot:
+            print("DEBUG: Returning time_series_plot data")
             return jsonify(analysis.time_series_plot)
         elif plot_type == 'frequency' and analysis.frequency_plot:
+            print("DEBUG: Returning frequency_plot data")
             return jsonify(analysis.frequency_plot)
         elif plot_type == 'forecast' and analysis.forecast_plot:
+            print("DEBUG: Returning forecast_plot data")
             return jsonify(analysis.forecast_plot)
         else:
+            print(f"DEBUG: Invalid plot type or plot not found: {plot_type}")
             return jsonify({'error': 'Invalid plot type or plot not found'}), 400
     
     except Exception as e:
+        print(f"DEBUG ERROR: {str(e)}")
         logger.error(f"Error retrieving plot: {str(e)}")
         return jsonify({'error': f'Error retrieving plot: {str(e)}'}), 500
 
