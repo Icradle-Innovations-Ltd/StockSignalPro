@@ -794,7 +794,7 @@ def download_system_report():
     try:
         # Render the HTML template
         html = render_template('system_report.html', now=datetime.now)
-        
+
         try:
             # First try with pdfkit
             options = {
@@ -812,7 +812,7 @@ def download_system_report():
             # Fallback to WeasyPrint
             from weasyprint import HTML
             pdf = HTML(string=html).write_pdf()
-        
+
         # Create response with inline display
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
