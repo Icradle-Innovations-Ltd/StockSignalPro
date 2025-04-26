@@ -200,7 +200,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     console.log("Time series data received:", data);
-                    Plotly.newPlot('time-series-chart', data.data, data.layout, {responsive: true});
+                    
+                    // Check if data has the expected structure
+                    if (data && data.data && data.layout) {
+                        console.log("Attempting to render time series chart");
+                        // Remove loading spinner
+                        timeSeriesContainer.innerHTML = '';
+                        Plotly.newPlot('time-series-chart', data.data, data.layout, {responsive: true});
+                        console.log("Time series chart rendered successfully");
+                    } else {
+                        console.error("Invalid data structure for time series chart:", data);
+                        timeSeriesContainer.innerHTML = '<div class="alert alert-danger">Error: Invalid chart data structure</div>';
+                    }
                 })
                 .catch(error => {
                     console.error('Error loading time series chart:', error);
@@ -214,9 +225,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const analysisId = frequencyContainer.dataset.analysisId;
             
             fetch(`/api/plots/${analysisId}/frequency`)
-                .then(response => response.json())
+                .then(response => {
+                    console.log("Frequency response status:", response.status);
+                    if (!response.ok) {
+                        console.error("Error response:", response.status, response.statusText);
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    Plotly.newPlot('frequency-chart', data.data, data.layout, {responsive: true});
+                    console.log("Frequency data received:", data);
+                    
+                    // Check if data has the expected structure
+                    if (data && data.data && data.layout) {
+                        console.log("Attempting to render frequency chart");
+                        // Remove loading spinner
+                        frequencyContainer.innerHTML = '';
+                        Plotly.newPlot('frequency-chart', data.data, data.layout, {responsive: true});
+                        console.log("Frequency chart rendered successfully");
+                    } else {
+                        console.error("Invalid data structure for frequency chart:", data);
+                        frequencyContainer.innerHTML = '<div class="alert alert-danger">Error: Invalid chart data structure</div>';
+                    }
                 })
                 .catch(error => {
                     console.error('Error loading frequency chart:', error);
@@ -230,9 +260,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const analysisId = forecastContainer.dataset.analysisId;
             
             fetch(`/api/plots/${analysisId}/forecast`)
-                .then(response => response.json())
+                .then(response => {
+                    console.log("Forecast response status:", response.status);
+                    if (!response.ok) {
+                        console.error("Error response:", response.status, response.statusText);
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    Plotly.newPlot('forecast-chart', data.data, data.layout, {responsive: true});
+                    console.log("Forecast data received:", data);
+                    
+                    // Check if data has the expected structure
+                    if (data && data.data && data.layout) {
+                        console.log("Attempting to render forecast chart");
+                        // Remove loading spinner
+                        forecastContainer.innerHTML = '';
+                        Plotly.newPlot('forecast-chart', data.data, data.layout, {responsive: true});
+                        console.log("Forecast chart rendered successfully");
+                    } else {
+                        console.error("Invalid data structure for forecast chart:", data);
+                        forecastContainer.innerHTML = '<div class="alert alert-danger">Error: Invalid chart data structure</div>';
+                    }
                 })
                 .catch(error => {
                     console.error('Error loading forecast chart:', error);
