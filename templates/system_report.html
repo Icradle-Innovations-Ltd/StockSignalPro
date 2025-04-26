@@ -1,0 +1,156 @@
+
+{% extends "base_content.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="text-center">
+        <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="60" class="mb-3">
+        <h1 class="mb-1">Stock Market Signal Processing System Report</h1>
+        <p class="text-muted">Generated on {{ now().strftime('%B %d, %Y at %H:%M') }}</p>
+        <hr class="my-4">
+    </div>
+
+    <!-- System Overview -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">System Overview</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Core Functionality</h5>
+                <p>A sophisticated web application that applies signal processing techniques to analyze stock market data and identify cyclic patterns using Fast Fourier Transform (FFT) algorithms.</p>
+                
+                <h5>Key Components</h5>
+                <ul>
+                    <li>Data Processing Engine</li>
+                    <li>FFT Analysis Module</li>
+                    <li>Trading Recommendation System</li>
+                    <li>Market Sentiment Analysis</li>
+                    <li>Portfolio Management</li>
+                    <li>Visualization System</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Architecture -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Technical Architecture</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Backend Stack</h5>
+                <ul>
+                    <li>Python Flask Web Framework</li>
+                    <li>SQLAlchemy ORM with PostgreSQL</li>
+                    <li>NumPy & SciPy for FFT Analysis</li>
+                    <li>Pandas for Data Processing</li>
+                    <li>Plotly for Visualization</li>
+                </ul>
+
+                <h5>Frontend Stack</h5>
+                <ul>
+                    <li>Bootstrap 5 Framework</li>
+                    <li>Interactive Plotly.js Charts</li>
+                    <li>Custom JavaScript Components</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Models -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Data Models</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Analysis Model</h5>
+                <pre class="bg-light p-3">
+- id (UUID): Primary key
+- ticker (String): Stock symbol
+- created_at (DateTime): Analysis timestamp
+- source_type (String): Data source
+- data (JSON): Processed data
+- recommendation (JSON): Trading signals
+- dominant_cycles (JSON): Detected cycles
+                </pre>
+
+                <h5>MarketSentiment Model</h5>
+                <pre class="bg-light p-3">
+- id (UUID): Primary key
+- ticker (String): Optional stock symbol
+- created_at (DateTime): Analysis timestamp
+- mood (String): Market sentiment
+- mood_value (Float): Sentiment score
+                </pre>
+
+                <h5>Portfolio Model</h5>
+                <pre class="bg-light p-3">
+- id (UUID): Primary key
+- name (String): Portfolio name
+- stocks (JSON): Stock list
+- allocations (JSON): Stock weights
+- correlation_matrix (JSON): Stock correlations
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Algorithms -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Core Algorithms</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>FFT Analysis</h5>
+                <p>Transforms time-domain price data into frequency domain for cycle detection using the Fast Fourier Transform algorithm.</p>
+
+                <h5>Cycle Detection</h5>
+                <p>Identifies dominant market cycles through frequency analysis and peak detection in the power spectrum.</p>
+
+                <h5>Trading Signals</h5>
+                <p>Generates recommendations based on cycle positions, strengths, and confluences.</p>
+
+                <h5>Sentiment Analysis</h5>
+                <p>Processes financial news and market data to determine overall market sentiment.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Features -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">System Features</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Data Input Methods</h5>
+                <ul>
+                    <li>CSV File Upload</li>
+                    <li>Stock Ticker Symbol Entry</li>
+                    <li>Real-time Market Data Integration</li>
+                </ul>
+
+                <h5>Analysis Capabilities</h5>
+                <ul>
+                    <li>Cycle Detection and Analysis</li>
+                    <li>Market Sentiment Assessment</li>
+                    <li>Portfolio Optimization</li>
+                    <li>Trading Recommendations</li>
+                </ul>
+
+                <h5>Visualization Tools</h5>
+                <ul>
+                    <li>Time Series Charts</li>
+                    <li>Frequency Domain Plots</li>
+                    <li>Sentiment Gauge Charts</li>
+                    <li>Portfolio Performance Charts</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="text-center mt-5">
+        <a href="#" onclick="window.print()" class="btn btn-primary">
+            <i class="fas fa-print me-2"></i>Print Report
+        </a>
+        <a href="{{ url_for('download_system_report') }}" class="btn btn-success ms-2">
+            <i class="fas fa-download me-2"></i>Download PDF
+        </a>
+    </div>
+</div>
+{% endblock %}

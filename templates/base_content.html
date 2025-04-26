@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CycleTrader - Stock Market Signal Processing{% endblock %}</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -29,11 +29,11 @@
                         <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="30" class="me-2">
                         <span class="app-title">CycleTrader</span>
                     </a>
-                    
+
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    
+
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
@@ -41,6 +41,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('market_sentiment_page') }}">Market Sentiment</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('system_report') }}">System Report</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('portfolios') }}">Portfolios</a>
@@ -81,7 +84,7 @@
             </nav>
         </div>
     </header>
-    
+
     <!-- Page Header -->
     <section class="bg-light py-5 mb-5">
         <div class="container">
@@ -100,7 +103,7 @@
         <!-- Page content goes here -->
         {% endblock %}
     </main>
-    
+
     <!-- Footer -->
     <footer class="app-footer">
         <div class="container">
@@ -109,7 +112,7 @@
                     <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="40" class="mb-3">
                     <p class="text-muted">Advanced stock market signal processing using Fast Fourier Transform to detect hidden market cycles and generate trading recommendations.</p>
                 </div>
-                
+
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                     <h5 class="text-primary mb-3">Features</h5>
                     <ul class="list-unstyled">
@@ -122,7 +125,7 @@
                         <li class="mb-2"><a href="{{ url_for('portfolios') }}" class="text-muted text-decoration-none">Portfolio Analysis</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                     <h5 class="text-primary mb-3">Resources</h5>
                     <ul class="list-unstyled">
@@ -132,7 +135,7 @@
                         <li class="mb-2"><a href="{{ url_for('support') }}" class="text-muted text-decoration-none">Support</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-lg-4 col-md-4">
                     <h5 class="text-primary mb-3">About</h5>
                     <p class="text-muted">CycleTrader is an educational tool designed to help traders and investors understand market cycles through signal processing techniques.</p>
@@ -143,23 +146,23 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="border-top border-secondary mt-4 pt-4 text-center text-muted">
                 <p>&copy; 2023 CycleTrader. All rights reserved.</p>
                 <p class="small">Disclaimer: This application is for educational purposes only. It does not constitute financial advice.</p>
             </div>
         </div>
     </footer>
-    
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Plotly.js for charts -->
     <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
-    
+
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    
+
     <!-- Force menu refresh -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -172,7 +175,7 @@
                 marketSentimentLink.href = "{{ url_for('market_sentiment_page') }}";
                 marketSentimentLink.className = 'dropdown-item';
                 marketSentimentLink.textContent = 'Market Sentiment';
-                
+
                 // Check if Market Sentiment is already there
                 var marketSentimentExists = false;
                 var items = featuresDropdown.querySelectorAll('a.dropdown-item');
@@ -182,21 +185,21 @@
                         break;
                     }
                 }
-                
+
                 // Add Market Sentiment if not present
                 if (!marketSentimentExists) {
                     marketSentimentItem.appendChild(marketSentimentLink);
                     featuresDropdown.appendChild(marketSentimentItem);
                     console.log('Added Market Sentiment to menu');
                 }
-                
+
                 // Add Sample Data Generator
                 var sampleDataItem = document.createElement('li');
                 var sampleDataLink = document.createElement('a');
                 sampleDataLink.href = "{{ url_for('sample_data_page') }}";
                 sampleDataLink.className = 'dropdown-item';
                 sampleDataLink.textContent = 'Market Data Generator';
-                
+
                 // Check if Market Data Generator is already there
                 var sampleDataExists = false;
                 for (var i = 0; i < items.length; i++) {
@@ -205,21 +208,21 @@
                         break;
                     }
                 }
-                
+
                 // Add Market Data Generator if not present
                 if (!sampleDataExists) {
                     sampleDataItem.appendChild(sampleDataLink);
                     featuresDropdown.appendChild(sampleDataItem);
                     console.log('Added Market Data Generator to menu');
                 }
-                
+
                 // Add Portfolio Analysis
                 var portfolioItem = document.createElement('li');
                 var portfolioLink = document.createElement('a');
                 portfolioLink.href = "{{ url_for('portfolios') }}";
                 portfolioLink.className = 'dropdown-item';
                 portfolioLink.textContent = 'Portfolio Analysis';
-                
+
                 // Check if Portfolio Analysis is already there
                 var portfolioExists = false;
                 for (var i = 0; i < items.length; i++) {
@@ -228,7 +231,7 @@
                         break;
                     }
                 }
-                
+
                 // Add Portfolio Analysis if not present
                 if (!portfolioExists) {
                     portfolioItem.appendChild(portfolioLink);
@@ -238,13 +241,13 @@
             } else {
                 console.log('Features dropdown not found');
             }
-            
+
             // Also add the top nav menu item if it doesn't exist
             var navbarNav = document.getElementById('navbarNav');
             if (navbarNav) {
                 var navItems = navbarNav.querySelectorAll('.nav-item');
                 var portfolioNavExists = false;
-                
+
                 for (var i = 0; i < navItems.length; i++) {
                     var link = navItems[i].querySelector('.nav-link');
                     if (link && link.textContent.includes('Portfolio')) {
@@ -252,7 +255,7 @@
                         break;
                     }
                 }
-                
+
                 if (!portfolioNavExists) {
                     // Find where to insert (after Market Sentiment)
                     var marketSentimentNav = null;
@@ -263,7 +266,7 @@
                             break;
                         }
                     }
-                    
+
                     if (marketSentimentNav) {
                         var portfolioNavItem = document.createElement('li');
                         portfolioNavItem.className = 'nav-item';
@@ -272,7 +275,7 @@
                         portfolioNavLink.href = "{{ url_for('portfolios') }}";
                         portfolioNavLink.textContent = 'Portfolios';
                         portfolioNavItem.appendChild(portfolioNavLink);
-                        
+
                         marketSentimentNav.parentNode.insertBefore(portfolioNavItem, marketSentimentNav.nextSibling);
                         console.log('Added Portfolios to main nav');
                     }
@@ -280,7 +283,7 @@
             }
         });
     </script>
-    
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>
