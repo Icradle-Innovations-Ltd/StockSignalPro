@@ -14,6 +14,7 @@ from utils.visualization import create_time_series_plot, create_frequency_plot, 
 from utils.decision_engine import generate_recommendation
 from utils.api_fetcher import fetch_stock_data
 from utils.sentiment_analysis import get_market_sentiment, create_sentiment_gauge
+from utils.sample_data_generator import generate_sample_data_csv, get_sample_data_info, sample_ticker_symbol
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -413,6 +414,41 @@ def ticker_sentiment(ticker):
         logger.error(f"Error fetching sentiment for {ticker}: {str(e)}")
         flash(f'Error fetching sentiment for {ticker}: {str(e)}', 'danger')
         return redirect(url_for('index'))
+
+@app.route('/sample-data')
+def sample_data_page():
+    """Display the sample data generation page."""
+    # Get sample data info
+    sample_data_info = get_sample_data_info()
+    return render_template('sample_data.html', sample_data_info=sample_data_info)
+
+@app.route('/api/sample-data/<stock_type>', methods=['GET'])
+def generate_sample_data(stock_type):
+    """Generate and return sample stock data as CSV."""
+    try:
+        # Get optional parameters from request
+        params = {}
+        if 'days' in request.args:
+            params['days'] = int(request.args.get('days'))
+        if 'start_price' in request.args:
+            params['start_price'] = float(request.args.get('start_price'))
+            
+        # Generate the sample data CSV
+        csv_data = generate_sample_data_csv(stock_type=stock_type, params=params)
+        
+        # Generate random ticker for filename
+        ticker = sample_ticker_symbol()
+        
+        # Return as downloadable file
+        return send_file(
+            io.BytesIO(csv_data.encode()),
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name=f"{ticker}_sample_data.csv"
+        )
+    except Exception as e:
+        logger.error(f"Error generating sample data: {str(e)}")
+        return jsonify({'error': f'Error generating sample data: {str(e)}'}), 500
 
 @app.errorhandler(500)
 def server_error(e):

@@ -1,0 +1,147 @@
+{% extends 'base_content.html' %}
+
+{% block title %}Generate Sample Data - Stock Market Signal Processing{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Generate Sample Stock Data</h1>
+    
+    <p class="lead">
+        Need some stock data to test the application? Generate sample data with different characteristics and download it as a CSV file.
+    </p>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4>Sample Data Options</h4>
+                </div>
+                <div class="card-body">
+                    <form id="sampleDataForm">
+                        <div class="mb-3">
+                            <label for="stockType" class="form-label">Stock Type</label>
+                            <select class="form-select" id="stockType" name="stockType" required>
+                                {% for stock_type, info in sample_data_info.items() %}
+                                <option value="{{ stock_type }}">{{ info.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div id="stockTypeDescription" class="form-text mt-2"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="days" class="form-label">Number of Days</label>
+                            <input type="range" class="form-range" id="days" name="days" min="60" max="730" step="10" value="365">
+                            <div class="d-flex justify-content-between">
+                                <span>60 days</span>
+                                <span id="daysValue">365 days</span>
+                                <span>730 days</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="startPrice" class="form-label">Starting Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="startPrice" name="startPrice" min="10" max="1000" step="1" value="100">
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Generate & Download CSV</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h4>Data Types Explained</h4>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="dataTypesAccordion">
+                        {% for stock_type, info in sample_data_info.items() %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ stock_type }}">
+                                <button class="accordion-button {{ 'collapsed' if not loop.first }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ stock_type }}" aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="collapse{{ stock_type }}">
+                                    {{ info.name }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ stock_type }}" class="accordion-collapse collapse {{ 'show' if loop.first }}" aria-labelledby="heading{{ stock_type }}" data-bs-parent="#dataTypesAccordion">
+                                <div class="accordion-body">
+                                    <p>{{ info.description }}</p>
+                                    <p><strong>Properties:</strong> {{ info.properties }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h4>How to Use Sample Data</h4>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Select the type of stock data you want to generate</li>
+                        <li>Adjust the number of days and starting price if needed</li>
+                        <li>Click the "Generate & Download CSV" button to download the file</li>
+                        <li>Return to the <a href="{{ url_for('index') }}">Home Page</a> and upload your downloaded file</li>
+                        <li>Analyze the data to see cycles and recommendations!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stockTypeSelect = document.getElementById('stockType');
+        const stockTypeDescription = document.getElementById('stockTypeDescription');
+        const daysRange = document.getElementById('days');
+        const daysValue = document.getElementById('daysValue');
+        const sampleDataForm = document.getElementById('sampleDataForm');
+        
+        // Sample data info from server
+        const sampleDataInfo = {{ sample_data_info|tojson }};
+        
+        // Update description when stock type changes
+        function updateDescription() {
+            const selectedType = stockTypeSelect.value;
+            stockTypeDescription.textContent = sampleDataInfo[selectedType].description;
+        }
+        
+        // Update days value display
+        function updateDaysValue() {
+            daysValue.textContent = daysRange.value + ' days';
+        }
+        
+        // Initialize
+        updateDescription();
+        updateDaysValue();
+        
+        // Add event listeners
+        stockTypeSelect.addEventListener('change', updateDescription);
+        daysRange.addEventListener('input', updateDaysValue);
+        
+        // Form submission
+        sampleDataForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const stockType = stockTypeSelect.value;
+            const days = daysRange.value;
+            const startPrice = document.getElementById('startPrice').value;
+            
+            // Construct URL with parameters
+            let url = `/api/sample-data/${stockType}?days=${days}&start_price=${startPrice}`;
+            
+            // Redirect to download the file
+            window.location.href = url;
+        });
+    });
+</script>
+{% endblock %}
