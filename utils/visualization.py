@@ -81,7 +81,9 @@ def create_time_series_plot(df):
                 x=1
             ),
             margin=dict(l=40, r=40, t=60, b=40),
-            template='plotly_dark'
+            template='plotly_white',
+            plot_bgcolor='rgba(255,255,255,1)',
+            paper_bgcolor='rgba(255,255,255,1)',
         )
         
         # Return the figure as a JSON serializable object
@@ -182,7 +184,9 @@ def create_frequency_plot(fft_results):
                 x=1
             ),
             margin=dict(l=40, r=40, t=60, b=40),
-            template='plotly_dark'
+            template='plotly_white',
+            plot_bgcolor='rgba(255,255,255,1)',
+            paper_bgcolor='rgba(255,255,255,1)',
         )
         
         # Return the figure as a JSON serializable object
@@ -295,7 +299,9 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
                 x=1
             ),
             margin=dict(l=40, r=40, t=60, b=40),
-            template='plotly_dark'
+            template='plotly_white',
+            plot_bgcolor='rgba(255,255,255,1)',
+            paper_bgcolor='rgba(255,255,255,1)',
         )
         
         # Return the figure as a JSON serializable object
