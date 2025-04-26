@@ -145,6 +145,13 @@
                                     <div class="mt-3">
                                         <p class="small text-muted">Your CSV should include date and price columns. Format: date,price</p>
                                     </div>
+                                    
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                                            <i class="fas fa-chart-line me-2"></i> Analyze CSV Data
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         
@@ -153,40 +160,41 @@
                                 <h4>Or Enter Ticker Symbol</h4>
                                 <p class="text-muted">We'll fetch the latest data for analysis.</p>
                                 
-                                <div class="form-group mb-3">
-                                    <label for="ticker-input" class="form-label">Stock Ticker Symbol</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                        <input type="text" id="ticker-input" name="ticker" class="form-control" placeholder="e.g., AAPL, MSFT, GOOGL">
+                                <form id="ticker-form" action="{{ url_for('upload_file') }}" method="post">
+                                    <div class="form-group mb-3">
+                                        <label for="ticker-input" class="form-label">Stock Ticker Symbol</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                            <input type="text" id="ticker-input" name="ticker" class="form-control" placeholder="e.g., AAPL, MSFT, GOOGL">
+                                        </div>
+                                        <div id="ticker-suggestions" class="list-group mt-1 position-absolute z-3" style="width: calc(100% - 3rem);"></div>
+                                        <div class="form-text">Enter a valid NYSE or NASDAQ ticker symbol.</div>
                                     </div>
-                                    <div id="ticker-suggestions" class="list-group mt-1 position-absolute z-3" style="width: calc(100% - 3rem);"></div>
-                                    <div class="form-text">Enter a valid NYSE or NASDAQ ticker symbol.</div>
-                                </div>
-                                
-                                <div class="form-group mb-3">
-                                    <label class="form-label d-flex align-items-center">
-                                        Time Period
-                                        <i class="fas fa-info-circle ms-2 text-primary" 
-                                           data-bs-toggle="tooltip" 
-                                           title="Amount of historical data to analyze. Longer periods might reveal longer-term cycles."></i>
-                                    </label>
-                                    <select class="form-select" name="period">
-                                        <option value="1y">1 Year</option>
-                                        <option value="2y" selected>2 Years</option>
-                                        <option value="5y">5 Years</option>
-                                        <option value="10y">10 Years</option>
-                                        <option value="max">Max Available</option>
-                                    </select>
-                                </div>
+                                    
+                                    <div class="form-group mb-3">
+                                        <label class="form-label d-flex align-items-center">
+                                            Time Period
+                                            <i class="fas fa-info-circle ms-2 text-primary" 
+                                               data-bs-toggle="tooltip" 
+                                               title="Amount of historical data to analyze. Longer periods might reveal longer-term cycles."></i>
+                                        </label>
+                                        <select class="form-select" name="period">
+                                            <option value="1y">1 Year</option>
+                                            <option value="2y" selected>2 Years</option>
+                                            <option value="5y">5 Years</option>
+                                            <option value="10y">10 Years</option>
+                                            <option value="max">Max Available</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                                            <i class="fas fa-chart-line me-2"></i> Analyze Ticker
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
-                            <i class="fas fa-chart-line me-2"></i> Analyze Stock Data
-                        </button>
-                    </form>
                     </div>
                 </div>
             </div>
