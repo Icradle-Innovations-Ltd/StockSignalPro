@@ -53,6 +53,7 @@ The application uses a PostgreSQL database with the following schema:
 - **time_series_plot** (JSON): Time series plot data
 - **frequency_plot** (JSON): Frequency domain plot data
 - **forecast_plot** (JSON): Forecast plot data
+- **portfolio_id** (String, Foreign Key): Optional link to Portfolio
 
 ### MarketSentiment Table
 - **id** (UUID, Primary Key): Unique identifier for sentiment analysis
@@ -64,6 +65,19 @@ The application uses a PostgreSQL database with the following schema:
 - **mood** (String): Overall sentiment classification ("bullish", "bearish", or "neutral")
 - **mood_value** (Float): Numeric value representing sentiment (0-100)
 - **sentiment_gauge** (JSON): Plotly chart JSON for sentiment gauge visualization
+
+### Portfolio Table
+- **id** (UUID, Primary Key): Unique identifier for portfolio
+- **name** (String): Portfolio name
+- **description** (Text): Optional portfolio description
+- **created_at** (DateTime): Creation timestamp
+- **updated_at** (DateTime): Last update timestamp
+- **stocks** (JSON): List of stock tickers
+- **allocations** (JSON): Stock allocation percentages
+- **correlation_matrix** (JSON): Stock correlation data
+- **portfolio_plot** (JSON): Portfolio visualization data
+- **cycle_analysis** (JSON): Portfolio cycle analysis results
+
 
 ## Data Processing Pipeline
 

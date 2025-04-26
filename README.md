@@ -57,13 +57,13 @@ Users can upload their own CSV data files or enter a stock ticker symbol to fetc
 The application is built using a modern web stack with the following components:
 
 - **Backend**:
-  - Python Flask web framework
-  - SQLAlchemy ORM for database operations
-  - NumPy and SciPy for numerical computations and FFT analysis
-  - Pandas for data manipulation and processing
-  - PostgreSQL database for data persistence
-  - Trafilatura for web content extraction
-  - Natural language processing for sentiment analysis
+  - **Python Flask**: Web application framework
+  - **SQLAlchemy**: ORM for database operations with PostgreSQL
+  - **NumPy & SciPy**: Numerical computations and FFT analysis
+  - **Pandas**: Data manipulation and processing
+  - **yfinance**: Stock data API integration
+  - **Plotly**: Interactive data visualization
+  
 
 - **Frontend**:
   - Bootstrap 5 for responsive UI components
@@ -120,7 +120,7 @@ The application is built using a modern web stack with the following components:
    ```
    python main.py
    ```
-   
+
 7. Access the application at http://localhost:5000
 
 ## Usage
@@ -174,7 +174,7 @@ stock-market-signal-processing/
 ├── templates/
 │   ├── index.html          # Home page template
 │   ├── results.html        # Analysis results template
-│   ├── report.html         # PDF report template
+│   ├── report.html        # PDF report template
 │   ├── market_sentiment.html # Market sentiment analysis page
 │   └── ticker_sentiment.html # Ticker-specific sentiment page
 ├── uploads/                # Temporary storage for uploaded files
@@ -216,7 +216,7 @@ The application generates recommendations based on detected cycles and their cur
 3. **Confidence Calculation**:
    - Assign confidence based on cycle clarity and strength
    - Adjust recommendations based on confidence levels
-   
+
 ### Market Sentiment Analysis
 The application analyzes financial news and content to determine market sentiment:
 
@@ -229,7 +229,7 @@ The application analyzes financial news and content to determine market sentimen
    - Analyze text for bullish/bearish/neutral keywords
    - Count and weight keyword occurrences
    - Calculate sentiment scores for each category
-   
+
 3. **Mood Determination**:
    - Combine sentiment scores into an overall mood
    - Classify as bullish, bearish, or neutral
@@ -249,7 +249,7 @@ The application creates the following main types of visualizations:
 3. **Forecast Plot**:
    - Price projection based on superposition of detected cycles
    - Confidence intervals for forecasted prices
-   
+
 4. **Sentiment Gauge Chart**:
    - Circular gauge showing market sentiment from bearish to bullish
    - Color-coded indicators (red for bearish, green for bullish)
@@ -289,13 +289,13 @@ The application creates the following main types of visualizations:
 - Downloads CSV file of analysis results
 - Parameters:
   - `analysis_id`: Unique identifier for the analysis
-  
+
 #### `GET /market-sentiment`
 - Displays overall market sentiment analysis page
-  
+
 #### `GET /api/market-sentiment`
 - Returns JSON data for market sentiment gauge
-  
+
 #### `GET /ticker-sentiment/<ticker>`
 - Displays sentiment analysis for specific stock ticker
 - Parameters:
