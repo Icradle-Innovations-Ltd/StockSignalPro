@@ -6,7 +6,7 @@ packages = ["cacert", "fontconfig", "ghostscript", "glib", "glibcLocales", "harf
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+run = ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 --workers 4 app:app"]
 
 [workflows]
 runButton = "Start Flask App"
@@ -37,6 +37,15 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python main.py"
+
+[[workflows.workflow]]
+name = "Production Server"
+author = 41986678
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gunicorn --bind 0.0.0.0:5000 --workers 4 app:app"
 
 [[ports]]
 localPort = 5000
