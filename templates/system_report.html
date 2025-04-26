@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-4 mb-5">
-    <!-- Title Page -->
+    <!-- 1. Title Page -->
     <div class="text-center">
         <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="CycleTrader Logo" height="60" class="mb-3">
         <h1 class="mb-1">Stock Market Signal Processing System Documentation</h1>
@@ -21,76 +21,86 @@
         <hr class="my-4">
     </div>
 
-    <!-- Instructor -->
+    <!-- 2. Declaration and Approval -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">Course Instructor</h2>
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5>Project Supervisor and Lecturer</h5>
-                <p>Buri Gershom (bgershom@must.ac.ug)</p>
-                <ul>
-                    <li>Project supervision and guidance</li>
-                    <li>Technical oversight and mentorship</li>
-                    <li>Academic evaluation and assessment</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-<!-- Authors and Contributors -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">Authors and Contributors</h2>
+        <h2 class="border-bottom pb-2">Declaration and Approval</h2>
         <div class="card">
             <div class="card-body">
-                <h5>Lead Developer and Project Manager</h5>
-                <p>Amon Muhwezi (2024BCS109@std.must.ac.ug)</p>
-                <ul>
-                    <li>System architecture and implementation</li>
-                    <li>Full-stack development</li>
-                    <li>Project deployment and management</li>
-                </ul>
-
-                <h5 class="mt-4">Core Development Team</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <ul>
-                            <li><strong>Amanya Peter (2024bcs033@std.must.ac.ug)</strong>
-                                <br>Frontend development and UI design</li>
-
-                            <li><strong>Doreen Miracle (2024bcs130@std.must.ac.ug)</strong>
-                                <br>Database design and management</li>
-
-                            <li><strong>Twinomugisha Nickson (2024bcs168@std.must.ac.ug)</strong>
-                                <br>API integration and testing</li>
-
-                            <li><strong>Asiimwe Shabellah (2024BCS049@std.must.ac.ug)</strong>
-                                <br>Data processing algorithms</li>
-
-                            <li><strong>Kangwagye Jonas (2024BCS194@std.must.ac.ug)</strong>
-                                <br>System testing and quality assurance</li>
-                        </ul>
+                <h5>Declaration</h5>
+                <p>We, the undersigned members of The Bazaar, declare that this project documentation is our original work. All sources used have been properly acknowledged and referenced. This work has not been submitted for any other academic award.</p>
+                
+                <div class="mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Group Leader</h5>
+                            <p>Name: Amon Muhwezi<br>
+                            Signature: _________________<br>
+                            Date: _________________</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Project Supervisor</h5>
+                            <p>Name: Mr. Buri Gershom<br>
+                            Signature: _________________<br>
+                            Date: _________________</p>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <ul>
-                            <li><strong>Maro Edly (2024BCS097@std.must.ac.ug)</strong>
-                                <br>Market sentiment analysis implementation</li>
-
-                            <li><strong>Nanjuki Daphine (2024BCS129@std.must.ac.ug)</strong>
-                                <br>Documentation and user guide development</li>
-
-                            <li><strong>Rwendeire Joshua Truth (2024BCS148@std.must.ac.ug)</strong>
-                                <br>Portfolio management features</li>
-
-                            <li><strong>Katusiime Moreen (2024bcs084@std.must.ac.ug)</strong>
-                                <br>Data visualization and reporting</li>
-                        </ul>
-                    </div>
+                </div>
+                
+                <h5 class="mt-4">Approval</h5>
+                <p>This project documentation has been submitted with the approval of the project supervisor.</p>
+                
+                <div class="mt-4">
+                    <h5>Head of Department</h5>
+                    <p>Name: _________________<br>
+                    Signature: _________________<br>
+                    Date: _________________</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Problem Statement -->
+    <!-- 3. Acknowledgements -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Acknowledgements</h2>
+        <div class="card">
+            <div class="card-body">
+                <p>We would like to express our sincere gratitude to:</p>
+                
+                <h5>Academic Support</h5>
+                <ul>
+                    <li><strong>Mr. Buri Gershom</strong> - For his invaluable guidance, supervision, and technical expertise throughout the project development</li>
+                    <li>The Faculty of Computing & Informatics at Mbarara University of Science and Technology</li>
+                    <li>The Department of Computer Science for providing the necessary resources and support</li>
+                </ul>
+                
+                <h5 class="mt-4">Technical Resources</h5>
+                <ul>
+                    <li>The open-source community for providing essential libraries and tools</li>
+                    <li>Financial data providers for access to market information</li>
+                    <li>Documentation contributors and technical writers</li>
+                </ul>
+                
+                <h5 class="mt-4">Special Thanks</h5>
+                <ul>
+                    <li>Our fellow students for their feedback and testing support</li>
+                    <li>The university administration for their institutional support</li>
+                    <li>Our families for their continuous encouragement and support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Abstract -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Abstract</h2>
+        <div class="card">
+            <div class="card-body">
+                <p>The Stock Market Signal Processing Web Application is a sophisticated platform that leverages Fast Fourier Transform (FFT) algorithms to analyze stock market data and identify cyclic patterns. This system provides traders and analysts with powerful tools for detecting market cycles, generating trading recommendations, and analyzing market sentiment. By combining advanced signal processing techniques with an intuitive user interface, the application makes complex technical analysis accessible to users of all experience levels.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Problem Statement -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Problem Statement</h2>
         <div class="card">
@@ -106,7 +116,7 @@
         </div>
     </section>
 
-    <!-- Objectives -->
+    <!-- 6. Objectives -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Objectives</h2>
         <div class="card">
@@ -118,7 +128,7 @@
                     <li>Integrate market sentiment analysis with technical indicators</li>
                     <li>Provide an intuitive interface for complex technical analysis</li>
                 </ul>
-
+                
                 <h5 class="mt-4">Technical Objectives</h5>
                 <ul>
                     <li>Implement efficient FFT algorithms for real-time analysis</li>
@@ -126,7 +136,7 @@
                     <li>Create reliable trading signal generation systems</li>
                     <li>Build comprehensive visualization tools</li>
                 </ul>
-
+                
                 <h5 class="mt-4">User Experience Objectives</h5>
                 <ul>
                     <li>Simplify complex technical analysis for all user levels</li>
@@ -138,93 +148,23 @@
         </div>
     </section>
 
-    <!-- Abstract -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">Abstract</h2>
-        <div class="card">
-            <div class="card-body">
-                <p>The Stock Market Signal Processing Web Application is a sophisticated platform that leverages Fast Fourier Transform (FFT) algorithms to analyze stock market data and identify cyclic patterns. This system provides traders and analysts with powerful tools for detecting market cycles, generating trading recommendations, and analyzing market sentiment. By combining advanced signal processing techniques with an intuitive user interface, the application makes complex technical analysis accessible to users of all experience levels.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Existing Systems Analysis -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">Existing Systems Analysis</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5>Current Market Solutions</h5>
-                <ul>
-                    <li><strong>TradingView</strong>: Offers traditional technical analysis tools but lacks advanced cycle detection</li>
-                    <li><strong>MetaTrader</strong>: Focuses on forex trading with basic technical indicators</li>
-                    <li><strong>ThinkOrSwim</strong>: Provides comprehensive charting but limited signal processing capabilities</li>
-                    <li><strong>Wave59 PRO2</strong>: Implements basic cycle analysis without FFT integration</li>
-                </ul>
-
-                <h5 class="mt-4">Limitations of Existing Systems</h5>
-                <ul>
-                    <li>Limited or no signal processing capabilities</li>
-                    <li>Lack of integrated sentiment analysis</li>
-                    <li>Complex interfaces requiring extensive training</li>
-                    <li>High cost of access to advanced features</li>
-                    <li>Limited customization options</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- System Uniqueness -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">System Uniqueness</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5>Key Differentiators</h5>
-                <ul>
-                    <li><strong>Advanced Signal Processing</strong>: First-of-its-kind implementation of FFT for market cycle detection</li>
-                    <li><strong>Integrated Approach</strong>: Seamless combination of technical analysis, sentiment analysis, and cycle detection</li>
-                    <li><strong>Accessibility</strong>: Complex mathematical concepts presented through an intuitive interface</li>
-                    <li><strong>Real-time Processing</strong>: Instant analysis of market data and sentiment</li>
-                    <li><strong>Cost-effective Solution</strong>: Professional-grade analysis tools at an accessible price point</li>
-                </ul>
-
-                <h5 class="mt-4">Innovative Features</h5>
-                <ul>
-                    <li><strong>Multi-cycle Analysis</strong>: Detection and analysis of multiple concurrent market cycles</li>
-                    <li><strong>Adaptive Algorithms</strong>: Self-adjusting analysis based on market conditions</li>
-                    <li><strong>Comprehensive Visualization</strong>: Interactive charts and intuitive visual representations</li>
-                    <li><strong>Portfolio Integration</strong>: Cycle analysis across multiple assets simultaneously</li>
-                    <li><strong>Custom Data Support</strong>: Analysis of user-provided historical data</li>
-                </ul>
-
-                <h5 class="mt-4">Future Advantages</h5>
-                <ul>
-                    <li>Machine learning integration for improved cycle detection</li>
-                    <li>Advanced portfolio optimization based on cycle analysis</li>
-                    <li>Enhanced mobile accessibility</li>
-                    <li>Integration with additional data sources</li>
-                    <li>Expanded API capabilities for third-party integration</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Literature Review -->
+    <!-- 7. Literature Review -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Literature Review</h2>
         <div class="card">
             <div class="card-body">
                 <h5>Signal Processing in Financial Markets</h5>
                 <p>The application of signal processing techniques to financial markets has been extensively studied. Ehlers (2004) pioneered the use of digital filters and FFT analysis in technical trading, demonstrating how these tools can reveal hidden market cycles. Murphy (1999) established the foundational principles of technical analysis that remain relevant to modern algorithmic trading approaches.</p>
-
+                
                 <h5 class="mt-4">Fourier Transform Applications</h5>
                 <p>Smith (1997) provided comprehensive coverage of FFT algorithms and their applications in signal processing, which has been adapted for financial time series analysis. Oppenheim and Schafer (2009) detailed the mathematical foundations of discrete-time signal processing that underpin our cycle detection methodology.</p>
-
+                
                 <h5 class="mt-4">Market Efficiency and Cycles</h5>
                 <p>Lo's (2004) Adaptive Markets Hypothesis provides a theoretical framework supporting the existence of market cycles, suggesting that market efficiency varies over time and adapts to changing conditions. This supports our approach of dynamic cycle detection and analysis.</p>
-
+                
                 <h5 class="mt-4">Market Sentiment Analysis</h5>
                 <p>Recent research has shown strong correlations between market sentiment and price movements. Johnson et al. (2003) explored the complexity of financial markets and how sentiment indicators can provide early signals of market regime changes.</p>
-
+                
                 <h5 class="mt-4">Gaps in Existing Systems</h5>
                 <ul>
                     <li>Limited integration of signal processing with traditional technical analysis</li>
@@ -232,7 +172,7 @@
                     <li>Insufficient combination of sentiment analysis with cycle detection</li>
                     <li>Need for real-time processing and analysis capabilities</li>
                 </ul>
-
+                
                 <h5 class="mt-4">Our Contribution</h5>
                 <p>This system addresses these gaps by providing an integrated platform that combines:</p>
                 <ul>
@@ -245,63 +185,67 @@
         </div>
     </section>
 
-    <!-- System Architecture -->
+    <!-- 8. Existing Systems Analysis -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">System Architecture</h2>
+        <h2 class="border-bottom pb-2">Existing Systems Analysis</h2>
         <div class="card">
             <div class="card-body">
-                <h5>Core Components</h5>
+                <h5>Current Market Solutions</h5>
                 <ul>
-                    <li>Data Processing Engine (FFT Analysis)</li>
-                    <li>Trading Recommendation System</li>
-                    <li>Market Sentiment Analysis</li>
-                    <li>Portfolio Management</li>
-                    <li>Visualization System</li>
+                    <li><strong>TradingView</strong>: Offers traditional technical analysis tools but lacks advanced cycle detection</li>
+                    <li><strong>MetaTrader</strong>: Focuses on forex trading with basic technical indicators</li>
+                    <li><strong>ThinkOrSwim</strong>: Provides comprehensive charting but limited signal processing capabilities</li>
+                    <li><strong>Wave59 PRO2</strong>: Implements basic cycle analysis without FFT integration</li>
                 </ul>
-
-                <h5>Technology Stack</h5>
+                
+                <h5 class="mt-4">Limitations of Existing Systems</h5>
                 <ul>
-                    <li>Backend: Python Flask, SQLAlchemy, NumPy, SciPy</li>
-                    <li>Frontend: Bootstrap 5, Plotly.js, Custom JavaScript</li>
-                    <li>Database: PostgreSQL with JSON support</li>
-                    <li>APIs: yfinance for market data</li>
+                    <li>Limited or no signal processing capabilities</li>
+                    <li>Lack of integrated sentiment analysis</li>
+                    <li>Complex interfaces requiring extensive training</li>
+                    <li>High cost of access to advanced features</li>
+                    <li>Limited customization options</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Features and Functionality -->
+    <!-- 9. System Uniqueness -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">Features and Functionality</h2>
+        <h2 class="border-bottom pb-2">System Uniqueness</h2>
         <div class="card">
             <div class="card-body">
-                <h5>Data Input Methods</h5>
+                <h5>Key Differentiators</h5>
                 <ul>
-                    <li>CSV File Upload: Historical price data analysis</li>
-                    <li>Stock Ticker Symbol: Real-time market data integration</li>
-                    <li>Portfolio Import: Multi-stock analysis capabilities</li>
+                    <li><strong>Advanced Signal Processing</strong>: First-of-its-kind implementation of FFT for market cycle detection</li>
+                    <li><strong>Integrated Approach</strong>: Seamless combination of technical analysis, sentiment analysis, and cycle detection</li>
+                    <li><strong>Accessibility</strong>: Complex mathematical concepts presented through an intuitive interface</li>
+                    <li><strong>Real-time Processing</strong>: Instant analysis of market data and sentiment</li>
+                    <li><strong>Cost-effective Solution</strong>: Professional-grade analysis tools at an accessible price point</li>
                 </ul>
-
-                <h5>Analysis Capabilities</h5>
+                
+                <h5 class="mt-4">Innovative Features</h5>
                 <ul>
-                    <li>Cycle Detection using FFT</li>
-                    <li>Market Sentiment Assessment</li>
-                    <li>Portfolio Optimization</li>
-                    <li>Trading Signal Generation</li>
+                    <li><strong>Multi-cycle Analysis</strong>: Detection and analysis of multiple concurrent market cycles</li>
+                    <li><strong>Adaptive Algorithms</strong>: Self-adjusting analysis based on market conditions</li>
+                    <li><strong>Comprehensive Visualization</strong>: Interactive charts and intuitive visual representations</li>
+                    <li><strong>Portfolio Integration</strong>: Cycle analysis across multiple assets simultaneously</li>
+                    <li><strong>Custom Data Support</strong>: Analysis of user-provided historical data</li>
                 </ul>
-
-                <h5>Visualization Tools</h5>
+                
+                <h5 class="mt-4">Future Advantages</h5>
                 <ul>
-                    <li>Interactive Time Series Charts</li>
-                    <li>Frequency Domain Plots</li>
-                    <li>Sentiment Gauge Charts</li>
-                    <li>Portfolio Performance Visualization</li>
+                    <li>Machine learning integration for improved cycle detection</li>
+                    <li>Advanced portfolio optimization based on cycle analysis</li>
+                    <li>Enhanced mobile accessibility</li>
+                    <li>Integration with additional data sources</li>
+                    <li>Expanded API capabilities for third-party integration</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Methodology -->
+    <!-- 10. Methodology -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Methodology</h2>
         <div class="card">
@@ -314,7 +258,7 @@
                     <li><strong>Cycle Detection</strong>: Dominant frequencies are identified and analyzed</li>
                     <li><strong>Signal Generation</strong>: Trading signals are generated based on cycle analysis</li>
                 </ul>
-
+                
                 <h5 class="mt-4">2. Mathematical Foundation</h5>
                 <p>The core mathematical components include:</p>
                 <ul>
@@ -323,7 +267,7 @@
                     <li><strong>Phase Calculation</strong>: φ(k) = atan2(imag(X(k)), real(X(k)))</li>
                     <li><strong>Period Conversion</strong>: T = N/k (where N is data length, k is frequency index)</li>
                 </ul>
-
+                
                 <h5 class="mt-4">3. Cycle Analysis Process</h5>
                 <ol>
                     <li><strong>Data Acquisition</strong>
@@ -348,7 +292,7 @@
                         </ul>
                     </li>
                 </ol>
-
+                
                 <h5 class="mt-4">4. Decision Engine</h5>
                 <p>Trading signals are generated through:</p>
                 <ul>
@@ -357,7 +301,7 @@
                     <li><strong>Confluence Detection</strong>: Identifying areas where multiple cycles align</li>
                     <li><strong>Confidence Calculation</strong>: Based on signal clarity and cycle strength</li>
                 </ul>
-
+                
                 <h5 class="mt-4">5. Validation Process</h5>
                 <ul>
                     <li><strong>Historical Backtesting</strong>: Testing against historical data</li>
@@ -369,13 +313,13 @@
         </div>
     </section>
 
-    <!-- Implementation Details -->
+    <!-- 11. Implementation Details -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Implementation Details</h2>
         <div class="card">
             <div class="card-body">
                 <h5>Core Algorithms</h5>
-
+                
                 <h6 class="mt-4">1. Fast Fourier Transform (FFT)</h6>
                 <p>Our implementation uses the Fast Fourier Transform algorithm to decompose price data into its frequency components:</p>
                 <ul>
@@ -384,7 +328,7 @@
                     <li><strong>Formula:</strong> X(k) = Σ[n=0 to N-1] x(n) * e^(-j2πkn/N)</li>
                     <li><strong>Application:</strong> Identifies dominant cycle frequencies in price movements</li>
                 </ul>
-
+                
                 <h6 class="mt-4">2. Cycle Detection Algorithm</h6>
                 <p>Custom peak detection algorithm for identifying significant market cycles:</p>
                 <ul>
@@ -399,7 +343,7 @@
                     </li>
                     <li><strong>Output:</strong> List of dominant cycles with period, strength, and phase</li>
                 </ul>
-
+                
                 <h6 class="mt-4">3. Trading Signal Generation</h6>
                 <p>Decision engine algorithm for generating trading recommendations:</p>
                 <ul>
@@ -419,7 +363,7 @@
                     </li>
                     <li><strong>Output:</strong> BUY/SELL/HOLD recommendation with confidence level</li>
                 </ul>
-
+                
                 <h6 class="mt-4">4. Sentiment Analysis Algorithm</h6>
                 <p>Natural language processing approach for market sentiment detection:</p>
                 <ul>
@@ -433,7 +377,7 @@
                     </li>
                     <li><strong>Output:</strong> Market sentiment score and mood classification</li>
                 </ul>
-
+                
                 <h5 class="mt-4">Data Processing Pipeline</h5>
                 <p>The system processes data through the following stages:</p>
                 <ol>
@@ -443,7 +387,7 @@
                     <li>Visualization creation</li>
                     <li>Result storage and presentation</li>
                 </ol>
-
+                
                 <h5>Market Sentiment Analysis</h5>
                 <p>Sentiment analysis involves:</p>
                 <ul>
@@ -455,47 +399,63 @@
         </div>
     </section>
 
-    <!-- System Weaknesses and Limitations -->
+    <!-- 12. System Architecture -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">System Weaknesses and Limitations</h2>
+        <h2 class="border-bottom pb-2">System Architecture</h2>
         <div class="card">
             <div class="card-body">
-                <h5>Technical Limitations</h5>
+                <h5>Core Components</h5>
                 <ul>
-                    <li>FFT analysis assumes cyclic patterns remain consistent over time</li>
-                    <li>System may not respond well to sudden market regime changes</li>
-                    <li>Processing speed limitations for very large datasets</li>
-                    <li>Memory constraints when analyzing multiple stocks simultaneously</li>
+                    <li>Data Processing Engine (FFT Analysis)</li>
+                    <li>Trading Recommendation System</li>
+                    <li>Market Sentiment Analysis</li>
+                    <li>Portfolio Management</li>
+                    <li>Visualization System</li>
                 </ul>
-
-                <h5 class="mt-4">Market-Related Challenges</h5>
+                
+                <h5>Technology Stack</h5>
                 <ul>
-                    <li>Cannot predict unexpected market events or news impacts</li>
-                    <li>Effectiveness varies in highly volatile market conditions</li>
-                    <li>Limited ability to detect non-cyclic market patterns</li>
-                    <li>Sentiment analysis may miss context or nuanced market news</li>
-                </ul>
-
-                <h5 class="mt-4">Data Dependencies</h5>
-                <ul>
-                    <li>Relies on quality and consistency of input data</li>
-                    <li>Historical data may not reflect current market dynamics</li>
-                    <li>Real-time data delays can affect timing of signals</li>
-                    <li>API rate limits affect data refresh frequency</li>
-                </ul>
-
-                <h5 class="mt-4">User Experience Constraints</h5>
-                <ul>
-                    <li>Learning curve for understanding FFT analysis concepts</li>
-                    <li>Complex configuration options may overwhelm new users</li>
-                    <li>Mobile interface limitations for detailed analysis</li>
-                    <li>Report generation time increases with data volume</li>
+                    <li>Backend: Python Flask, SQLAlchemy, NumPy, SciPy</li>
+                    <li>Frontend: Bootstrap 5, Plotly.js, Custom JavaScript</li>
+                    <li>Database: PostgreSQL with JSON support</li>
+                    <li>APIs: yfinance for market data</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Testing and Validation -->
+    <!-- 13. Features and Functionality -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Features and Functionality</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Data Input Methods</h5>
+                <ul>
+                    <li>CSV File Upload: Historical price data analysis</li>
+                    <li>Stock Ticker Symbol: Real-time market data integration</li>
+                    <li>Portfolio Import: Multi-stock analysis capabilities</li>
+                </ul>
+                
+                <h5>Analysis Capabilities</h5>
+                <ul>
+                    <li>Cycle Detection using FFT</li>
+                    <li>Market Sentiment Assessment</li>
+                    <li>Portfolio Optimization</li>
+                    <li>Trading Signal Generation</li>
+                </ul>
+                
+                <h5>Visualization Tools</h5>
+                <ul>
+                    <li>Interactive Time Series Charts</li>
+                    <li>Frequency Domain Plots</li>
+                    <li>Sentiment Gauge Charts</li>
+                    <li>Portfolio Performance Visualization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 14. Testing and Validation -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Testing and Validation</h2>
         <div class="card">
@@ -511,38 +471,47 @@
         </div>
     </section>
 
-    <!-- Acknowledgements -->
+    <!-- 15. System Weaknesses and Limitations -->
     <section class="mb-5">
-        <h2 class="border-bottom pb-2">Acknowledgements</h2>
+        <h2 class="border-bottom pb-2">System Weaknesses and Limitations</h2>
         <div class="card">
             <div class="card-body">
-                <p>We would like to express our sincere gratitude to:</p>
+                <h5>Technical Limitations</h5>
+                <ul>
+                    <li>FFT analysis assumes cyclic patterns remain consistent over time</li>
+                    <li>System may not respond well to sudden market regime changes</li>
+                    <li>Processing speed limitations for very large datasets</li>
+                    <li>Memory constraints when analyzing multiple stocks simultaneously</li>
+                </ul>
                 
-                <h5>Academic Support</h5>
+                <h5 class="mt-4">Market-Related Challenges</h5>
                 <ul>
-                    <li><strong>Mr. Buri Gershom</strong> - For his invaluable guidance, supervision, and technical expertise throughout the project development</li>
-                    <li>The Faculty of Computing & Informatics at Mbarara University of Science and Technology</li>
-                    <li>The Department of Computer Science for providing the necessary resources and support</li>
+                    <li>Cannot predict unexpected market events or news impacts</li>
+                    <li>Effectiveness varies in highly volatile market conditions</li>
+                    <li>Limited ability to detect non-cyclic market patterns</li>
+                    <li>Sentiment analysis may miss context or nuanced market news</li>
                 </ul>
-
-                <h5 class="mt-4">Technical Resources</h5>
+                
+                <h5 class="mt-4">Data Dependencies</h5>
                 <ul>
-                    <li>The open-source community for providing essential libraries and tools</li>
-                    <li>Financial data providers for access to market information</li>
-                    <li>Documentation contributors and technical writers</li>
+                    <li>Relies on quality and consistency of input data</li>
+                    <li>Historical data may not reflect current market dynamics</li>
+                    <li>Real-time data delays can affect timing of signals</li>
+                    <li>API rate limits affect data refresh frequency</li>
                 </ul>
-
-                <h5 class="mt-4">Special Thanks</h5>
+                
+                <h5 class="mt-4">User Experience Constraints</h5>
                 <ul>
-                    <li>Our fellow students for their feedback and testing support</li>
-                    <li>The university administration for their institutional support</li>
-                    <li>Our families for their continuous encouragement and support</li>
+                    <li>Learning curve for understanding FFT analysis concepts</li>
+                    <li>Complex configuration options may overwhelm new users</li>
+                    <li>Mobile interface limitations for detailed analysis</li>
+                    <li>Report generation time increases with data volume</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Future Improvements -->
+    <!-- 16. Recommendations and Future Work -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">Recommendations and Future Work</h2>
         <div class="card">
@@ -558,45 +527,7 @@
         </div>
     </section>
 
-    <!-- Declaration and Approval -->
-    <section class="mb-5">
-        <h2 class="border-bottom pb-2">Declaration and Approval</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5>Declaration</h5>
-                <p>We, the undersigned members of The Bazaar, declare that this project documentation is our original work. All sources used have been properly acknowledged and referenced. This work has not been submitted for any other academic award.</p>
-                
-                <div class="mt-4">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Group Leader</h5>
-                            <p>Name: Amon Muhwezi<br>
-                            Signature: _________________<br>
-                            Date: _________________</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>Project Supervisor</h5>
-                            <p>Name: Mr. Buri Gershom<br>
-                            Signature: _________________<br>
-                            Date: _________________</p>
-                        </div>
-                    </div>
-                </div>
-
-                <h5 class="mt-4">Approval</h5>
-                <p>This project documentation has been submitted with the approval of the project supervisor.</p>
-                
-                <div class="mt-4">
-                    <h5>Head of Department</h5>
-                    <p>Name: _________________<br>
-                    Signature: _________________<br>
-                    Date: _________________</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- References -->
+    <!-- 17. References -->
     <section class="mb-5">
         <h2 class="border-bottom pb-2">References</h2>
         <div class="card">
@@ -609,7 +540,7 @@
                     <li>Tolstov, G.P. (1976). "Fourier Series" - Classical text on Fourier series applications</li>
                     <li>Lanczos, C. (1988). "Discourse on Fourier Series" - Intuitive approach to Fourier analysis</li>
                 </ol>
-
+                
                 <h5>Technical References</h5>
                 <ol>
                     <li>Smith, Steven W. (1997). "The Scientist and Engineer's Guide to Digital Signal Processing"</li>
@@ -617,14 +548,14 @@
                     <li>Edwards, Robert D., Magee, John (2007). "Technical Analysis of Stock Trends"</li>
                     <li>Oppenheim, Alan V., Schafer, Ronald W. (2009). "Discrete-Time Signal Processing"</li>
                 </ol>
-
+                
                 <h5 class="mt-4">Research Papers</h5>
                 <ol>
                     <li>Johnson, N. F., et al. (2003). "Financial market complexity"</li>
                     <li>Lo, Andrew W. (2004). "The Adaptive Markets Hypothesis"</li>
                     <li>Ehlers, John F. (2004). "Cybernetic Analysis for Stocks and Futures"</li>
                 </ol>
-
+                
                 <h5 class="mt-4">Software Libraries and Tools</h5>
                 <ol>
                     <li>NumPy Documentation - Mathematical computing tools</li>
@@ -633,6 +564,75 @@
                     <li>Plotly Documentation - Interactive visualization library</li>
                     <li>SQLAlchemy Documentation - Database toolkit</li>
                 </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- 18. Course Instructor -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Course Instructor</h2>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Project Supervisor and Lecturer</h5>
+                <p>Buri Gershom (bgershom@must.ac.ug)</p>
+                <ul>
+                    <li>Project supervision and guidance</li>
+                    <li>Technical oversight and mentorship</li>
+                    <li>Academic evaluation and assessment</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 19. Authors and Contributors -->
+    <section class="mb-5">
+        <h2 class="border-bottom pb-2">Authors and Contributors</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5>Lead Developer and Project Manager</h5>
+                <p>Amon Muhwezi (2024BCS109@std.must.ac.ug)</p>
+                <ul>
+                    <li>System architecture and implementation</li>
+                    <li>Full-stack development</li>
+                    <li>Project deployment and management</li>
+                </ul>
+                
+                <h5 class="mt-4">Core Development Team</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Amanya Peter (2024bcs033@std.must.ac.ug)</strong>
+                                <br>Frontend development and UI design</li>
+                            
+                            <li><strong>Doreen Miracle (2024bcs130@std.must.ac.ug)</strong>
+                                <br>Database design and management</li>
+                            
+                            <li><strong>Twinomugisha Nickson (2024bcs168@std.must.ac.ug)</strong>
+                                <br>API integration and testing</li>
+                            
+                            <li><strong>Asiimwe Shabellah (2024BCS049@std.must.ac.ug)</strong>
+                                <br>Data processing algorithms</li>
+                            
+                            <li><strong>Kangwagye Jonas (2024BCS194@std.must.ac.ug)</strong>
+                                <br>System testing and quality assurance</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Maro Edly (2024BCS097@std.must.ac.ug)</strong>
+                                <br>Market sentiment analysis implementation</li>
+                            
+                            <li><strong>Nanjuki Daphine (2024BCS129@std.must.ac.ug)</strong>
+                                <br>Documentation and user guide development</li>
+                            
+                            <li><strong>Rwendeire Joshua Truth (2024BCS148@std.must.ac.ug)</strong>
+                                <br>Portfolio management features</li>
+                            
+                            <li><strong>Katusiime Moreen (2024bcs084@std.must.ac.ug)</strong>
+                                <br>Data visualization and reporting</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
