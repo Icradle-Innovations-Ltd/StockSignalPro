@@ -277,3 +277,9 @@ body {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   color: var(--text-color);
 }
+
+/* Override Bootstrap's text-muted color for better visibility in light theme */
+.text-muted {
+  --bs-text-opacity: 1;
+  color: #1c2333 !important;
+}
