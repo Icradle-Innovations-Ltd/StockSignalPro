@@ -7,6 +7,7 @@ This guide provides step-by-step instructions on how to use the Stock Market Sig
 - [Data Input Options](#data-input-options)
 - [Understanding Your Results](#understanding-your-results)
 - [Interpreting Recommendations](#interpreting-recommendations)
+- [Market Sentiment Analysis](#market-sentiment-analysis)
 - [Exporting and Sharing](#exporting-and-sharing)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Troubleshooting](#troubleshooting)
@@ -142,6 +143,59 @@ The results page is divided into several sections:
 - **Limitations**: Cycle analysis works better in some market conditions than others
 - **Past Performance**: Remember that historical patterns do not guarantee future results
 
+## Market Sentiment Analysis
+
+The Market Sentiment feature analyzes news and market information to determine overall market mood.
+
+### Accessing Market Sentiment Analysis
+
+You can access the Market Sentiment feature in several ways:
+- Click the "Market Sentiment" button in the navigation bar
+- Select "Market Sentiment" from the Features dropdown menu
+- Click the "View Market Sentiment" link in the homepage's information card
+
+### General Market Sentiment
+
+The Market Sentiment page displays:
+
+1. **Sentiment Gauge**: 
+   - Visual indicator showing the overall market mood on a scale from bearish to bullish
+   - The gauge ranges from 0 (extremely bearish) to 100 (extremely bullish)
+   - The pointer indicates the current market sentiment value
+
+2. **Sentiment Breakdown**:
+   - Bullish Score: Percentage of positive market signals
+   - Bearish Score: Percentage of negative market signals  
+   - Neutral Score: Percentage of neutral market signals
+
+3. **Mood Indicator**:
+   - Text description of the current market mood (Bearish, Neutral, or Bullish)
+   - Timestamp showing when the sentiment analysis was performed
+
+### Ticker-Specific Sentiment
+
+For analysis of individual stocks:
+
+1. Enter a ticker symbol in the search box on the Market Sentiment page
+2. Click "Analyze Sentiment" to process
+3. View ticker-specific sentiment results including:
+   - Sentiment gauge for that specific stock
+   - Breakdown of bullish, bearish, and neutral signals
+   - Analysis timestamp
+
+### Interpreting Sentiment Results
+
+- **Bullish (70-100)**: Indicates positive market sentiment; may suggest a favorable environment for buying
+- **Neutral (30-70)**: Mixed or balanced market sentiment; may suggest a cautious approach
+- **Bearish (0-30)**: Indicates negative market sentiment; may suggest a defensive approach
+
+### Combining Sentiment with Cycle Analysis
+
+For best results:
+- Use Market Sentiment as a broader context for your cycle analysis
+- Consider being more conservative when cycle recommendations conflict with market sentiment
+- Look for confirmation when both cycle analysis and sentiment align in the same direction
+
 ## Exporting and Sharing
 
 ### Generate PDF Report
@@ -188,6 +242,15 @@ A: The forecast is generally displayed for 30 trading days, but its reliability 
 **Q: Why don't I see any strong recommendations sometimes?**
 A: Not all market conditions exhibit clear cyclical patterns. During periods of market transition or when influenced by external events, cycles may be weak or conflicting, resulting in low-confidence or hold recommendations.
 
+**Q: How is the market sentiment analysis performed?**
+A: Market sentiment is analyzed by processing financial news articles and market reports. The system identifies bullish, bearish, and neutral keywords and phrases to determine the overall market mood. This analysis is presented as a sentiment gauge with a numeric value between 0 (extremely bearish) and 100 (extremely bullish).
+
+**Q: How often is the market sentiment updated?**
+A: Market sentiment analysis is performed when you visit the Market Sentiment page. Each analysis uses the latest available news and market information at that time.
+
+**Q: How accurate is the sentiment analysis?**
+A: Market sentiment analysis provides a general indication of market mood based on news and information available at the time of analysis. Like all sentiment indicators, it should be used as one of several tools in your decision-making process, not as a standalone predictor of market movements.
+
 ### Technical Questions
 
 **Q: What format should my CSV file be in?**
@@ -227,6 +290,12 @@ A: The application uses Fast Fourier Transform (FFT) to convert price data from 
 - Check your internet connection
 - Try a different browser
 - Clear your browser cache
+
+**Issue: Market Sentiment not working or showing errors**
+- Verify your internet connection as the feature requires access to news sources
+- Try refreshing the page
+- For ticker-specific sentiment, ensure you're using a valid ticker symbol
+- If the sentiment gauge isn't displaying, try a different browser
 
 ### Getting Help
 

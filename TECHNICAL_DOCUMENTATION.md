@@ -54,6 +54,17 @@ The application uses a PostgreSQL database with the following schema:
 - **frequency_plot** (JSON): Frequency domain plot data
 - **forecast_plot** (JSON): Forecast plot data
 
+### MarketSentiment Table
+- **id** (UUID, Primary Key): Unique identifier for sentiment analysis
+- **ticker** (String, Nullable): Optional ticker symbol for stock-specific sentiment
+- **created_at** (DateTime): Timestamp of sentiment analysis
+- **bullish_score** (Float): Percentage of bullish indicators (0-100)
+- **bearish_score** (Float): Percentage of bearish indicators (0-100)
+- **neutral_score** (Float): Percentage of neutral indicators (0-100)
+- **mood** (String): Overall sentiment classification ("bullish", "bearish", or "neutral")
+- **mood_value** (Float): Numeric value representing sentiment (0-100)
+- **sentiment_gauge** (JSON): Plotly chart JSON for sentiment gauge visualization
+
 ## Data Processing Pipeline
 
 ### 1. Data Acquisition
@@ -96,6 +107,13 @@ def detect_cycles(fft_results, min_period=2, max_period=252, strength_threshold=
 - **Time Series Plot**: Shows historical prices with moving averages
 - **Frequency Plot**: Displays power spectrum with dominant cycles highlighted
 - **Forecast Plot**: Projects future prices based on cycle superposition
+- **Sentiment Gauge**: Visualizes market sentiment on a 0-100 scale
+
+### 6. Sentiment Analysis (`utils/sentiment_analysis.py` & `utils/web_scraper.py`)
+- **Web Scraping**: Extracts text content from financial news sources
+- **Text Analysis**: Identifies bullish, bearish, and neutral keywords and phrases
+- **Sentiment Scoring**: Calculates sentiment scores based on keyword frequency and weight
+- **Gauge Visualization**: Creates interactive gauge chart to display sentiment visually
 
 ## Algorithm Details
 
@@ -149,6 +167,35 @@ Buy/Hold/Sell recommendations are generated based on:
 3. **Strength Weighting**:
    - Stronger cycles have more influence on the recommendation
    - Weak or noisy cycles are given less weight
+
+### Market Sentiment Analysis
+The market sentiment analysis uses natural language processing techniques to analyze financial news:
+
+1. **Text Extraction**:
+   - Web scraping financial news sources using Trafilatura
+   - Filtering content by relevance to markets or specific tickers
+   - Preprocessing text to normalize and clean content
+
+2. **Sentiment Detection**:
+   - Keyword-based approach using predefined dictionaries of:
+     - Bullish terms (e.g., "rally", "upgrade", "outperform")
+     - Bearish terms (e.g., "decline", "downgrade", "underperform")
+     - Neutral terms (e.g., "unchanged", "hold", "stable")
+   - Term frequency analysis with weighted scoring
+   - Context consideration for negations and qualifiers
+
+3. **Sentiment Scoring**:
+   - Calculation of bullish, bearish, and neutral percentages
+   - Overall mood score on a 0-100 scale:
+     - 0-30: Bearish
+     - 30-70: Neutral
+     - 70-100: Bullish
+   - Scoring adjustment based on term importance and context
+
+4. **Visual Representation**:
+   - Interactive gauge chart using Plotly
+   - Color-coded ranges (red for bearish, yellow for neutral, green for bullish)
+   - Dynamic needle positioning based on calculated mood value
 
 ## Performance Considerations
 
