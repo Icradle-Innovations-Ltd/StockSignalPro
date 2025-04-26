@@ -28,13 +28,13 @@ from utils.portfolio_analysis import (create_portfolio, fetch_portfolio_data, ca
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# Configure wkhtmltopdf path based on environment
-if os.name == 'nt':  # Windows
-    wkhtmltopdf_path = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-else:  # Linux/Unix
+# Configure wkhtmltopdf
+try:
     wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
-
-pdfkit_config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+    pdfkit_config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+except Exception as e:
+    logger.warning(f"PDF generation may not work: {str(e)}")
+    pdfkit_config = None
 
 # Create the app
 app = Flask(__name__)
@@ -299,7 +299,11 @@ def download_report(analysis_id):
         }
 
         # Generate PDF from the file
-        pdf = pdfkit.from_file(temp_html, False, configuration=pdfkit_config, options=options)
+        if pdfkit_config:
+            pdf = pdfkit.from_file(temp_html, False, configuration=pdfkit_config, options=options)
+        else:
+            # Fallback to default configuration
+            pdf = pdfkit.from_file(temp_html, False, options=options)
         
         # Clean up temporary file
         os.remove(temp_html)

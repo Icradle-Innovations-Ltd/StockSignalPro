@@ -56,3 +56,6 @@ scipy
 trafilatura
 werkzeug
 yfinance
+flask
+pdfkit
+werkzeug
