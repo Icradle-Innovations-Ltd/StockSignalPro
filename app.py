@@ -792,20 +792,26 @@ def system_report():
 def download_system_report():
     """Generate and download system report as PDF."""
     try:
-        # Configure PDF options
-        options = {
-            'page-size': 'A4',
-            'margin-top': '0.75in',
-            'margin-right': '0.75in',
-            'margin-bottom': '0.75in',
-            'margin-left': '0.75in',
-            'encoding': "UTF-8",
-            'no-outline': None
-        }
-        
-        # Create PDF using pdfkit
+        # Render the HTML template
         html = render_template('system_report.html', now=datetime.now)
-        pdf = pdfkit.from_string(html, False, options=options)
+        
+        try:
+            # First try with pdfkit
+            options = {
+                'page-size': 'A4',
+                'margin-top': '0.75in',
+                'margin-right': '0.75in',
+                'margin-bottom': '0.75in',
+                'margin-left': '0.75in',
+                'encoding': "UTF-8",
+                'no-outline': None
+            }
+            pdf = pdfkit.from_string(html, False, options=options)
+        except Exception as pdfkit_error:
+            logger.warning(f"pdfkit failed, trying WeasyPrint: {str(pdfkit_error)}")
+            # Fallback to WeasyPrint
+            from weasyprint import HTML
+            pdf = HTML(string=html).write_pdf()
         
         # Create response
         response = make_response(pdf)
