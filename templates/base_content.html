@@ -163,7 +163,7 @@
     <!-- Force menu refresh -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Force update the nav menus to include Market Sentiment and Sample Data Generator
+            // Force update the nav menus to include Market Sentiment, Portfolio, and Sample Data Generator
             var featuresDropdown = document.querySelector('.dropdown-menu[aria-labelledby="featuresDropdown"]');
             if (featuresDropdown) {
                 // Add Market Sentiment
@@ -212,8 +212,71 @@
                     featuresDropdown.appendChild(sampleDataItem);
                     console.log('Added Market Data Generator to menu');
                 }
+                
+                // Add Portfolio Analysis
+                var portfolioItem = document.createElement('li');
+                var portfolioLink = document.createElement('a');
+                portfolioLink.href = "{{ url_for('portfolios') }}";
+                portfolioLink.className = 'dropdown-item';
+                portfolioLink.textContent = 'Portfolio Analysis';
+                
+                // Check if Portfolio Analysis is already there
+                var portfolioExists = false;
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].textContent.includes('Portfolio Analysis')) {
+                        portfolioExists = true;
+                        break;
+                    }
+                }
+                
+                // Add Portfolio Analysis if not present
+                if (!portfolioExists) {
+                    portfolioItem.appendChild(portfolioLink);
+                    featuresDropdown.appendChild(portfolioItem);
+                    console.log('Added Portfolio Analysis to menu');
+                }
             } else {
                 console.log('Features dropdown not found');
+            }
+            
+            // Also add the top nav menu item if it doesn't exist
+            var navbarNav = document.getElementById('navbarNav');
+            if (navbarNav) {
+                var navItems = navbarNav.querySelectorAll('.nav-item');
+                var portfolioNavExists = false;
+                
+                for (var i = 0; i < navItems.length; i++) {
+                    var link = navItems[i].querySelector('.nav-link');
+                    if (link && link.textContent.includes('Portfolio')) {
+                        portfolioNavExists = true;
+                        break;
+                    }
+                }
+                
+                if (!portfolioNavExists) {
+                    // Find where to insert (after Market Sentiment)
+                    var marketSentimentNav = null;
+                    for (var i = 0; i < navItems.length; i++) {
+                        var link = navItems[i].querySelector('.nav-link');
+                        if (link && link.textContent.includes('Market Sentiment')) {
+                            marketSentimentNav = navItems[i];
+                            break;
+                        }
+                    }
+                    
+                    if (marketSentimentNav) {
+                        var portfolioNavItem = document.createElement('li');
+                        portfolioNavItem.className = 'nav-item';
+                        var portfolioNavLink = document.createElement('a');
+                        portfolioNavLink.className = 'nav-link';
+                        portfolioNavLink.href = "{{ url_for('portfolios') }}";
+                        portfolioNavLink.textContent = 'Portfolios';
+                        portfolioNavItem.appendChild(portfolioNavLink);
+                        
+                        marketSentimentNav.parentNode.insertBefore(portfolioNavItem, marketSentimentNav.nextSibling);
+                        console.log('Added Portfolios to main nav');
+                    }
+                }
             }
         });
     </script>
