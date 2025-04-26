@@ -40,14 +40,24 @@ except Exception as e:
 app = Flask(__name__)
 
 # Configure the app
+is_production = os.environ.get('FLASK_ENV') == 'production'
+
 app.config.update(
-    SECRET_KEY=os.getenv('SECRET_KEY', 'your-secret-key-here'),
+    SECRET_KEY=os.getenv('SECRET_KEY', os.urandom(24) if is_production else 'dev-key'),
     SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URL', 'sqlite:///stocksignalpro.db'),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    DEBUG=False if os.getenv('FLASK_ENV') == 'production' else True,
-    TESTING=False if os.getenv('FLASK_ENV') == 'production' else True,
-    PROPAGATE_EXCEPTIONS=True if os.getenv('FLASK_ENV') == 'production' else False
+    DEBUG=not is_production,
+    TESTING=not is_production,
+    PROPAGATE_EXCEPTIONS=is_production,
+    SESSION_COOKIE_SECURE=is_production,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax'
 )
+
+# Production security headers
+if is_production:
+    from flask_talisman import Talisman
+    Talisman(app, content_security_policy=None)
 
 # Configure for production behind proxy
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
