@@ -75,7 +75,7 @@ class Portfolio(db.Model):
     """Model for storing portfolio data with multiple stocks."""
     id = db.Column(db.String(36), primary_key=True, default=generate_uuid)
     name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(255), nullable=True)
+    description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     # Store stock tickers as a JSON list
