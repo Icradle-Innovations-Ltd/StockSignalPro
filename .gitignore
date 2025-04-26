@@ -36,6 +36,7 @@ uploads/*
 !uploads/.gitkeep
 *.log
 .env
+.env.example
 .env.local
 .env.*.local
 

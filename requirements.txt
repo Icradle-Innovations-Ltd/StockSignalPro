@@ -27,3 +27,4 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
 idna==3.6
 waitress==3.0.2
+python-dotenv==1.0.1
