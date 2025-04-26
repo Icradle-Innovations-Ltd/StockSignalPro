@@ -216,6 +216,24 @@ The application generates recommendations based on detected cycles and their cur
 3. **Confidence Calculation**:
    - Assign confidence based on cycle clarity and strength
    - Adjust recommendations based on confidence levels
+   
+### Market Sentiment Analysis
+The application analyzes financial news and content to determine market sentiment:
+
+1. **Data Collection**:
+   - Scrape financial news from reputable sources
+   - Extract relevant text content using Trafilatura
+   - Optionally filter for specific ticker mentions
+
+2. **Sentiment Processing**:
+   - Analyze text for bullish/bearish/neutral keywords
+   - Count and weight keyword occurrences
+   - Calculate sentiment scores for each category
+   
+3. **Mood Determination**:
+   - Combine sentiment scores into an overall mood
+   - Classify as bullish, bearish, or neutral
+   - Assign a numeric value between 0-100
 
 ### Visualization Creation
 The application creates the following main types of visualizations:
@@ -297,6 +315,17 @@ The application creates the following main types of visualizations:
 - `time_series_plot`: JSON data for time series visualization
 - `frequency_plot`: JSON data for frequency domain visualization
 - `forecast_plot`: JSON data for forecast visualization
+
+#### MarketSentiment
+- `id`: Unique identifier (UUID)
+- `ticker`: Stock ticker symbol (optional, for specific stocks)
+- `created_at`: Timestamp of sentiment analysis
+- `bullish_score`: Float value representing bullish sentiment (0-1)
+- `bearish_score`: Float value representing bearish sentiment (0-1)
+- `neutral_score`: Float value representing neutral sentiment (0-1)
+- `mood`: String indicator ("bullish", "bearish", or "neutral")
+- `mood_value`: Numeric value between 0-100 indicating sentiment
+- `sentiment_gauge`: JSON data for gauge chart visualization
 
 ## Contributing
 
