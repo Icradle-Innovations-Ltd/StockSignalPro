@@ -107,6 +107,12 @@ def create_frequency_plot(fft_results):
         amplitudes = fft_results['amplitudes']
         
         # Filter to relevant periods (2 days to 252 days/1 year)
+        # Convert to numpy arrays if they're lists
+        if isinstance(periods, list):
+            periods = np.array(periods)
+        if isinstance(amplitudes, list):
+            amplitudes = np.array(amplitudes)
+            
         mask = (periods >= 2) & (periods <= 252)
         filtered_periods = periods[mask]
         filtered_amplitudes = amplitudes[mask]
@@ -125,7 +131,13 @@ def create_frequency_plot(fft_results):
         ))
         
         # Add markers for top 5 peaks
-        peak_indices = np.argsort(-filtered_amplitudes)[:5]
+        # Handle the case where filtered_amplitudes could be a list
+        if isinstance(filtered_amplitudes, list):
+            # Convert to numpy array for processing
+            filtered_amplitudes_np = np.array(filtered_amplitudes)
+            peak_indices = np.argsort(-filtered_amplitudes_np)[:5]
+        else:
+            peak_indices = np.argsort(-filtered_amplitudes)[:5]
         fig.add_trace(go.Scatter(
             x=filtered_periods[peak_indices],
             y=filtered_amplitudes[peak_indices],

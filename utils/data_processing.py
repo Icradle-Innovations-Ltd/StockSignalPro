@@ -189,9 +189,18 @@ def detect_cycles(fft_results, min_period=2, max_period=252, strength_threshold=
             max_amplitude = np.max(filtered_amplitudes) if len(filtered_amplitudes) > 0 else 1
         
         # Calculate relative strengths
-        relative_strengths = filtered_amplitudes / max_amplitude
+        # Handle the case where filtered_amplitudes might be a list
+        if isinstance(filtered_amplitudes, list):
+            filtered_amplitudes_np = np.array(filtered_amplitudes)
+            relative_strengths = filtered_amplitudes_np / max_amplitude
+        else:
+            relative_strengths = filtered_amplitudes / max_amplitude
         
         # Identify dominant cycles (above strength threshold)
+        # Ensure we're working with numpy arrays
+        if isinstance(relative_strengths, list):
+            relative_strengths = np.array(relative_strengths)
+            
         dominant_indices = np.where(relative_strengths >= strength_threshold)[0]
         
         # Sort by strength (amplitude)
