@@ -1,7 +1,7 @@
 import os
 import logging
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file
 import uuid
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file
 import pandas as pd
 from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -21,6 +21,21 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev_secret_key")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+# Configure database
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_recycle": 300,
+    "pool_pre_ping": True,
+}
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Import and initialize the database
+from models import db, Analysis
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 # Configure uploads
 UPLOAD_FOLDER = 'uploads'
@@ -77,32 +92,23 @@ def upload_file():
                 frequency_plot = create_frequency_plot(fft_results)
                 forecast_plot = create_forecast_plot(df, dominant_cycles)
                 
-                # Store in session
-                session_id = str(uuid.uuid4())
+                # Create a new analysis record in the database
+                analysis = Analysis(
+                    source_type='file',
+                    filename=secure_filename(file.filename),
+                    dominant_cycles=dominant_cycles,
+                    recommendation=recommendation,
+                    time_series_plot=time_series_plot,
+                    frequency_plot=frequency_plot,
+                    forecast_plot=forecast_plot
+                )
                 
-                # We need to ensure all numpy arrays are converted to lists for JSON serialization
-                # Convert time series plot data
-                time_series_plot_json = time_series_plot
-                frequency_plot_json = frequency_plot
-                forecast_plot_json = forecast_plot
-                
-                # Create a deep copy of dominant_cycles to avoid modifying the original
-                import copy
-                dominant_cycles_json = copy.deepcopy(dominant_cycles)
-                
-                # Store only the essential data in the session
-                session['analysis_results'] = {
-                    'id': session_id,
-                    'filename': secure_filename(file.filename),
-                    'dominant_cycles': dominant_cycles_json,
-                    'recommendation': recommendation,
-                    'time_series_plot': time_series_plot_json,
-                    'frequency_plot': frequency_plot_json,
-                    'forecast_plot': forecast_plot_json,
-                }
+                # Save to database
+                db.session.add(analysis)
+                db.session.commit()
                 
                 # Redirect to results page
-                return redirect(url_for('results', analysis_id=session_id))
+                return redirect(url_for('results', analysis_id=analysis.id))
                 
             except Exception as e:
                 logger.error(f"Error processing file: {str(e)}")
@@ -132,32 +138,23 @@ def upload_file():
             frequency_plot = create_frequency_plot(fft_results)
             forecast_plot = create_forecast_plot(df, dominant_cycles)
             
-            # Store in session
-            session_id = str(uuid.uuid4())
+            # Create a new analysis record in the database
+            analysis = Analysis(
+                source_type='api',
+                ticker=ticker,
+                dominant_cycles=dominant_cycles,
+                recommendation=recommendation,
+                time_series_plot=time_series_plot,
+                frequency_plot=frequency_plot,
+                forecast_plot=forecast_plot
+            )
             
-            # We need to ensure all numpy arrays are converted to lists for JSON serialization
-            # Convert time series plot data
-            time_series_plot_json = time_series_plot
-            frequency_plot_json = frequency_plot
-            forecast_plot_json = forecast_plot
-            
-            # Create a deep copy of dominant_cycles to avoid modifying the original
-            import copy
-            dominant_cycles_json = copy.deepcopy(dominant_cycles)
-            
-            # Store only the essential data in the session
-            session['analysis_results'] = {
-                'id': session_id,
-                'ticker': ticker,
-                'dominant_cycles': dominant_cycles_json,
-                'recommendation': recommendation,
-                'time_series_plot': time_series_plot_json,
-                'frequency_plot': frequency_plot_json,
-                'forecast_plot': forecast_plot_json,
-            }
+            # Save to database
+            db.session.add(analysis)
+            db.session.commit()
             
             # Redirect to results page
-            return redirect(url_for('results', analysis_id=session_id))
+            return redirect(url_for('results', analysis_id=analysis.id))
             
         except Exception as e:
             logger.error(f"Error fetching ticker data: {str(e)}")
@@ -170,31 +167,32 @@ def upload_file():
 @app.route('/results/<analysis_id>')
 def results(analysis_id):
     """Display analysis results."""
-    # Check if analysis exists in session
-    if 'analysis_results' not in session or session['analysis_results']['id'] != analysis_id:
+    # Get analysis from database
+    analysis = Analysis.query.get(analysis_id)
+    
+    if not analysis:
         flash('Analysis not found or expired', 'warning')
         return redirect(url_for('index'))
     
-    analysis = session['analysis_results']
-    return render_template('results.html', analysis=analysis)
+    return render_template('results.html', analysis=analysis.to_dict())
 
 @app.route('/api/plots/<analysis_id>/<plot_type>', methods=['GET'])
 def get_plot(analysis_id, plot_type):
     """API endpoint to get plot data."""
-    # Check if analysis exists in session
-    if 'analysis_results' not in session or session['analysis_results']['id'] != analysis_id:
+    # Get analysis from database
+    analysis = Analysis.query.get(analysis_id)
+    
+    if not analysis:
         return jsonify({'error': 'Analysis not found or expired'}), 404
     
     try:
         # Return the stored plot data directly
-        analysis = session['analysis_results']
-        
-        if plot_type == 'time_series' and 'time_series_plot' in analysis:
-            return jsonify(analysis['time_series_plot'])
-        elif plot_type == 'frequency' and 'frequency_plot' in analysis:
-            return jsonify(analysis['frequency_plot'])
-        elif plot_type == 'forecast' and 'forecast_plot' in analysis:
-            return jsonify(analysis['forecast_plot'])
+        if plot_type == 'time_series' and analysis.time_series_plot:
+            return jsonify(analysis.time_series_plot)
+        elif plot_type == 'frequency' and analysis.frequency_plot:
+            return jsonify(analysis.frequency_plot)
+        elif plot_type == 'forecast' and analysis.forecast_plot:
+            return jsonify(analysis.forecast_plot)
         else:
             return jsonify({'error': 'Invalid plot type or plot not found'}), 400
     
@@ -205,15 +203,14 @@ def get_plot(analysis_id, plot_type):
 @app.route('/generate_report/<analysis_id>')
 def generate_report(analysis_id):
     """Generate and download a PDF report of the analysis."""
-    # Check if analysis exists in session
-    if 'analysis_results' not in session or session['analysis_results']['id'] != analysis_id:
+    # Get analysis from database
+    analysis = Analysis.query.get(analysis_id)
+    
+    if not analysis:
         flash('Analysis not found or expired', 'warning')
         return redirect(url_for('index'))
     
     try:
-        # Get the analysis data
-        analysis = session['analysis_results']
-        
         # Add a helper function for the template to format dates
         def now():
             from datetime import datetime
@@ -221,7 +218,7 @@ def generate_report(analysis_id):
             
         # In a real implementation, this would generate a PDF
         # For now, we'll render an HTML report that could be printed
-        return render_template('report.html', analysis=analysis, now=now)
+        return render_template('report.html', analysis=analysis.to_dict(), now=now)
     
     except Exception as e:
         logger.error(f"Error generating report: {str(e)}")
