@@ -1,0 +1,169 @@
+{% extends "base_content.html" %}
+
+{% block title %}{{ ticker }} Sentiment Analysis | Stock Market Signal Processing{% endblock %}
+
+{% block header_content %}
+<h1>{{ ticker }} Sentiment Analysis</h1>
+<p class="lead">Real-time sentiment analysis for {{ ticker }} based on news and social media</p>
+{% endblock %}
+
+{% block main_content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">{{ ticker }} Mood Indicator</h2>
+                </div>
+                <div class="card-body">
+                    <p>The Stock Sentiment Analysis examines news and social media content specifically related to {{ ticker }} to determine the current sentiment.</p>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="text-start">
+                            <span class="badge bg-danger">Bearish</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="badge bg-warning text-dark">Neutral</span>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success">Bullish</span>
+                        </div>
+                    </div>
+                    
+                    <div id="sentiment-gauge" class="mb-4" data-sentiment-id="{{ sentiment.id }}"></div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card text-center mb-3">
+                                <div class="card-header bg-danger text-white">
+                                    Bearish Score
+                                </div>
+                                <div class="card-body">
+                                    <h3>{{ sentiment.bearish_score }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    Neutral Score
+                                </div>
+                                <div class="card-body">
+                                    <h3>{{ sentiment.neutral_score }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center mb-3">
+                                <div class="card-header bg-success text-white">
+                                    Bullish Score
+                                </div>
+                                <div class="card-body">
+                                    <h3>{{ sentiment.bullish_score }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert {% if sentiment.mood == 'bullish' %}alert-success{% elif sentiment.mood == 'bearish' %}alert-danger{% else %}alert-warning{% endif %} mt-3">
+                        <strong>Current {{ ticker }} Mood:</strong> 
+                        <span class="fs-5">
+                            {% if sentiment.mood == 'bullish' %}
+                                <span>{{ sentiment.mood|capitalize }} 📈</span>
+                            {% elif sentiment.mood == 'bearish' %}
+                                <span>{{ sentiment.mood|capitalize }} 📉</span>
+                            {% else %}
+                                <span>{{ sentiment.mood|capitalize }} ↔️</span>
+                            {% endif %}
+                        </span>
+                        <br>
+                        <small class="text-muted">Last updated: {{ sentiment.created_at }}</small>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <p><strong>What does this mean?</strong></p>
+                        {% if sentiment.mood == 'bullish' %}
+                            <p>The current sentiment for {{ ticker }} is bullish, indicating positive market expectations. This could be due to favorable news, strong earnings reports, or positive analyst coverage.</p>
+                        {% elif sentiment.mood == 'bearish' %}
+                            <p>The current sentiment for {{ ticker }} is bearish, indicating negative market expectations. This could be due to concerning news, disappointing earnings, or negative analyst coverage.</p>
+                        {% else %}
+                            <p>The current sentiment for {{ ticker }} is neutral, indicating balanced market expectations. This could indicate mixed news or a period of consolidation before a more defined trend emerges.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Compare With Market Sentiment</h3>
+                </div>
+                <div class="card-body">
+                    <p>Compare {{ ticker }}'s sentiment with the overall market mood to identify potential divergences or confirmations.</p>
+                    <a href="{{ url_for('market_sentiment_page') }}" class="btn btn-primary">View Market Sentiment</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Technical Analysis</h3>
+                </div>
+                <div class="card-body">
+                    <p>Combine sentiment analysis with technical cycle detection for a more comprehensive view.</p>
+                    <form action="{{ url_for('upload_file') }}" method="post" class="d-inline">
+                        <input type="hidden" name="ticker" value="{{ ticker }}">
+                        <button type="submit" class="btn btn-primary">Analyze {{ ticker }} Cycles</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Check Another Stock</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('ticker_sentiment', ticker='PLACEHOLDER') }}" method="GET" id="ticker-sentiment-form">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter ticker symbol (e.g., AAPL, MSFT)" id="ticker-input" required>
+                            <button class="btn btn-primary" type="submit">Analyze Sentiment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the sentiment gauge
+        const sentimentId = document.getElementById('sentiment-gauge').dataset.sentimentId;
+        const gaugeData = {{ sentiment.sentiment_gauge|tojson }};
+        
+        Plotly.newPlot('sentiment-gauge', gaugeData.data, gaugeData.layout);
+        
+        // Handle the ticker sentiment form submission
+        const tickerForm = document.getElementById('ticker-sentiment-form');
+        const tickerInput = document.getElementById('ticker-input');
+        
+        tickerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const ticker = tickerInput.value.trim().toUpperCase();
+            if (ticker) {
+                window.location.href = "{{ url_for('ticker_sentiment', ticker='') }}" + ticker;
+            }
+        });
+    });
+</script>
+{% endblock %}

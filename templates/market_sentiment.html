@@ -1,0 +1,160 @@
+{% extends "base_content.html" %}
+
+{% block title %}Market Sentiment Mood Indicator | Stock Market Signal Processing{% endblock %}
+
+{% block header_content %}
+<h1>Real-Time Market Sentiment Mood Indicator</h1>
+<p class="lead">Analyze current market sentiment based on news and social media data</p>
+{% endblock %}
+
+{% block main_content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Market Mood Indicator</h2>
+                </div>
+                <div class="card-body">
+                    <p>The Market Sentiment Mood Indicator analyzes financial news and social media to determine the current market sentiment.</p>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="text-start">
+                            <span class="badge bg-danger">Bearish</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="badge bg-warning text-dark">Neutral</span>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success">Bullish</span>
+                        </div>
+                    </div>
+                    
+                    <div id="sentiment-gauge" class="mb-4" data-sentiment-id="{{ sentiment.id }}"></div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card text-center mb-3">
+                                <div class="card-header bg-danger text-white">
+                                    Bearish Score
+                                </div>
+                                <div class="card-body">
+                                    <h3>{{ sentiment.bearish_score }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    Neutral Score
+                                </div>
+                                <div class="card-body">
+                                    <h3>{{ sentiment.neutral_score }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center mb-3">
+                                <div class="card-header bg-success text-white">
+                                    Bullish Score
+                                </div>
+                                <div class="card-body">
+                                    <h3>{{ sentiment.bullish_score }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <strong>Current Market Mood:</strong> 
+                        <span class="fs-5">
+                            {% if sentiment.mood == 'bullish' %}
+                                <span class="text-success">{{ sentiment.mood|capitalize }} 📈</span>
+                            {% elif sentiment.mood == 'bearish' %}
+                                <span class="text-danger">{{ sentiment.mood|capitalize }} 📉</span>
+                            {% else %}
+                                <span class="text-warning">{{ sentiment.mood|capitalize }} ↔️</span>
+                            {% endif %}
+                        </span>
+                        <br>
+                        <small class="text-muted">Last updated: {{ sentiment.created_at }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">What Is Market Sentiment?</h3>
+                </div>
+                <div class="card-body">
+                    <p>Market sentiment refers to the overall attitude of investors toward a particular security or financial market. It is the feeling or tone of a market, or its crowd psychology, as revealed through the activity and price movement of the securities traded in that market.</p>
+                    <p>In broad terms, rising prices indicate bullish market sentiment, while falling prices indicate bearish market sentiment.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">How Is Sentiment Calculated?</h3>
+                </div>
+                <div class="card-body">
+                    <p>Our algorithm analyzes:</p>
+                    <ul>
+                        <li>Financial news articles from major sources</li>
+                        <li>Social media posts about markets</li>
+                        <li>Keywords and phrases that indicate market direction</li>
+                    </ul>
+                    <p>The data is processed to extract bullish, bearish, and neutral sentiment indicators, which are then weighted to produce an overall market mood.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Check Sentiment for a Specific Stock</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('ticker_sentiment', ticker='PLACEHOLDER') }}" method="GET" id="ticker-sentiment-form">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter ticker symbol (e.g., AAPL, MSFT)" id="ticker-input" required>
+                            <button class="btn btn-primary" type="submit">Analyze Sentiment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the sentiment gauge
+        const sentimentId = document.getElementById('sentiment-gauge').dataset.sentimentId;
+        const gaugeData = {{ sentiment.sentiment_gauge|tojson }};
+        
+        Plotly.newPlot('sentiment-gauge', gaugeData.data, gaugeData.layout);
+        
+        // Handle the ticker sentiment form submission
+        const tickerForm = document.getElementById('ticker-sentiment-form');
+        const tickerInput = document.getElementById('ticker-input');
+        
+        tickerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const ticker = tickerInput.value.trim().toUpperCase();
+            if (ticker) {
+                window.location.href = "{{ url_for('ticker_sentiment', ticker='') }}" + ticker;
+            }
+        });
+    });
+</script>
+{% endblock %}

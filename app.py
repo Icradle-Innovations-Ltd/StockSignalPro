@@ -12,6 +12,7 @@ from utils.data_processing import process_data, perform_fft, detect_cycles
 from utils.visualization import create_time_series_plot, create_frequency_plot, create_forecast_plot, convert_numpy_to_lists
 from utils.decision_engine import generate_recommendation
 from utils.api_fetcher import fetch_stock_data
+from utils.sentiment_analysis import get_market_sentiment, create_sentiment_gauge
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -31,7 +32,7 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Import and initialize the database
-from models import db, Analysis
+from models import db, Analysis, MarketSentiment
 db.init_app(app)
 
 with app.app_context():
@@ -319,6 +320,98 @@ def blog():
 @app.route('/resources/support')
 def support():
     return render_template('resources/support.html')
+
+@app.route('/market-sentiment')
+def market_sentiment_page():
+    """Display the market sentiment page with mood indicator."""
+    # Check if we have recent sentiment data
+    recent_sentiment = MarketSentiment.query.order_by(MarketSentiment.created_at.desc()).first()
+    
+    # If no recent sentiment or older than 1 hour, fetch new
+    if not recent_sentiment or (datetime.utcnow() - recent_sentiment.created_at).total_seconds() > 3600:
+        try:
+            # Get market sentiment
+            sentiment_data = get_market_sentiment()
+            
+            # Create gauge chart
+            sentiment_gauge = create_sentiment_gauge(sentiment_data)
+            
+            # Create new sentiment record
+            sentiment = MarketSentiment(
+                bullish_score=sentiment_data['bullish_score'],
+                bearish_score=sentiment_data['bearish_score'],
+                neutral_score=sentiment_data['neutral_score'],
+                mood=sentiment_data['mood'],
+                mood_value=sentiment_data['mood_value'],
+                sentiment_gauge=convert_numpy_to_lists(sentiment_gauge)
+            )
+            
+            # Save to database
+            db.session.add(sentiment)
+            db.session.commit()
+            
+            return render_template('market_sentiment.html', sentiment=sentiment.to_dict())
+        except Exception as e:
+            logger.error(f"Error fetching market sentiment: {str(e)}")
+            flash(f'Error fetching market sentiment: {str(e)}', 'danger')
+            return redirect(url_for('index'))
+    
+    # Use recent sentiment data
+    return render_template('market_sentiment.html', sentiment=recent_sentiment.to_dict())
+
+@app.route('/api/market-sentiment', methods=['GET'])
+def get_market_sentiment_api():
+    """API endpoint to get market sentiment data."""
+    ticker = request.args.get('ticker')
+    
+    try:
+        # Get market sentiment data
+        sentiment_data = get_market_sentiment(ticker=ticker)
+        
+        # Create gauge chart
+        sentiment_gauge = create_sentiment_gauge(sentiment_data)
+        
+        # Create response
+        response = {
+            'sentiment': sentiment_data,
+            'gauge_chart': convert_numpy_to_lists(sentiment_gauge)
+        }
+        
+        return jsonify(response)
+    except Exception as e:
+        logger.error(f"Error getting market sentiment: {str(e)}")
+        return jsonify({'error': f'Error getting market sentiment: {str(e)}'}), 500
+
+@app.route('/ticker-sentiment/<ticker>')
+def ticker_sentiment(ticker):
+    """Display sentiment analysis for a specific ticker."""
+    try:
+        # Get sentiment for specific ticker
+        sentiment_data = get_market_sentiment(ticker=ticker)
+        
+        # Create gauge chart
+        sentiment_gauge = create_sentiment_gauge(sentiment_data)
+        
+        # Create new sentiment record
+        sentiment = MarketSentiment(
+            ticker=ticker,
+            bullish_score=sentiment_data['bullish_score'],
+            bearish_score=sentiment_data['bearish_score'],
+            neutral_score=sentiment_data['neutral_score'],
+            mood=sentiment_data['mood'],
+            mood_value=sentiment_data['mood_value'],
+            sentiment_gauge=convert_numpy_to_lists(sentiment_gauge)
+        )
+        
+        # Save to database
+        db.session.add(sentiment)
+        db.session.commit()
+        
+        return render_template('ticker_sentiment.html', sentiment=sentiment.to_dict(), ticker=ticker)
+    except Exception as e:
+        logger.error(f"Error fetching sentiment for {ticker}: {str(e)}")
+        flash(f'Error fetching sentiment for {ticker}: {str(e)}', 'danger')
+        return redirect(url_for('index'))
 
 @app.errorhandler(500)
 def server_error(e):

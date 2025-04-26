@@ -39,3 +39,30 @@ class Analysis(db.Model):
             'frequency_plot': self.frequency_plot,
             'forecast_plot': self.forecast_plot
         }
+
+
+class MarketSentiment(db.Model):
+    """Model for storing market sentiment data."""
+    id = db.Column(db.String(36), primary_key=True, default=generate_uuid)
+    ticker = db.Column(db.String(10), nullable=True)  # Optional specific ticker
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    bullish_score = db.Column(db.Float)
+    bearish_score = db.Column(db.Float)
+    neutral_score = db.Column(db.Float)
+    mood = db.Column(db.String(20))  # 'bullish', 'bearish', or 'neutral'
+    mood_value = db.Column(db.Float)  # Numeric value between 0-100
+    sentiment_gauge = db.Column(JSON)  # Plotly chart JSON
+    
+    def to_dict(self):
+        """Convert model to dictionary."""
+        return {
+            'id': self.id,
+            'ticker': self.ticker,
+            'created_at': self.created_at.isoformat(),
+            'bullish_score': self.bullish_score,
+            'bearish_score': self.bearish_score,
+            'neutral_score': self.neutral_score,
+            'mood': self.mood,
+            'mood_value': self.mood_value,
+            'sentiment_gauge': self.sentiment_gauge
+        }
