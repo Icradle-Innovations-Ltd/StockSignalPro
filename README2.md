@@ -1,164 +1,202 @@
-Got it — you want a **full updated `README.md`** file, **not slides**.  
-I'll now create a professional, clean, fully updated `README.md` for you that includes:
+Alright — you're doing very well moving between dev and production!  
+Let's **summarize** and **properly update your README** now, *including everything*, clear for **both Development and Production setup**.
 
-- Setup (both Development and Production)
-- Debugging help (wkhtmltopdf notice)
-- Running with `main.py` (development) and `wsgi.py` (production)
-- Notes on requirements
-- Additional helpful notes
+Here’s your complete updated README.md:
 
 ---
 
-# 📄 README.md (final version)
+# 📈 StockSignalPro
 
-```markdown
-# StockSignalPro
-
-StockSignalPro is a Flask-based financial analysis web app that provides stock signal insights, portfolio management, and PDF report generation.
+A Flask-based application for stock analysis, signal generation, and portfolio management.
 
 ---
 
-## 🚀 Setup Instructions
+## 🚀 Features
+- Upload your portfolio and analyze stock signals
+- Time series forecasting
+- Market sentiment visualization
+- Export analysis to PDF
+- Production-ready (Waitress server)
+- Development-ready (Flask server)
 
-### 1. Clone the Repository
+---
+
+## 🛠 Installation
+
+### 1. Clone the repo
 ```bash
 git clone https://your-repo-url.git
 cd StockSignalPro
 ```
 
-### 2. Create a Virtual Environment (Recommended)
+### 2. Create and activate a Virtual Environment
 ```bash
+# Windows
 python -m venv .venv
-source .venv/bin/activate     # Linux/macOS
-.venv\Scripts\activate        # Windows
+.venv\Scripts\activate
+
+# Linux / Mac
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 3. Install Python Dependencies
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-If you want to lock exact versions for deployment:
+---
+
+## 📜 Environment Variables
+
+Create a `.env` file with:
+
+```env
+FLASK_ENV=development
+PORT=5000
+```
+
+> - For production set `FLASK_ENV=production`
+> - Default port is 5000
+
+---
+
+## 🧪 Running in Development Mode
+
+```bash
+python wsgi.py
+```
+# Then set environment variable and run:
+set FLASK_ENV=development && python wsgi.py
+
+- App available at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+- Flask built-in server used with `debug=True`.
+- Auto-reloads on code changes.
+
+---
+
+## 🏭 Running in Production Mode
+
+1. **Set the environment** (on Windows):for cmd
+   ```bash
+   .venv\Scripts\activate
+set FLASK_ENV=production && python wsgi.py
+
+# For Bash
+source .venv/Scripts/activate
+set FLASK_ENV=production && python wsgi.py
+# Terminal | How to Activate Venv
+# CMD 
+.venv\Scripts\activate.bat
+# PowerShell 
+.venv\Scripts\Activate.ps1
+# Git Bash 
+source .venv/Scripts/activate
+   ```
+
+2. **Run the app**:
+   ```bash
+   python wsgi.py
+   ```
+# To make sure it runs in production mode, you need to set the FLASK_ENV environment variable to production.
+source .venv/Scripts/activate
+export FLASK_ENV=production
+python wsgi.py
+- App available at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+- **Waitress server** starts listening on all interfaces (`0.0.0.0:5000`).
+- Suitable for production.
+- No automatic reload.
+
+---
+
+## ⚡ Important: `wkhtmltopdf`
+
+PDF generation requires **wkhtmltopdf** installed!
+
+- Install it from: https://github.com/JazzCore/python-pdfkit/wiki/Installing-wkhtmltopdf
+- Then make sure it's accessible via PATH.
+
+**Windows Quick Install**:
+```bash
+choco install wkhtmltopdf
+```
+
+Otherwise you will see warnings like:
+> No wkhtmltopdf executable found: "/usr/bin/wkhtmltopdf"
+
+---
+
+## 📦 Freeze Environment (for lock files)
+
+To generate exact package versions (for deployment):
+
 ```bash
 pip freeze > requirements.lock
 ```
 
----
-
-## 🛠️ Running the App (Development)
-
-In **development mode**:
+Then you can reinstall exactly later with:
 ```bash
-python main.py
+pip install -r requirements.lock
 ```
 
-- Server runs at: `http://127.0.0.1:5000`
-- Debugging and auto-reloading are enabled.
-- Logs and API activity will print to console.
+---
 
-If you need to explicitly set environment:
+## 📄 Project Structure
+
 ```bash
-set FLASK_ENV=development     # Windows
-export FLASK_ENV=development   # macOS/Linux
+StockSignalPro/
+│
+├── app.py             # Flask main app
+├── wsgi.py            # Production-ready entry point
+├── models.py          # Database models
+├── utils/             # Helper functions
+├── static/            # CSS, JS, images
+├── templates/         # HTML pages
+├── .env               # Environment settings
+├── requirements.txt   # Main dependencies
+├── requirements.lock  # Exact versions
+└── README.md          # This file
 ```
 
 ---
 
-## 🏢 Running the App (Production)
-
-Production **must** use a WSGI server like **Waitress**.
-
-### 1. Ensure Environment is Set
-```bash
-set FLASK_ENV=production     # Windows
-export FLASK_ENV=production   # macOS/Linux
-```
-
-### 2. Run using `wsgi.py`
-```bash
-python wsgi.py
-```
-
-Or directly with **Waitress**:
-```bash
-waitress-serve --host=127.0.0.1 --port=5000 wsgi:app
-```
-
-- Production runs at: `http://127.0.0.1:5000`
-- Proper threading and connection handling through Waitress.
-- Debugging is disabled automatically.
+## 🛠 Debugging Issues
+- Set `FLASK_ENV=development` to get verbose error logs
+- Use browser console (`F12`) for frontend errors
+- If you get **ERR_ADDRESS_INVALID** make sure you connect to:
+  - [http://127.0.0.1:5000](http://127.0.0.1:5000) for local testing
+- If you get **SSL/TLS errors** you may have tried HTTPS by mistake — use HTTP for local development.
+- For `wkhtmltopdf` missing — install it manually and verify it's on PATH.
 
 ---
 
-## ⚙️ Important Notes
+# 📢 Notes
 
-### wkhtmltopdf Dependency
-- This app generates PDFs via `pdfkit` which requires `wkhtmltopdf`.
-- Install it manually from:  
-  [https://github.com/JazzCore/python-pdfkit/wiki/Installing-wkhtmltopdf](https://github.com/JazzCore/python-pdfkit/wiki/Installing-wkhtmltopdf)
-- Ensure the binary (`wkhtmltopdf.exe` on Windows) is accessible via PATH or configure manually.
-
-Otherwise you will see warnings like:
-```
-PDF generation may not work: No wkhtmltopdf executable found.
-```
+- This app **is NOT secure out of the box**. For a full production system, add:
+  - HTTPS (via Nginx, Caddy, etc.)
+  - Gunicorn with Nginx proxy
+  - Docker containerization
+- Use `flask-talisman` to enforce HTTPS and security headers in production.
 
 ---
 
-## 📦 Requirements
-
-### For Development and Production
-
-Example pinned versions:
-```
-Flask==2.0.1
-Flask-SQLAlchemy==2.5.1
-SQLAlchemy<2.0
-gunicorn>=20.1.0
-waitress>=2.1.2
-numpy>=1.24.0
-pandas>=2.0.0
-plotly>=5.9.0
-python-dotenv>=0.21.0
-requests>=2.31.0
-scipy>=1.10.0
-yfinance>=0.2.28
-pdfkit>=1.0.0
-Werkzeug==2.0.1
-beautifulsoup4>=4.12.2
-lxml>=4.9.3
-trafilatura>=1.4.0
-html5lib>=1.1
-python-dateutil>=2.8.2
-urllib3>=1.26.15
-certifi>=2022.12.7
-idna>=3.4
-justext>=3.0.0
-courlan>=0.9.3
-flask-talisman>=0.8.1
-```
+# 🧑‍💻 Author
+**ULTIMATE INVESTOR TEAM**
 
 ---
 
-## ✅ Summary
+# ✅ Quick Commands Cheat Sheet
 
-| Environment | How to Run                | URL                  | Server    |
-|:------------|:---------------------------|:---------------------|:---------|
-| Development | `python main.py`            | `http://127.0.0.1:5000` | Werkzeug |
-| Production  | `python wsgi.py` OR `waitress-serve` | `http://127.0.0.1:5000` | Waitress |
-
----
-
-## 🤝 Contribution
-Feel free to submit issues or pull requests!
+| Action | Command |
+|:---|:---|
+| Install all deps | `pip install -r requirements.txt` |
+| Freeze env | `pip freeze > requirements.lock` |
+| Run dev server | `python wsgi.py` |
+| Set production | `set FLASK_ENV=production && python wsgi.py` |
 
 ---
 
-## 📜 License
-[Specify your license here if needed.]
-```
+# 🎯 You are now 100% Production + Development Ready.
 
 ---
-
-✅ Would you also like me to give you the **`wsgi.py`** content as a perfect reference, in case you want to finalize that too?  
-(It's just a very tiny file but important for production.) 🚀
