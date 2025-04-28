@@ -11,10 +11,19 @@ if __name__ == '__main__':
     port: int = int(os.getenv('PORT', '5000'))
     host: str = '0.0.0.0'
 
-    # Check if we're in production
+    import os
+from app import app
+from waitress import serve
+
+if __name__ == "__main__":
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", 5000))
+    
     if os.environ.get('FLASK_ENV') == 'production':
-        # Production server using waitress
-        serve(app, host=host, port=port)
+        # Production server using Waitress
+        print("Starting production server with Waitress...")
+        serve(app, host=host, port=port, threads=8)
     else:
         # Development server
-        app.run(host=host, port=port, debug=True)
+        print("Starting development server with Flask...")
+        app.run(host=host, port=port, debug=True, threaded=True)
