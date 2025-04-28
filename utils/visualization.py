@@ -105,7 +105,7 @@ def create_time_series_plot(df):
                     yref='paper',
                     x=0,
 
-                    y=-0.5,
+                    y=-0.6,
                     align='left'
                 )
             ]
@@ -209,7 +209,7 @@ def create_frequency_plot(fft_results):
                     yref='paper',
                     x=0,
 
-                    y=-0.8,
+                    y=-10.0,
                     align='left'
                 )
             ]
@@ -343,7 +343,7 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
                     yref='paper',
                     x=0,
 
-                    y=-0.8,
+                    y=-10.0,
                     align='left'
                 )
             ]
