@@ -983,15 +983,19 @@ def generate_sample_data(stock_type):
 def server_error(e):
     return render_template('index.html', error="Server error occurred"), 500
 
+import os
+
 # Main run
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    host = '127.0.0.1'
 
+    # Use '0.0.0.0' in production, '127.0.0.1' in development
     if is_production:
+        host = '0.0.0.0'   # <-- Accessible externally
         from waitress import serve
         print("🚀 Starting production server with Waitress...")
         serve(app, host=host, port=port, threads=8)
     else:
+        host = '127.0.0.1' # <-- Local development
         print("🔧 Starting development server with Flask...")
         app.run(host=host, port=port, debug=True, threaded=True)
