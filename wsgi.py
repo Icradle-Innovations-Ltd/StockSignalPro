@@ -3,18 +3,18 @@ from app import app
 from waitress import serve
 from dotenv import load_dotenv
 
-load_dotenv()  # ✅ Load environment variables from a .env file (great for dev)
+load_dotenv()
 
-application = app  # ✅ For Gunicorn to find when it runs wsgi:application
+application = app
 
 if __name__ == "__main__":
-    port = int(os.getenv('PORT', 5000))  # ✅ Dynamically pick port (Render injects $PORT)
+    port = int(os.getenv('PORT', 5000))
 
     if os.getenv('FLASK_ENV') == 'production':
-        host = '0.0.0.0'  # ✅ Bind externally for cloud deployment
+        host = '0.0.0.0'
         print(f"🚀 Starting production server at {host}:{port}...")
-        serve(app, host=host, port=port, threads=8)  # ✅ Waitress is production-ready WSGI server
+        serve(app, host=host, port=port, threads=8)
     else:
-        host = '127.0.0.1'  # ✅ Local development only
+        host = '127.0.0.1'
         print(f"🔧 Starting development server at {host}:{port}...")
-        app.run(host=host, port=port, debug=True, threaded=True)  # ✅ Built-in Flask server for dev
+        app.run(host=host, port=port, debug=True, threaded=True)
