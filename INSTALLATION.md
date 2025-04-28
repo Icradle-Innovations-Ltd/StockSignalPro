@@ -100,7 +100,7 @@ pip install gunicorn
 Create a file named `gunicorn_config.py`:
 
 ```python
-bind = "0.0.0.0:8000"
+bind = "127.0.0.1:8000"
 workers = 4
 timeout = 120
 ```
@@ -250,7 +250,7 @@ ENV FLASK_APP=main.py
 
 EXPOSE 5000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+CMD ["gunicorn", "--bind", "127.0.0.1:5000", "main:app"]
 ```
 
 ### 2. Create a docker-compose.yml File

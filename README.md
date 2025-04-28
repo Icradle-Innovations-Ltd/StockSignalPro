@@ -22,6 +22,63 @@ curl -sSL https://install.python-poetry.org | python3 -
 ```bash
 poetry install
 ```
+## 🚀 Quick Start for Development
+
+### Prerequisites
+- Python 3.11+
+- Virtual environment (recommended)
+
+### Local Setup
+
+1. Check Python version:
+```bash
+python --version
+```
+
+2. Create and activate virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+.venv\Scripts\activate     # Windows
+```
+
+3. Install dependencies:
+```bash
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+```
+
+4. Run in debug mode:
+```bash
+python main.py
+```
+
+Visit: http://localhost:5000/
+
+## ⚠️ Troubleshooting
+
+- If seeing `400 Bad Request`: Use **http://** not **https://**
+- For `ModuleNotFoundError`: Ensure virtual environment is activated
+- Missing `wkhtmltopdf`: Install only if PDF export needed
+
+## 📋 Project Structure
+```
+stock-market-signal-processing/
+├── app.py
+├── main.py
+├── models.py
+├── requirements.txt
+└── templates/
+    └── *.html
+└── static/
+    └── *.css, *.js
+```
+
+## 📢 Development Notes
+- Debug mode enabled for detailed error traces
+- Running on HTTP only (not HTTPS)
+- Not configured for production use
+
 
 4. Set up PostgreSQL database:
 - Create a new database
@@ -40,10 +97,10 @@ poetry run python recreate_db.py
 6. Run the application:
 
 ```bash
-poetry run gunicorn --bind 0.0.0.0:5000 main:app
+poetry run gunicorn --bind 127.0.0.1:5000 main:app
 ```
 
-The application will be available at `http://0.0.0.0:5000`
+The application will be available at `http://127.0.0.1:5000`
 
 Note: All dependencies are defined in `pyproject.toml`. Poetry will automatically manage the virtual environment and install the correct versions of all required packages.
 
@@ -108,85 +165,185 @@ Your app will be live in a few minutes!
 This application applies signal processing techniques to stock market data to identify hidden market cycles and generate trading recommendations. By utilizing Fast Fourier Transform (FFT) algorithms, the app can detect periodic patterns in price data that might not be visible through traditional technical analysis methods.
 
 Users can upload their own CSV data files or enter a stock ticker symbol to fetch real-time market data. The application then processes this data, identifies dominant cycles, and provides actionable insights with confidence ratings.
+    # 📈 StockSignalPro (Debug Mode)
+
+    This is a web-based stock market cycle detection and analysis platform.
+    Built with Flask, SQLAlchemy, and common data science libraries.
 
 
-## Technical Architecture
+    ---
 
-The application is built using a modern web stack with the following components:
 
-- **Backend**:
-  - **Python Flask**: Web application framework
-  - **SQLAlchemy**: ORM for database operations with PostgreSQL
-  - **NumPy & SciPy**: Numerical computations and FFT analysis
-  - **Pandas**: Data manipulation and processing
-  - **yfinance**: Stock data API integration
-  - **Plotly**: Interactive data visualization
+    ## 🚀 How to Run Locally
 
-- **Frontend**:
-  - Bootstrap 5 for responsive UI components
-  - Plotly.js for interactive data visualizations
-  - Custom CSS for styling
-  - JavaScript for client-side interactions
 
-- **Data Processing Pipeline**:
-  1. Data acquisition (CSV upload or API fetch)
-  2. Data cleaning and preprocessing
-  3. FFT analysis and cycle detection
-  4. Trading recommendation generation
-  5. Market sentiment analysis (scraping and processing financial news)
-  6. Visualization creation (including sentiment gauge charts)
-  7. Results storage and presentation
 
-## Installation
 
-### Prerequisites
-- Python 3.8+
-- PostgreSQL database
-- pip package manager
 
-### Setup Instructions
 
-1. Clone the repository:
 
-```bash
-git clone https://github.com/yourusername/stock-market-signal-processing.git
-cd stock-market-signal-processing
-```
 
-1. Create and activate a virtual environment:
+    ### 1. Install Python 3.11+ if not already installed
+    Check:
+    ```bash
+    python --version
+    ```
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
 
-1. Install required packages:
 
-```bash
-pip install -r requirements.txt
-```
 
-1. Set up environment variables:
 
-```bash
-export DATABASE_URL=postgresql://username:password@localhost/dbname
-# On Windows: set DATABASE_URL=postgresql://username:password@localhost/dbname
-```
 
-1. Initialize the database:
+    ---
 
-```bash
-python initialize_db.py
-```
 
-1. Start the application:
 
-```bash
-python main.py
-```
 
-1. Access the application at http://localhost:5000
 
+
+
+
+
+    ### 2. Clone the repository
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/StockSignalPro.git
+    cd StockSignalPro
+    ```
+
+
+    ---
+
+
+
+
+
+    ### 3. Create a Virtual Environment (Recommended)
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate  # Linux/macOS
+    .venv\Scripts\activate     # Windows
+    ```
+
+
+    ---
+
+
+    ### 4. Install the Requirements
+    ```bash
+    pip install --upgrade pip setuptools wheel
+    pip install -r requirements.txt
+    ```
+
+
+
+
+
+    ---
+
+
+    ### 5. Run in Debug/Development Mode
+    ```bash
+    python main.py
+    ```
+
+
+
+
+
+    Visit:
+    ```
+    http://localhost:5000/
+    ```
+
+
+    ✅ This runs the Flask built-in development server.
+    ✅ Good for debugging and testing.
+    ✅ **Open only over HTTP** (no HTTPS).
+
+
+
+
+    ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ## ⚠️ Troubleshooting
+
+
+    - If you see `400 Bad Request` with weird characters → Make sure you are opening with **http://**, not **https://**
+    - If `ModuleNotFoundError: flask` → Double-check your virtual environment is activated
+    - If `wkhtmltopdf` is missing → Install it only if you need PDF export
+
+
+
+
+
+    ---
+
+
+    ## 📋 Basic Project Structure
+    ```
+    StockSignalPro/
+    ├── app.py
+    ├── main.py
+    ├── models.py
+    ├── requirements.txt
+    └── templates/
+        └── *.html
+    └── static/
+        └── *.css, *.js
+    ```
+
+
+
+
+    ---
+
+
+    ## 📢 Notes
+
+
+
+
+    - This mode is **NOT for production**
+    - Debug logs will show full error traces for easier fixing
+    - Flask runs **only HTTP**, not HTTPS
+
+
+    ---
+
+    # ✅ Summary:
+    | This README Includes |  |
+    |:---|:---|
+    | Install instructions | ✅ |
+    | How to run locally | ✅ |
+    | Debugging tips | ✅ |
+    | Very lightweight | ✅ |
 ## Usage
 
 ### Analyzing Stock Data with CSV Upload

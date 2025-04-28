@@ -9,7 +9,7 @@ application = app
 if __name__ == '__main__':
     # Get port from environment variable with fallback to 5000
     port: int = int(os.getenv('PORT', '5000'))
-    host: str = '0.0.0.0'
+    host: str = '127.0.0.1'
 
     # Check if we're in production
     if os.environ.get('FLASK_ENV') == 'production':

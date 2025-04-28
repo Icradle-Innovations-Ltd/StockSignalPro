@@ -985,18 +985,22 @@ def server_error(e):
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
+    
     if os.getenv('FLASK_ENV') == 'production':
-        # Production mode with improved settings
-        app.config['SERVER_NAME'] = None
+        # --- Production mode with Waitress server ---
         from waitress import serve
-        serve(app, 
-            host='0.0.0.0', 
+        
+        app.config['SERVER_NAME'] = None  # Reset any server binding
+        
+        serve(
+            app,
+            host='127.0.0.1',   # localhost only (you can change to '0.0.0.0' for external access)
             port=port,
-            threads=8,  # Adjust based on CPU cores
+            threads=8,          # Threads for handling requests
             connection_limit=1000,  # Maximum concurrent connections
-            cleanup_interval=30,  # Cleanup every 30 seconds
-            channel_timeout=300  # 5 minute timeout
+            cleanup_interval=30,    # Cleanup interval in seconds
+            channel_timeout=300     # Connection timeout in seconds
         )
     else:
-        # Development mode
-        app.run(host='0.0.0.0', port=port, debug=True)
+        # --- Development mode ---
+        app.run(host='127.0.0.1', port=port, debug=True)
