@@ -47,11 +47,11 @@ The application will be available at `http://0.0.0.0:5000`
 
 Note: All dependencies are defined in `pyproject.toml`. Poetry will automatically manage the virtual environment and install the correct versions of all required packages.
 
-## Deploying on Replit
+## Deploying on rennder.com
 
-1. Create a new Repl using the Python template
+1. Create a new render using the Python template
 
-2. Import your code into the Repl
+2. Import your code into the render
 
 3. Set up environment variables in the Secrets tab:
 - Add `DATABASE_URL` with your PostgreSQL connection string
