@@ -985,6 +985,9 @@ def server_error(e):
 
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Main run
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))

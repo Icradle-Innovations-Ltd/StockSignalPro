@@ -1,4 +1,5 @@
-# main.py
+from dotenv import load_dotenv
+load_dotenv()
 
 from app import app  # noqa: F401
 import os

@@ -1,6 +1,9 @@
 import os
 from app import app
 from waitress import serve
+from dotenv import load_dotenv
+
+load_dotenv()
 
 application = app
 
