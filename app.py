@@ -986,7 +986,7 @@ def server_error(e):
 # Main run
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    host = '127.0.0.1'
+    host = '0.0.0.0'
 
     if is_production:
         from waitress import serve
