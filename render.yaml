@@ -24,6 +24,9 @@ services:
       # Explicitly bind to PORT environment variable
       startCommand: gunicorn wsgi:application --bind 0.0.0.0:$PORT
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8de2009 (emvironment)
+=======
 >>>>>>> parent of 8de2009 (emvironment)
 =======
 >>>>>>> parent of 8de2009 (emvironment)
