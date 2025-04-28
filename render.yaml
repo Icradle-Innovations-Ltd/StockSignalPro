@@ -9,10 +9,10 @@ services:
       apt-get install -y wkhtmltopdf xvfb
       ln -s /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
       python -m pip install --upgrade pip
-      pip install -r requirements.txt
-    startCommand: | 
-      Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      export DISPLAY=:99
+      pip install -r requirements.txt   
+    startCommand: python wsgi.py
+      
+
     envVars:
       - key: FLASK_ENV
         value: production
