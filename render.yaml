@@ -8,14 +8,11 @@ services:
       apt-get update -y
       apt-get install -y wkhtmltopdf xvfb
       ln -s /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
-      python -m pip install --upgrade pip setuptools wheel
-      pip install -r requirements-prod.txt
-    startCommand: |
-      # Start Xvfb
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: | 
       Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
       export DISPLAY=:99
-      # Start Gunicorn and bind to the correct port
-      gunicorn wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: FLASK_ENV
         value: production
