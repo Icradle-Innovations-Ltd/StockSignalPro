@@ -5,20 +5,37 @@ services:
     region: oregon
     plan: free
     buildCommand: |
-      # Install system dependencies
       apt-get update -y
       apt-get install -y wkhtmltopdf xvfb
-      # Create symlink for wkhtmltopdf
       ln -s /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
-      # Install Python dependencies
+<<<<<<< HEAD
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt   
+    startCommand: python wsgi.py
+      
+
+=======
       python -m pip install --upgrade pip setuptools wheel
-      pip install -r requirements.txt
+      pip install -r requirements-prod.txt
     startCommand: |
       # Start Xvfb
       Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      # Set display for wkhtmltopdf
       export DISPLAY=:99
-      gunicorn app:app
+      # Explicitly bind to PORT environment variable
+      startCommand: gunicorn wsgi:application --bind 0.0.0.0:$PORT
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8de2009 (emvironment)
+=======
+>>>>>>> parent of 8de2009 (emvironment)
+=======
+>>>>>>> parent of 8de2009 (emvironment)
+=======
+>>>>>>> parent of 8de2009 (emvironment)
+=======
+>>>>>>> parent of 8de2009 (emvironment)
     envVars:
       - key: FLASK_ENV
         value: production

@@ -1,20 +1,20 @@
-from app import app
 import os
-from typing import Optional
+from app import app
 from waitress import serve
+from dotenv import load_dotenv
 
-# This is the WSGI entry point
+load_dotenv()
+
 application = app
 
-if __name__ == '__main__':
-    # Get port from environment variable with fallback to 5000
-    port: int = int(os.getenv('PORT', '5000'))
-    host: str = '0.0.0.0'
+if __name__ == "__main__":
+    port = int(os.getenv('PORT', 5000))
 
-    # Check if we're in production
-    if os.environ.get('FLASK_ENV') == 'production':
-        # Production server using waitress
-        serve(app, host=host, port=port)
+    if os.getenv('FLASK_ENV') == 'production':
+        host = '0.0.0.0'
+        print(f"🚀 Starting production server at {host}:{port}...")
+        serve(app, host=host, port=port, threads=8)
     else:
-        # Development server
-        app.run(host=host, port=port, debug=True)
+        host = '127.0.0.1'
+        print(f"🔧 Starting development server at {host}:{port}...")
+        app.run(host=host, port=port, debug=True, threaded=True)
