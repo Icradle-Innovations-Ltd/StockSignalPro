@@ -23,6 +23,9 @@ services:
       export DISPLAY=:99
       # Explicitly bind to PORT environment variable
       startCommand: gunicorn wsgi:application --bind 0.0.0.0:$PORT
+<<<<<<< HEAD
+>>>>>>> parent of 8de2009 (emvironment)
+=======
 >>>>>>> parent of 8de2009 (emvironment)
     envVars:
       - key: FLASK_ENV
