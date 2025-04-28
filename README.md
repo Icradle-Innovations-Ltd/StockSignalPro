@@ -165,185 +165,113 @@ Your app will be live in a few minutes!
 This application applies signal processing techniques to stock market data to identify hidden market cycles and generate trading recommendations. By utilizing Fast Fourier Transform (FFT) algorithms, the app can detect periodic patterns in price data that might not be visible through traditional technical analysis methods.
 
 Users can upload their own CSV data files or enter a stock ticker symbol to fetch real-time market data. The application then processes this data, identifies dominant cycles, and provides actionable insights with confidence ratings.
-    # 📈 StockSignalPro (Debug Mode)
 
-    This is a web-based stock market cycle detection and analysis platform.
-    Built with Flask, SQLAlchemy, and common data science libraries.
 
+## Technical Architecture
+
+The application is built using a modern web stack with the following components:
+
+- **Backend**:
+  - **Python Flask**: Web application framework
+  - **SQLAlchemy**: ORM for database operations with PostgreSQL
+  - **NumPy & SciPy**: Numerical computations and FFT analysis
+  - **Pandas**: Data manipulation and processing
+  - **yfinance**: Stock data API integration
+  - **Plotly**: Interactive data visualization
+
+- **Frontend**:
+  - Bootstrap 5 for responsive UI components
+  - Plotly.js for interactive data visualizations
+  - Custom CSS for styling
+  - JavaScript for client-side interactions
+
+- **Data Processing Pipeline**:
+  1. Data acquisition (CSV upload or API fetch)
+  2. Data cleaning and preprocessing
+  3. FFT analysis and cycle detection
+  4. Trading recommendation generation
+  5. Market sentiment analysis (scraping and processing financial news)
+  6. Visualization creation (including sentiment gauge charts)
+  7. Results storage and presentation
+
+## Installation
+
+### Prerequisites
+- Python 3.8+
+- PostgreSQL database
+- pip package manager
+
+### Setup Instructions
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/stock-market-signal-processing.git
+cd stock-market-signal-processing
+```
+
+1. Create and activate a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+1. Install required packages:
+
+```bash
+pip install --upgrade pip setuptools wheel Cython
+pip install -r requirements.txt
+
+packages = [
+    "Flask==2.0.1",
+    "Flask-SQLAlchemy==2.5.1",
+    "gunicorn==20.1.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "plotly>=5.9.0",
+    "python-dotenv>=0.21.0",
+    "requests>=2.31.0",
+    "scipy>=1.10.0",
+    "SQLAlchemy>=1.4.46",
+    "waitress>=2.1.2",
+    "yfinance>=0.2.28",
+    "pdfkit>=1.0.0",
+    "Werkzeug==2.0.1",
+    "beautifulsoup4>=4.12.2",
+    "lxml>=4.9.3",
+    "trafilatura>=1.4.0",
+    "html5lib>=1.1",
+    "python-dateutil>=2.8.2",
+    "urllib3>=1.26.15",
+    "certifi>=2022.12.7",
+    "idna>=3.4",
+    "justext>=3.0.0",
+    "courlan>=0.9.3",
+    "flask-talisman>=0.8.1"
+]```
+
+1. Set up environment variables:
+
+```bash
+export DATABASE_URL=postgresql://username:password@localhost/dbname
+# On Windows: set DATABASE_URL=postgresql://username:password@localhost/dbname
+```
+
+1. Initialize the database:
+
+```bash
+python initialize_db.py
+```
+
+1. Start the application:
+
+```bash
+python main.py
+```
 
-    ---
+1. Access the application at http://localhost:5000
 
-
-    ## 🚀 How to Run Locally
-
-
-
-
-
-
-
-
-    ### 1. Install Python 3.11+ if not already installed
-    Check:
-    ```bash
-    python --version
-    ```
-
-
-
-
-
-
-    ---
-
-
-
-
-
-
-
-
-
-    ### 2. Clone the repository
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/StockSignalPro.git
-    cd StockSignalPro
-    ```
-
-
-    ---
-
-
-
-
-
-    ### 3. Create a Virtual Environment (Recommended)
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # Linux/macOS
-    .venv\Scripts\activate     # Windows
-    ```
-
-
-    ---
-
-
-    ### 4. Install the Requirements
-    ```bash
-    pip install --upgrade pip setuptools wheel
-    pip install -r requirements.txt
-    ```
-
-
-
-
-
-    ---
-
-
-    ### 5. Run in Debug/Development Mode
-    ```bash
-    python main.py
-    ```
-
-
-
-
-
-    Visit:
-    ```
-    http://localhost:5000/
-    ```
-
-
-    ✅ This runs the Flask built-in development server.
-    ✅ Good for debugging and testing.
-    ✅ **Open only over HTTP** (no HTTPS).
-
-
-
-
-    ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ## ⚠️ Troubleshooting
-
-
-    - If you see `400 Bad Request` with weird characters → Make sure you are opening with **http://**, not **https://**
-    - If `ModuleNotFoundError: flask` → Double-check your virtual environment is activated
-    - If `wkhtmltopdf` is missing → Install it only if you need PDF export
-
-
-
-
-
-    ---
-
-
-    ## 📋 Basic Project Structure
-    ```
-    StockSignalPro/
-    ├── app.py
-    ├── main.py
-    ├── models.py
-    ├── requirements.txt
-    └── templates/
-        └── *.html
-    └── static/
-        └── *.css, *.js
-    ```
-
-
-
-
-    ---
-
-
-    ## 📢 Notes
-
-
-
-
-    - This mode is **NOT for production**
-    - Debug logs will show full error traces for easier fixing
-    - Flask runs **only HTTP**, not HTTPS
-
-
-    ---
-
-    # ✅ Summary:
-    | This README Includes |  |
-    |:---|:---|
-    | Install instructions | ✅ |
-    | How to run locally | ✅ |
-    | Debugging tips | ✅ |
-    | Very lightweight | ✅ |
 ## Usage
 
 ### Analyzing Stock Data with CSV Upload
