@@ -93,7 +93,7 @@ def create_time_series_plot(df):
                 x=1
             ),
 
-            margin=dict(l=40, r=40, t=100, b=120),
+            margin=dict(l=40, r=40, t=100, b=160),
             template='plotly_white',
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
@@ -105,7 +105,7 @@ def create_time_series_plot(df):
                     yref='paper',
                     x=0,
 
-                    y=-0.35,
+                    y=-0.45,
                     align='left'
                 )
             ]
@@ -197,7 +197,7 @@ def create_frequency_plot(fft_results):
                 x=1
             ),
 
-            margin=dict(l=40, r=40, t=100, b=140),
+            margin=dict(l=40, r=40, t=100, b=180),
             template='plotly_white',
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
@@ -209,7 +209,7 @@ def create_frequency_plot(fft_results):
                     yref='paper',
                     x=0,
 
-                    y=-0.4,
+                    y=-0.5,
                     align='left'
                 )
             ]
@@ -331,7 +331,7 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
                 x=1
             ),
 
-            margin=dict(l=40, r=40, t=100, b=140),
+            margin=dict(l=40, r=40, t=100, b=180),
             template='plotly_white',
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
@@ -343,7 +343,7 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
                     yref='paper',
                     x=0,
 
-                    y=-0.4,
+                    y=-0.5,
                     align='left'
                 )
             ]
