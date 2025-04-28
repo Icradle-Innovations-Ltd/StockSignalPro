@@ -29,8 +29,7 @@ NEUTRAL_KEYWORDS = [
 NEWS_SOURCES = [
     'https://finance.yahoo.com/topic/stock-market-news/',
     'https://www.marketwatch.com/latest-news',
-    'https://www.cnbc.com/markets/',
-    'https://www.reuters.com/markets/'
+    'https://www.cnbc.com/markets/'
 ]
 
 def analyze_text_sentiment(text):
