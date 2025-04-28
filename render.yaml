@@ -21,21 +21,8 @@ services:
       # Start Xvfb
       Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
       export DISPLAY=:99
-      # Explicitly bind to PORT environment variable
-      startCommand: gunicorn wsgi:application --bind 0.0.0.0:$PORT
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 8de2009 (emvironment)
-=======
->>>>>>> parent of 8de2009 (emvironment)
-=======
->>>>>>> parent of 8de2009 (emvironment)
-=======
->>>>>>> parent of 8de2009 (emvironment)
-=======
->>>>>>> parent of 8de2009 (emvironment)
+      # Start Gunicorn and bind to the correct port
+      gunicorn wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: FLASK_ENV
         value: production
