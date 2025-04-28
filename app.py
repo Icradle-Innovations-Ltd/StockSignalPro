@@ -983,20 +983,15 @@ def generate_sample_data(stock_type):
 def server_error(e):
     return render_template('index.html', error="Server error occurred"), 500
 
+# Main run
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    if os.getenv('FLASK_ENV') == 'production':
-        # Production mode with improved settings
-        app.config['SERVER_NAME'] = None
+    host = '127.0.0.1'
+
+    if is_production:
         from waitress import serve
-        serve(app, 
-            host='0.0.0.0', 
-            port=port,
-            threads=8,  # Adjust based on CPU cores
-            connection_limit=1000,  # Maximum concurrent connections
-            cleanup_interval=30,  # Cleanup every 30 seconds
-            channel_timeout=300  # 5 minute timeout
-        )
+        print("🚀 Starting production server with Waitress...")
+        serve(app, host=host, port=port, threads=8)
     else:
-        # Development mode
-        app.run(host='0.0.0.0', port=port, debug=True)
+        print("🔧 Starting development server with Flask...")
+        app.run(host=host, port=port, debug=True, threaded=True)

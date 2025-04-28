@@ -1,12 +1,14 @@
-from app import app
 import os
+from app import app
 from waitress import serve
 
-if __name__ == "__main__":
-    host = "0.0.0.0"
-    port = int(os.environ.get("PORT", 5000))
+application = app
 
-    if os.environ.get('FLASK_ENV') == 'production':
+if __name__ == "__main__":
+    port = int(os.getenv('PORT', 5000))
+    host = '127.0.0.1'
+
+    if os.getenv('FLASK_ENV') == 'production':
         print("🚀 Starting production server with Waitress...")
         serve(app, host=host, port=port, threads=8)
     else:
