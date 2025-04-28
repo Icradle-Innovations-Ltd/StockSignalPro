@@ -185,8 +185,30 @@
                                         <label for="ticker-input" class="form-label">Stock Ticker Symbol</label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                            <input type="text" id="ticker-input" name="ticker" class="form-control" placeholder="e.g., AAPL, MSFT, GOOGL">
+                                            <input type="text" id="ticker-input" name="ticker" class="form-control" placeholder="e.g., AAPL, MSFT, GOOGL" list="common-tickers">
                                         </div>
+                                        <datalist id="common-tickers">
+                                            <option value="AAPL">Apple Inc.</option>
+                                            <option value="MSFT">Microsoft Corporation</option>
+                                            <option value="GOOG">Alphabet Inc.</option>
+                                            <option value="GOOGL">Alphabet Inc.</option>
+                                            <option value="AMZN">Amazon.com, Inc.</option>
+                                            <option value="FB">Meta Platforms, Inc.</option>
+                                            <option value="TSLA">Tesla, Inc.</option>
+                                            <option value="NVDA">NVIDIA Corporation</option>
+                                            <option value="JPM">JPMorgan Chase & Co.</option>
+                                            <option value="V">Visa Inc.</option>
+                                            <option value="JNJ">Johnson & Johnson</option>
+                                            <option value="WMT">Walmart Inc.</option>
+                                            <option value="BAC">Bank of America Corporation</option>
+                                            <option value="PG">The Procter & Gamble Company</option>
+                                            <option value="MA">Mastercard Incorporated</option>
+                                            <option value="DIS">The Walt Disney Company</option>
+                                            <option value="NFLX">Netflix, Inc.</option>
+                                            <option value="XOM">Exxon Mobil Corporation</option>
+                                            <option value="T">AT&T Inc.</option>
+                                            <option value="INTC">Intel Corporation</option>
+                                        </datalist>
                                         <div id="ticker-suggestions" class="list-group mt-1 position-absolute z-3" style="width: calc(100% - 3rem);"></div>
                                         <div class="form-text">Enter a valid NYSE or NASDAQ ticker symbol.</div>
                                     </div>
@@ -198,7 +220,7 @@
                                                data-bs-toggle="tooltip" 
                                                title="Amount of historical data to analyze. Longer periods might reveal longer-term cycles."></i>
                                         </label>
-                                        <select class="form-select" name="period">
+                                        <select class="form-select" name="period" aria-label="Select time period">
                                             <option value="1y">1 Year</option>
                                             <option value="2y" selected>2 Years</option>
                                             <option value="5y">5 Years</option>

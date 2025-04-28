@@ -76,9 +76,12 @@ def create_time_series_plot(df):
             hovertemplate='<b>Date:</b> %{x}<br><b>30-Day MA:</b> %{y:.2f}<extra></extra>'
         ))
         
-        # Update layout
+        # Update layout with more detailed information
         fig.update_layout(
-            title='Historical Price Data',
+            title={
+                'text': 'Historical Price Data with Moving Averages',
+                'font': {'size': 24}
+            },
             xaxis_title='Date',
             yaxis_title='Price',
             hovermode='x unified',
@@ -89,10 +92,21 @@ def create_time_series_plot(df):
                 xanchor='right',
                 x=1
             ),
-            margin=dict(l=40, r=40, t=60, b=40),
+            margin=dict(l=40, r=40, t=100, b=40),
             template='plotly_white',
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
+            annotations=[
+                dict(
+                    text='Blue line shows actual price<br>Orange dotted line shows 7-day moving average (short-term trend)<br>Red dotted line shows 30-day moving average (long-term trend)',
+                    showarrow=False,
+                    xref='paper',
+                    yref='paper',
+                    x=0,
+                    y=-0.15,
+                    align='left'
+                )
+            ]
         )
         
         # Return the figure as a JSON serializable object
@@ -163,9 +177,12 @@ def create_frequency_plot(fft_results):
             hovertemplate='<b>Period:</b> %{x:.1f} days<br><b>Amplitude:</b> %{y:.4f}<extra></extra>'
         ))
         
-        # Update layout
+        # Update layout with more detailed information
         fig.update_layout(
-            title='Frequency Domain Analysis',
+            title={
+                'text': 'Frequency Domain Analysis - Price Cycles',
+                'font': {'size': 24}
+            },
             xaxis_title='Period (days)',
             yaxis_title='Amplitude',
             hovermode='x unified',
@@ -177,10 +194,21 @@ def create_frequency_plot(fft_results):
                 xanchor='right',
                 x=1
             ),
-            margin=dict(l=40, r=40, t=60, b=40),
+            margin=dict(l=40, r=40, t=100, b=60),
             template='plotly_white',
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
+            annotations=[
+                dict(
+                    text='Blue line shows the strength of price cycles at different periods<br>Orange dots highlight the most significant cycles<br>Higher amplitude indicates stronger price patterns at that period<br>X-axis uses logarithmic scale to better display cycle lengths',
+                    showarrow=False,
+                    xref='paper',
+                    yref='paper',
+                    x=0,
+                    y=-0.2,
+                    align='left'
+                )
+            ]
         )
         
         # Use log scale for x-axis to better show the distribution of periods
@@ -282,9 +310,12 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
             ay=0
         )
         
-        # Update layout
+        # Update layout with more detailed information
         fig.update_layout(
-            title='Price Forecast Based on Detected Cycles',
+            title={
+                'text': 'Price Forecast Based on Detected Cycles',
+                'font': {'size': 24}
+            },
             xaxis_title='Date',
             yaxis_title='Price',
             hovermode='x unified',
@@ -295,10 +326,21 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
                 xanchor='right',
                 x=1
             ),
-            margin=dict(l=40, r=40, t=60, b=40),
+            margin=dict(l=40, r=40, t=100, b=60),
             template='plotly_white',
             plot_bgcolor='rgba(255,255,255,1)',
             paper_bgcolor='rgba(255,255,255,1)',
+            annotations=[
+                dict(
+                    text='Blue line shows historical price data<br>Orange dashed line shows forecasted prices based on detected cycles<br>Gray dotted line marks the start of the forecast period<br>Forecast combines the effects of the top 3 dominant cycles',
+                    showarrow=False,
+                    xref='paper',
+                    yref='paper',
+                    x=0,
+                    y=-0.2,
+                    align='left'
+                )
+            ]
         )
         
         # Return the figure as a JSON serializable object
