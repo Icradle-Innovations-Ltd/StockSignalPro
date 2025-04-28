@@ -209,7 +209,7 @@ def create_frequency_plot(fft_results):
                     yref='paper',
                     x=0,
 
-                    y=-10.0,
+                    y=-0.9,
                     align='left'
                 )
             ]
@@ -343,7 +343,7 @@ def create_forecast_plot(df, dominant_cycles, forecast_days=30):
                     yref='paper',
                     x=0,
 
-                    y=-10.0,
+                    y=-0.9,
                     align='left'
                 )
             ]
