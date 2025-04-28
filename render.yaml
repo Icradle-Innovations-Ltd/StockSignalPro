@@ -1,7 +1,7 @@
 services:
   - type: web
     name: stocksignalpro
-    env: python
+    runtime: python
     region: oregon
     plan: free
     buildCommand: |

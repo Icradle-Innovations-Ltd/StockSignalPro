@@ -986,10 +986,17 @@ def server_error(e):
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     if os.getenv('FLASK_ENV') == 'production':
-        # Production mode
+        # Production mode with improved settings
         app.config['SERVER_NAME'] = None
         from waitress import serve
-        serve(app, host='0.0.0.0', port=port)
+        serve(app, 
+            host='0.0.0.0', 
+            port=port,
+            threads=8,  # Adjust based on CPU cores
+            connection_limit=1000,  # Maximum concurrent connections
+            cleanup_interval=30,  # Cleanup every 30 seconds
+            channel_timeout=300  # 5 minute timeout
+        )
     else:
         # Development mode
         app.run(host='0.0.0.0', port=port, debug=True)

@@ -1,6 +1,7 @@
 from app import app
 import os
 from typing import Optional
+from waitress import serve
 
 # This is the WSGI entry point
 application = app
@@ -12,13 +13,8 @@ if __name__ == '__main__':
 
     # Check if we're in production
     if os.environ.get('FLASK_ENV') == 'production':
-        try:
-            from waitress import serve
-            # Production server
-            serve(app, host=host, port=port)
-        except ImportError:
-            print("Warning: Waitress not installed. Please install with: pip install waitress")
-            exit(1)
+        # Production server using waitress
+        serve(app, host=host, port=port)
     else:
         # Development server
         app.run(host=host, port=port, debug=True)
